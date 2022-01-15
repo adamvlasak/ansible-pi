@@ -1,0 +1,13 @@
+---
+- name: setup raspberry pi
+  hosts: all
+  become: yes
+  vars_files:
+    - vars.yml
+  roles:
+    - base
+    - security
+    - firewall
+    - dnsmasq
+    - minidlna
+    - samba

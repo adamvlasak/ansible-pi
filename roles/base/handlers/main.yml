@@ -1,0 +1,5 @@
+---
+- name: generate locales
+  command: locale-gen
+  tags:
+    - base

@@ -1,0 +1,18 @@
+---
+- name: install samba package
+  apt:
+    name: samba
+    state: present
+  tags:
+    - samba
+
+- name: setup smb.conf
+  template:
+    src: smb.conf.j2
+    dest: /etc/samba/smb.conf
+    owner: root
+    group: root
+    mode: 0664
+  notify: restart samba
+  tags:
+    - samba

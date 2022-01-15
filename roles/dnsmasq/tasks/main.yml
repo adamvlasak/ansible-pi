@@ -1,0 +1,46 @@
+---
+- name: install dnsmasq package
+  apt:
+    name: dnsmasq
+    state: present
+  tags:
+    - dnsmasq
+
+- name: download blacklist
+  get_url:
+    url: "{{ item.url }}"
+    dest: "{{ item.filename }}"
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart dnsmasq
+  loop:
+    "{{ dnsmasq.blacklists }}"
+  when: item.url is defined
+  tags:
+    - dnsmasq
+
+- name: setup facebook blacklist
+  template:
+    src: dnsmasq.facebook.blacklist.txt.j2
+    dest: /etc/dnsmasq.facebook.blacklist.txt
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart dnsmasq
+  tags:
+    - dnsmasq
+
+- name: setup dnsmasq config
+  template:
+    src: dnsmasq.conf.j2
+    dest: /etc/dnsmasq.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart dnsmasq
+  tags:
+    - dnsmasq

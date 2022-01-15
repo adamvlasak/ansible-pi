@@ -1,0 +1,26 @@
+---
+packages:
+  - bash-completion
+  - ca-certificates
+  - curl
+  - dnsutils
+  - git
+  - htop
+  - iftop
+  - iotop
+  - irqbalance
+  - mlocate
+  - ncdu
+  - pass
+  - sysstat
+  - tar
+  - tcpdump
+  - telnet
+  - tig
+  - tmux
+  - traceroute
+  - tree
+  - unzip
+  - vim
+  - w3m
+  - wget

@@ -1,0 +1,66 @@
+---
+- name: install necessary packages
+  apt:
+    name: "{{ packages }}"
+    state: present
+    update_cache: yes
+  tags:
+    - base
+- name: remove openresolv package
+  apt:
+    name: openresolv
+    state: absent
+  tags:
+    - base
+
+- name: set machine hostname
+  hostname:
+    name: "{{ network.hostname }}"
+  tags:
+    - base
+
+- name: set hosts file
+  template:
+    src: hosts.j2
+    dest: /etc/hosts
+    owner: root
+    group: root
+    mode: 0644
+    attr: +i
+  tags:
+    - base
+
+- name: setup correct time
+  file:
+    src: /usr/share/zoneinfo/Europe/Prague
+    dest: /etc/localtime
+    force: yes
+    state: link
+  tags:
+    - base
+
+- name: setup locales
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - generate locales
+  loop:
+    - { src: locale.gen.j2, dest: /etc/locale.gen }
+    - { src: default.locale.j2, dest: /etc/default/locale }
+  tags:
+    - base
+
+- name: setup resolv.conf
+  template:
+    src: resolv.conf.j2
+    dest: /etc/resolv.conf
+    owner: root
+    group: root
+    mode: 0644
+    attr: +i
+  tags:
+    - base

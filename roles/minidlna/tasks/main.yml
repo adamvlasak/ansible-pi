@@ -1,0 +1,19 @@
+---
+- name: install minidlna package
+  apt:
+    name: minidlna
+    state: present
+  tags:
+    - minidlna
+
+- name: setup minidlna.conf
+  template:
+    src: minidlna.conf.j2
+    dest: /etc/minidlna.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart minidlna
+  tags:
+    - minidlna

@@ -1,0 +1,7 @@
+---
+- name: restart minidlna
+  service:
+    name: minidlna
+    state: restarted
+  tags:
+    - minidlna

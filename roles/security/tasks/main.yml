@@ -1,0 +1,10 @@
+---
+- name: harden through sysctl
+  sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    state: present
+  loop:
+    "{{ rules }}"
+  tags:
+    - security

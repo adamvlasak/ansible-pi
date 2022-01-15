@@ -1,0 +1,11 @@
+[Unit]
+Description=Packet Filtering Framework
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/iptables-rules
+ExecReload=/usr/local/sbin/iptables-rules
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

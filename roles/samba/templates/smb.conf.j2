@@ -1,0 +1,14 @@
+[global]
+security = user
+map to guest = bad user
+guest account = nobody
+
+[{{ samba.share_name }}]
+comment = guest
+path = {{ samba.share_path }}
+public = yes
+only guest = yes
+writable = yes
+printable = no
+veto files = /._*/.DS_Store/
+delete veto files = yes
