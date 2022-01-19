@@ -1,8 +1,6 @@
 {% for server in dnsmasq.server %}
 server={{ server }}
 {% endfor %}
-listen-address={{ dnsmasq.listen_address }}
-bind-dynamic
 local-service
 bogus-priv
 filterwin2k
