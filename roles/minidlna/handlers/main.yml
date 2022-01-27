@@ -1,7 +1,6 @@
 ---
 - name: restart minidlna
-  service:
+  systemd:
     name: minidlna
     state: restarted
-  tags:
-    - minidlna
+    enabled: yes

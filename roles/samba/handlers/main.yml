@@ -1,7 +1,6 @@
 ---
 - name: restart samba
-  service:
+  systemd:
     name: smbd
     state: restarted
-  tags:
-    - samba
+    enabled: yes

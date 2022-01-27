@@ -1,12 +1,6 @@
 ---
-- name: daemon-reload
+- name: restart iptables
   systemd:
-    daemon-reload: yes
-
-- name: iptables
-  systemd:
-    name: iptables.service
+    name: iptables
     state: restarted
     enabled: yes
-  tags:
-    - firewall

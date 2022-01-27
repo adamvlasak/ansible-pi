@@ -24,7 +24,7 @@
     owner: root
     group: root
     mode: 0700
-  notify: iptables
+  notify: restart iptables
   tags:
     - firewall
 
