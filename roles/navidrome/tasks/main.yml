@@ -1,0 +1,63 @@
+---
+- name: download release from github
+  get_url:
+    url: "https://github.com/navidrome/navidrome/releases/download/v{{ navidrome.version }}/navidrome_{{ navidrome.version }}_Linux_arm64.tar.gz"
+    dest: /tmp
+  tags:
+    - navidrome
+
+- name: prepare directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  loop:
+    - "{{ navidrome.working_directory }}"
+    - "{{ navidrome.bin_directory }}"
+  tags:
+    - navidrome
+
+- name: extract archive
+  unarchive:
+    src: /tmp/navidrome_{{ navidrome.version }}_Linux_arm64.tar.gz
+    dest: /opt/navidrome
+    remote_src: yes
+  tags:
+    - navidrome
+
+- name: setup navidrome.toml
+  template:
+    src: navidrome.toml.j2
+    dest: "{{ navidrome.working_directory }}/navidrome.toml"
+    owner: root
+    group: root
+    mode: 0755
+  notify: restart navidrome
+  tags:
+    - navidrome
+
+- name: setup navidrome.service
+  template:
+    src: navidrome.service.j2
+    dest: /etc/systemd/system/navidrome.service
+    owner: root
+    group: root
+    mode: 0755
+  notify:
+    - daemon-reload
+    - restart navidrome
+  tags:
+    - navidrome
+
+- name: setup nginx virtualhost
+  template:
+    src: navidrome.nginx.j2
+    dest: /etc/nginx/sites-enabled/navidrome
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart nginx
+  tags:
+    - navidrome

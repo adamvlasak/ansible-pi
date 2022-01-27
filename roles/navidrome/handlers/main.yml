@@ -1,0 +1,13 @@
+---
+- name: restart navidrome
+  service:
+    name: navidrome
+    state: restarted
+
+- name: daemon-reload
+  command: systemctl daemon-reload
+
+- name: restart nginx
+  service:
+    name: nginx
+    state: restarted

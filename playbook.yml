@@ -10,4 +10,5 @@
     - firewall
     - dnsmasq
     - minidlna
+    - navidrome
     - samba
