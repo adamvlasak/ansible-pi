@@ -34,10 +34,11 @@ minidlna:
   port: 8200
   interface: eth0
   friendly_name: SOME_NAME
-  movies_directory: /mnt/data/Movies
-  series_directory: /mnt/data/Series
-  tutorials_directory: /mnt/data/Tutorials
-  audiobooks_directory: /mnt/data/AudioBooks
+  media_dirs:
+    - { type: V, path: /mnt/data/Movies }
+    - { type: V, path: /mnt/data/Series }
+    - { type: V, path: /mnt/data/Tutorials }
+    - { type: A, path: /mnt/data/AudioBooks }
 
 navidrome:
   version: 0.47.5
