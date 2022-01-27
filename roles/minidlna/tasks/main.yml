@@ -17,3 +17,13 @@
     - restart minidlna
   tags:
     - minidlna
+
+- name: increase fs.inotify.max_user_watches
+  sysctl:
+    key: fs.inotify.max_user_watches
+    value: "100000"
+    state: present
+  notify:
+    - restart minidlna
+  tags:
+    - minidlna
