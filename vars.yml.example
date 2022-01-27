@@ -45,3 +45,7 @@ navidrome:
   working_directory: /var/lib/navidrome
   bin_directory: /opt/navidrome
   music_directory: /mnt/data/Music
+
+mount:
+  points:
+    - { path: /mnt/data, owner: nobody, group: nogroup, mode: "0777" }
