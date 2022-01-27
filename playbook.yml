@@ -9,6 +9,7 @@
     - security
     - firewall
     - dnsmasq
-    - minidlna
+    - nginx
     - navidrome
+    - minidlna
     - samba
