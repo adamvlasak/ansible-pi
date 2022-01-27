@@ -78,3 +78,13 @@
   when: mount.points is defined
   tags:
     - base
+
+- name: disable unwanted services
+  systemd:
+    name: "{{ item }}"
+    state: stopped
+    enabled: no
+  loop: "{{ disabled_services }}"
+  when: disabled_services is defined
+  tags:
+    - base

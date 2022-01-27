@@ -28,3 +28,7 @@ packages:
 
 absent_packages:
   - openresolv
+
+disabled_services:
+  - avahi-daemon.service
+  - avahi-daemon.socket
