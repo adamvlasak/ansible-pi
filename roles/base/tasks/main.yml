@@ -6,10 +6,12 @@
     update_cache: yes
   tags:
     - base
-- name: remove openresolv package
+
+- name: remove unwanted packages
   apt:
-    name: openresolv
+    name: "{{ item }}"
     state: absent
+  loop: "{{ absent_packages }}"
   tags:
     - base
 

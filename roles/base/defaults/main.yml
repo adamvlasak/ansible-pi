@@ -3,6 +3,7 @@ packages:
   - bash-completion
   - ca-certificates
   - curl
+  - convmv
   - dnsutils
   - git
   - htop
@@ -24,3 +25,6 @@ packages:
   - vim
   - w3m
   - wget
+
+absent_packages:
+  - openresolv

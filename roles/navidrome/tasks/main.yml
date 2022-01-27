@@ -61,3 +61,10 @@
   notify: restart nginx
   tags:
     - navidrome
+
+- name: install ffmpeg
+  apt:
+    name: ffmpeg
+    state: present
+  tags:
+    - navidrome
