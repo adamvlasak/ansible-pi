@@ -1,0 +1,40 @@
+---
+network:
+  ip: 192.168.1.100
+  hostname: pi.loc
+  subnet: 192.168.1.0/24
+  nameserver: 127.0.0.1
+
+dnsmasq:
+  server:
+    - 192.168.1.1
+  listen_address: "{{ network.ip }}"
+  cache_size: 8192
+  domain:
+    name: loc
+    subnet: "{{ network.subnet }}"
+
+  host_records:
+    - { domain: pi.loc, ip: "{{ network.ip }}" }
+    - { domain: navidrome.loc, ip: "{{ network.ip }}" }
+
+  inline_blacklists:
+    - { domain: example.com, ip: 0.0.0.0 }
+
+  blacklists:
+    - { filename: /etc/dnsmasq.notracking.blacklist.txt, url: https://github.com/notracking/hosts-blocklists/raw/master/dnsmasq/dnsmasq.blacklist.txt }
+    - { filename: /etc/dnsmasq.oisd.blacklist.txt, url: https://dnsmasq.oisd.nl/basic/ }
+    - { filename: /etc/dnsmasq.facebook.blacklist.txt }
+
+samba:
+  share_name: SOME_NAME
+  share_path: /mnt/data
+
+minidlna:
+  port: 8200
+  interface: eth0
+  friendly_name: SOME_NAME
+  movies_directory: /mnt/data/Movies
+  series_directory: /mnt/data/Series
+  tutorials_directory: /mnt/data/Tutorials
+  audiobooks_directory: /mnt/data/AudioBooks
