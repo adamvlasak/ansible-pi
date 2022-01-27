@@ -38,3 +38,9 @@ minidlna:
   series_directory: /mnt/data/Series
   tutorials_directory: /mnt/data/Tutorials
   audiobooks_directory: /mnt/data/AudioBooks
+
+navidrome:
+  version: 0.47.5
+  working_directory: /var/lib/navidrome
+  bin_directory: /opt/navidrome
+  music_directory: /mnt/data/Music
