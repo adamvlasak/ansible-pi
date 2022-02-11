@@ -1,0 +1,170 @@
+---
+- name: install dnscryt-proxy
+  apt:
+    name: dnscrypt-proxy
+    state: present
+  tags:
+    - dnscrypt-proxy
+
+- name: configure dnscrypt-proxy
+  template:
+    src: dnscrypt-proxy.toml.j2
+    dest: /etc/dnscrypt-proxy/dnscrypt-proxy.toml
+    owner: root
+    group: root
+    mode: 0444
+  notify:
+    - dnscrypt-proxy
+  tags:
+    - dnscrypt-proxy
+
+- name: provision allowed-names.txt
+  template:
+    src: allowed-names.txt.j2
+    dest: /etc/dnscrypt-proxy/allowed-names.txt
+    owner: root
+    group: root
+    mode: 0444
+  when: dnscrypt_proxy_allowed_names is defined
+  notify:
+    - dnscrypt-proxy
+  tags:
+    - dnscrypt-proxy
+
+- name: provision blocked-ips.txt
+  template:
+    src: blocked-ips.txt.j2
+    dest: /etc/dnscrypt-proxy/blocked-ips.txt
+    owner: root
+    group: root
+    mode: 0444
+  notify:
+    - dnscrypt-proxy
+  tags:
+    - dnscrypt-proxy
+
+- name: provision forwarding-rules.txt
+  template:
+    src: forwarding-rules.txt.j2
+    dest: /etc/dnscrypt-proxy/forwarding-rules.txt
+    owner: root
+    group: root
+    mode: 0444
+  when: dnscrypt_proxy.forwarding_rules is defined
+  notify:
+    - dnscrypt-proxy
+  tags:
+    - dnscrypt-proxy
+
+- name: provision cloaking-rules.txt
+  template:
+    src: cloaking-rules.txt.j2
+    dest: /etc/dnscrypt-proxy/cloaking-rules.txt
+    owner: root
+    group: root
+    mode: 0444
+  when: dnscrypt_proxy.cloaking_rules is defined
+  notify:
+    - dnscrypt-proxy
+  tags:
+    - dnscrypt-proxy
+
+- name: set permissions to /etc/dnscrypt-proxy
+  file:
+    path: /etc/dnscrypt-proxy
+    state: directory
+    owner: root
+    group: root
+    mode: 0555
+  tags:
+    - dnscrypt-proxy
+
+- name: prepare directory for blocklist generator and its config
+  file:
+    path: "{{ blocked_names_generator_path }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0500
+  tags:
+    - blocked-names
+
+- name: download blocklist generator
+  get_url:
+    url: https://github.com/DNSCrypt/dnscrypt-proxy/raw/master/utils/generate-domains-blocklist/generate-domains-blocklist.py
+    dest: "{{ blocked_names_generator_path }}/generate-domains-blocklist.py"
+    owner: root
+    group: root
+    mode: 0400
+  notify:
+    - generate blocked names
+  tags:
+    - blocked-names
+
+- name: provision domains-blocklist.conf
+  template:
+    src: domains-blocklist.conf.j2
+    dest: "{{ blocked_names_generator_path }}/domains-blocklist.conf"
+    owner: root
+    group: root
+    mode: 0400
+  notify:
+    - generate blocked names
+  tags:
+    - blocked-names
+
+- name: provision domains-blocklist-local-additions.txt
+  template:
+    src: domains-blocklist-local-additions.txt.j2
+    dest: "{{ blocked_names_generator_path }}/domains-blocklist-local-additions.txt"
+    owner: root
+    group: root
+    mode: 0400
+  notify:
+    - generate blocked names
+  tags:
+    - blocked-names
+
+- name: provision domains-allowlist.txt from github
+  get_url:
+    url: https://github.com/DNSCrypt/dnscrypt-proxy/raw/master/utils/generate-domains-blocklist/domains-allowlist.txt
+    dest: "{{ blocked_names_generator_path }}/domains-allowlist.txt"
+    owner: root
+    group: root
+    mode: 0400
+  notify:
+    - generate blocked names
+  tags:
+    - blocked-names
+
+- name: create empty domains-time-restricted.txt
+  file:
+    dest: "{{ blocked_names_generator_path }}/domains-time-restricted.txt"
+    state: touch
+    owner: root
+    group: root
+    mode: 0400
+  tags:
+    - blocked-names
+
+- name: provision helper script
+  template:
+    src: blocked-names-generator.sh.j2
+    dest: "{{ blocked_names_generator_helper_path }}"
+    owner: root
+    group: root
+    mode: 0500
+  notify:
+    - generate blocked names
+  tags:
+    - blocked-names
+
+- name: provision cron script
+  template:
+    src: cron.j2
+    dest: /etc/cron.daily/blocked-names-generator
+    owner: root
+    group: root
+    mode: 0500
+  tags:
+    - blocked-names

@@ -5,26 +5,12 @@ network:
   subnet: 192.168.1.0/24
   nameserver: 127.0.0.1
 
-dnsmasq:
-  server:
-    - 192.168.1.1
-  listen_address: "{{ network.ip }}"
-  cache_size: 8192
-  domain:
-    name: loc
-    subnet: "{{ network.subnet }}"
-
-  host_records:
-    - { domain: pi.loc, ip: "{{ network.ip }}" }
-    - { domain: navidrome.loc, ip: "{{ network.ip }}" }
-
-  inline_blacklists:
-    - { domain: example.com, ip: 0.0.0.0 }
-
-  blacklists:
-    - { filename: /etc/dnsmasq.notracking.blacklist.txt, url: https://github.com/notracking/hosts-blocklists/raw/master/dnsmasq/dnsmasq.blacklist.txt }
-    - { filename: /etc/dnsmasq.oisd.blacklist.txt, url: https://dnsmasq.oisd.nl/basic/ }
-    - { filename: /etc/dnsmasq.facebook.blacklist.txt }
+dnscrypt_proxy:
+  cloaking_rules:
+    - "pi.loc {{ network.ip }}"
+    - "navidrome.loc {{ network.ip }}"
+  forwarding_rules:
+    - "1.168.192.in-addr.arpa 192.168.1.1"
 
 samba:
   share_name: SOME_NAME

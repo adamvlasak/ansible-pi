@@ -1,0 +1,4 @@
+---
+blocked_names_generator_helper_path: /usr/local/sbin/blocked-names-generator
+blocked_names_generator_path: /etc/dnscrypt-proxy/blocked-names-generator
+blocked_names_path: /etc/dnscrypt-proxy/blocked-names.txt
