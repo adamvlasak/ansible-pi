@@ -6,6 +6,16 @@
   tags:
     - dnscrypt-proxy
 
+- name: add AmbientCapabilities = cap_net_bind_service
+  lineinfile:
+    line: AmbientCapabilities=cap_net_bind_service
+    regex: ^AmbientCapabilities
+    path: /etc/systemd/system/multi-user.target.wants/dnscrypt-proxy.service
+  notify:
+    - dnscrypt-proxy
+  tags:
+    - dnscrypt-proxy
+
 - name: configure dnscrypt-proxy
   template:
     src: dnscrypt-proxy.toml.j2
