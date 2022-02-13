@@ -6,6 +6,10 @@ network:
   nameserver: 127.0.0.1
 
 dnscrypt_proxy:
+  blocklists:
+    - https://raw.githubusercontent.com/notracking/hosts-blocklists/master/dnscrypt-proxy/dnscrypt-proxy.blacklist.txt
+    - https://hosts.oisd.nl/basic/
+    - https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/dnscrypt/spy.txt
   cloaking_rules:
     - "pi.loc {{ network.ip }}"
     - "navidrome.loc {{ network.ip }}"
