@@ -6,6 +6,7 @@ network:
   nameserver: 127.0.0.1
 
 dnscrypt_proxy:
+  servername: cz.nic
   blocklists:
     - https://raw.githubusercontent.com/notracking/hosts-blocklists/master/dnscrypt-proxy/dnscrypt-proxy.blacklist.txt
     - https://hosts.oisd.nl/basic/
