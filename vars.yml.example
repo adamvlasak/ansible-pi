@@ -26,8 +26,9 @@ minidlna:
   interface: eth0
   friendly_name: SOME_NAME
   media_dirs:
-    - { type: V, path: /mnt/data/Movies }
-    - { type: V, path: /mnt/data/Series }
+    - { type: V, path: /mnt/data/Movies/Film }
+    - { type: V, path: /mnt/data/Movies/Series }
+    - { type: V, path: /mnt/data/Movies/Documentary }
     - { type: V, path: /mnt/data/Tutorials }
     - { type: A, path: /mnt/data/AudioBooks }
 
