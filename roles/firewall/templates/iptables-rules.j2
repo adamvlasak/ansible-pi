@@ -1,13 +1,10 @@
 #!/bin/bash
+
+# IPv4
+
 # Flush all current rules from iptables
-iptables -t nat -F
-iptables -t mangle -F
 iptables -F
 iptables -X
-
-# Allow SSH connections on tcp port 22
-# This is essential when working on remote servers via SSH to prevent locking yourself out of the system
-iptables -A INPUT -s {{ network.subnet }} -d {{ network.ip }}/32 -i eth0 -m conntrack --ctstate NEW -p tcp -m tcp --dport 22 -j ACCEPT
 
 # Set default policies for INPUT, FORWARD and OUTPUT chains
 iptables -P INPUT DROP
@@ -43,13 +40,16 @@ iptables -t mangle -A PREROUTING -s 10.0.0.0/8 -j DROP
 iptables -t mangle -A PREROUTING -s 240.0.0.0/5 -j DROP
 iptables -t mangle -A PREROUTING -s 127.0.0.0/8 ! -i lo -j DROP
 
+# Allow SSH connections on tcp port 22
+iptables -A INPUT -s {{ network.subnet }} -d {{ network.ip }}/32 -i eth0 -m conntrack --ctstate NEW -p tcp -m tcp --dport 22 -j ACCEPT
+
 # Incoming icmp
-iptables -A INPUT -s {{ network.subnet }} -d {{ network.ip }} -p icmp --icmp-type 8 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
-iptables -A OUTPUT -s {{ network.ip }} -d {{ network.subnet }} -p icmp --icmp-type 0 -m state --state ESTABLISHED,RELATED -j ACCEPT
+iptables -A INPUT -s {{ network.subnet }} -d {{ network.ip }} -p icmp --icmp-type 8 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
+iptables -A OUTPUT -s {{ network.ip }} -d {{ network.subnet }} -p icmp --icmp-type 0 -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 
 # Outgoing icmp
-iptables -A OUTPUT -s {{ network.ip }} -d {{ network.subnet }} -p icmp --icmp-type 8 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
-iptables -A INPUT -s {{ network.subnet }} -d {{ network.ip }} -p icmp --icmp-type 0 -m state --state ESTABLISHED,RELATED -j ACCEPT
+iptables -A OUTPUT -s {{ network.ip }} -d {{ network.subnet }} -p icmp --icmp-type 8 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
+iptables -A INPUT -s {{ network.subnet }} -d {{ network.ip }} -p icmp --icmp-type 0 -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 
 # Allowed input packets
 iptables -A INPUT -i lo -j ACCEPT
@@ -82,7 +82,13 @@ iptables -A OUTPUT -m tcp -p tcp -j REJECT --reject-with tcp-reset
 iptables -A OUTPUT -m udp -p udp -j REJECT --reject-with icmp-port-unreachable
 iptables -A OUTPUT -j REJECT --reject-with icmp-proto-unreachable
 
-# Disallow IPV6
+# IPv6
+
+# Flush all current rules from iptables
+ip6tables -F
+ip6tables -X
+
+# Set default policies for INPUT, FORWARD and OUTPUT chains
 ip6tables -P INPUT DROP
 ip6tables -P FORWARD DROP
 ip6tables -P OUTPUT DROP
