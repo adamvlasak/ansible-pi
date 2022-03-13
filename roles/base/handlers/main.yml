@@ -7,3 +7,8 @@
   command: locale-gen
   tags:
     - base
+
+- name: restart sshd
+  systemd:
+    name: sshd
+    state: restarted
