@@ -32,6 +32,11 @@ cloaking_rules = '/etc/dnscrypt-proxy/cloaking-rules.txt'
 [blocked_ips]
   blocked_ips_file = '/etc/dnscrypt-proxy/blocked-ips.txt'
 
+{% if dnscrypt_proxy.allowed_names is defined %}
+[allowed_names]
+  allowed_names_file = '/etc/dnscrypt-proxy/allowed-names.txt'
+{% endif %}
+
 [query_log]
   file = '/var/log/dnscrypt-proxy/query.log'
 

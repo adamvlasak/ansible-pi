@@ -35,7 +35,7 @@
     owner: root
     group: root
     mode: 0444
-  when: dnscrypt_proxy_allowed_names is defined
+  when: dnscrypt_proxy.allowed_names is defined
   notify:
     - dnscrypt-proxy
   tags:
