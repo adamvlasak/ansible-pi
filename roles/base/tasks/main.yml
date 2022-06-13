@@ -15,6 +15,16 @@
   tags:
     - base
 
+- name: setup boot/config.txt
+  template:
+    src: boot-config.txt.j2
+    dest: /boot/config.txt
+    owner: root
+    group: root
+    mode: 0755
+  tags:
+    - base
+
 - name: set machine hostname
   hostname:
     name: "{{ network.hostname }}"
