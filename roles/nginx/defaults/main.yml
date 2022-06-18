@@ -1,0 +1,4 @@
+---
+nginx:
+  default_port: 80
+  root_base_path: /var/www

@@ -41,3 +41,7 @@ navidrome:
 mount:
   points:
     - { path: /mnt/data, owner: nobody, group: nogroup, mode: "0777" }
+
+static_sites:
+  - { "server_name": "example1.loc" }
+  - { "server_name": "example2.loc", "autoindex": True }

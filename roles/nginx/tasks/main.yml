@@ -26,3 +26,40 @@
   notify: restart nginx
   tags:
     - nginx
+
+- block:
+    - name: setup static sites directory
+      file:
+        path: "{{ nginx.root_base_path }}/sites"
+        state: directory
+        owner: root
+        group: root
+        mode: 0755
+      notify: restart nginx
+      tags:
+        - nginx
+
+    - name: setup static sites subdirectories
+      file:
+        path: "{{ nginx.root_base_path }}/sites/{{ item.server_name }}"
+        state: directory
+        owner: root
+        group: root
+        mode: 0755
+      loop: "{{ static_sites }}"
+      notify: restart nginx
+      tags:
+        - nginx
+
+    - name: setup nginx virtual hosts
+      template:
+        src: static-vhost.conf.j2
+        dest: "/etc/nginx/sites-enabled/{{ item.server_name }}-static.conf"
+        owner: root
+        group: root
+        mode: 0644
+      loop: "{{ static_sites }}"
+      notify: restart nginx
+      tags:
+        - nginx
+  when: static_sites is defined
