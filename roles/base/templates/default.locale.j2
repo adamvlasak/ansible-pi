@@ -1,1 +1,4 @@
-LANG=en_US.UTF-8
+{% if env.LANG is defined %}
+LANG={{ env.LANG }}
+LC_ALL={{ env.LANG }}
+{% endif %}
