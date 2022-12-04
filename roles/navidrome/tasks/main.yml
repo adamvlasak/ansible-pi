@@ -24,6 +24,7 @@
     src: /tmp/navidrome_{{ navidrome.version }}_Linux_arm64.tar.gz
     dest: /opt/navidrome
     remote_src: yes
+  notify: restart navidrome
   tags:
     - navidrome
 

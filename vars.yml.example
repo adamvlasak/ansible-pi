@@ -8,7 +8,11 @@ network:
   subnet: 192.168.1.0/24
   nameserver: 127.0.0.1
 
+env:
+  LANG: en_US.UTF-8
+
 dnscrypt_proxy:
+  cache_size: 4096
   servername: cz.nic
   blocklists:
     - https://raw.githubusercontent.com/notracking/hosts-blocklists/master/dnscrypt-proxy/dnscrypt-proxy.blacklist.txt
@@ -36,7 +40,7 @@ minidlna:
     - { type: A, path: /mnt/data/AudioBooks }
 
 navidrome:
-  version: 0.47.5
+  version: 0.48.0
   working_directory: /var/lib/navidrome
   bin_directory: /opt/navidrome
   music_directory: /mnt/data/Music
