@@ -1,22 +1,19 @@
 
 # Local set of patterns to block
 
-ad.*
-ads.*
-banner.*
-banners.*
-creatives.*
-oas.*
-oascentral.*
-tag.*
-telemetry.*
-tracker.*
+{% if dnscrypt_proxy.block_patterns is defined %}
+{% for pattern in dnscrypt_proxy.block_patterns %}
+{{ pattern }}
+{% endfor %}
+{% endif %}
 
 # Blocked local domains
 
+{% if dnscrypt_proxy.blocked_local_domains is defined %}
 {% for domain in dnscrypt_proxy.blocked_local_domains %}
 {{ domain }}
 {% endfor %}
+{% endif %}
 
 # eth0.me is hardcoded in tools such as Archey, but is not available any
 # more, causing issues such as terminal sessions taking a long time to

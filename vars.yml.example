@@ -25,6 +25,17 @@ dnscrypt_proxy:
     - "*.local"
     - "*.localdomain"
     - "*.workgroup"
+  block_patterns:
+    - "ad.*"
+    - "ads.*"
+    - "banner.*"
+    - "banners.*"
+    - "creatives.*"
+    - "oas.*"
+    - "oascentral.*"
+    - "tag.*"
+    - "telemetry.*"
+    - "tracker.*"
 
 samba:
   share_name: SOME_NAME
