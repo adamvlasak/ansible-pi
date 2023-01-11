@@ -1,11 +1,19 @@
+ansible_cmd := ansible-playbook playbook.yml --diff
+
 test:
-	ansible-playbook playbook.yml --check --diff
+	$(ansible_cmd) --check
 
 test.dnscrypt_proxy:
-	ansible-playbook playbook.yml --check --diff --tags=dnscrypt-proxy,blocked-names
+	$(ansible_cmd) --check --tags=dnscrypt-proxy,blocked-names
+
+test.minidlna:
+	$(ansible_cmd) --check --tags=minidlna
 
 provision:
-	ansible-playbook playbook.yml --diff
+	$(ansible_cmd)
 
 provision.dnscrypt_proxy:
-	ansible-playbook playbook.yml --diff --tags=dnscrypt-proxy,blocked-names
+	$(ansible_cmd) --tags=dnscrypt-proxy,blocked-names
+
+provision.minidlna:
+	$(ansible_cmd) --tags=minidlna
