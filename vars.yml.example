@@ -18,24 +18,11 @@ dnscrypt_proxy:
   cloaking_rules:
     - "pi.loc {{ network.ip }}"
     - "navidrome.loc {{ network.ip }}"
-  forwarding_rules:
-    - "1.168.192.in-addr.arpa 192.168.1.1"
-  blocked_local_domains:
+  block_patterns:
     - "*.lan"
     - "*.local"
     - "*.localdomain"
     - "*.workgroup"
-  block_patterns:
-    - "ad.*"
-    - "ads.*"
-    - "banner.*"
-    - "banners.*"
-    - "creatives.*"
-    - "oas.*"
-    - "oascentral.*"
-    - "tag.*"
-    - "telemetry.*"
-    - "tracker.*"
 
 samba:
   share_name: SOME_NAME

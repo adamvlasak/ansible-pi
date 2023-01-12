@@ -22,9 +22,13 @@ cache_max_ttl = 86400
 cache_neg_min_ttl = 60
 cache_neg_max_ttl = 600
 
+{% if dnscrypt_proxy.forwarding_rules is defined %}
 forwarding_rules = '/etc/dnscrypt-proxy/forwarding-rules.txt'
+{% endif %}
 
+{% if dnscrypt_proxy.cloaking_rules is defined %}
 cloaking_rules = '/etc/dnscrypt-proxy/cloaking-rules.txt'
+{% endif %}
 
 [blocked_names]
   blocked_names_file = '/etc/dnscrypt-proxy/blocked-names.txt'
