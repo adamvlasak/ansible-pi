@@ -1,30 +1,29 @@
 ---
-- name: install iptables package
-  apt:
+- name: Install iptables package
+  ansible.builtin.apt:
     name: iptables
     state: present
   tags:
     - firewall
 
-- name: provision iptables.service
-  template:
+- name: Provision iptables.service
+  ansible.builtin.template:
     src: iptables.service.j2
     dest: /etc/systemd/system/iptables.service
     owner: root
     group: root
     mode: 0400
-  notify: daemon-reload
+  notify: Daemon-reload
   tags:
     - firewall
 
-- name: configure iptables
-  template:
+- name: Configure iptables
+  ansible.builtin.template:
     src: iptables-rules.j2
     dest: /usr/local/sbin/iptables-rules
     owner: root
     group: root
     mode: 0700
-  notify: restart iptables
+  notify: Restart iptables
   tags:
     - firewall
-

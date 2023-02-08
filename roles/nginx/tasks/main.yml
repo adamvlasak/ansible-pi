@@ -1,65 +1,66 @@
 ---
-- name: install package
-  apt:
+- name: Install package
+  ansible.builtin.apt:
     name: nginx
     state: present
   tags:
     - nginx
 
-- name: remove original default vhost
-  file:
+- name: Remove original default vhost
+  ansible.builtin.file:
     path: /etc/nginx/sites-available/default
     state: absent
   tags:
     - nginx
 
-- name: setup nginx.conf
-  template:
+- name: Setup nginx.conf
+  ansible.builtin.template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
     owner: root
     group: root
     mode: 0644
   loop:
-    - { src: nginx.conf.j2, dest: /etc/nginx/nginx.conf }
-    - { src: default.nginx.j2, dest: /etc/nginx/sites-enabled/default }
-  notify: restart nginx
+    - {src: nginx.conf.j2, dest: /etc/nginx/nginx.conf}
+    - {src: default.nginx.j2, dest: /etc/nginx/sites-enabled/default}
+  notify: Restart nginx
   tags:
     - nginx
 
-- block:
-    - name: setup static sites directory
-      file:
+- name: Setuo static sites
+  when: static_sites is defined
+  block:
+    - name: Setup static sites directory
+      ansible.builtin.file:
         path: "{{ nginx.root_base_path }}/sites"
         state: directory
         owner: root
         group: root
         mode: 0755
-      notify: restart nginx
+      notify: Restart nginx
       tags:
         - nginx
 
-    - name: setup static sites subdirectories
-      file:
+    - name: Setup static sites subdirectories
+      ansible.builtin.file:
         path: "{{ nginx.root_base_path }}/sites/{{ item.server_name }}"
         state: directory
         owner: root
         group: root
         mode: 0755
       loop: "{{ static_sites }}"
-      notify: restart nginx
+      notify: Restart nginx
       tags:
         - nginx
 
-    - name: setup nginx virtual hosts
-      template:
+    - name: Setup nginx virtual hosts
+      ansible.builtin.template:
         src: static-vhost.conf.j2
         dest: "/etc/nginx/sites-enabled/{{ item.server_name }}-static.conf"
         owner: root
         group: root
         mode: 0644
       loop: "{{ static_sites }}"
-      notify: restart nginx
+      notify: Restart nginx
       tags:
         - nginx
-  when: static_sites is defined

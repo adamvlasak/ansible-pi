@@ -1,14 +1,14 @@
 ---
-- name: daemon-reload
-  systemd:
-    daemon-reload: yes
+- name: Daemon-reload
+  ansible.builtin.systemd:
+    daemon-reload: true
 
-- name: generate locales
-  command: locale-gen
+- name: Generate locales
+  ansible.builtin.command: locale-gen
   tags:
     - base
 
-- name: restart sshd
-  systemd:
+- name: Restart sshd
+  ansible.builtin.systemd:
     name: sshd
     state: restarted

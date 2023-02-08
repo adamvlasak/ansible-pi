@@ -51,4 +51,4 @@ mount:
 
 static_sites:
   - { "server_name": "example1.loc" }
-  - { "server_name": "example2.loc", "autoindex": True }
+  - { "server_name": "example2.loc", "autoindex": true }

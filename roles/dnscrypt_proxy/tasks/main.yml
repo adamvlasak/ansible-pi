@@ -1,86 +1,80 @@
 ---
-- name: install dnscryt-proxy
-  apt:
+- name: Install dnscryt-proxy
+  ansible.builtin.apt:
     name: dnscrypt-proxy
     state: present
   tags:
     - dnscrypt-proxy
 
-- name: add AmbientCapabilities = cap_net_bind_service
-  lineinfile:
+- name: Add AmbientCapabilities = cap_net_bind_service
+  ansible.builtin.lineinfile:
     line: AmbientCapabilities=cap_net_bind_service
     regex: ^AmbientCapabilities
     path: /etc/systemd/system/multi-user.target.wants/dnscrypt-proxy.service
-  notify:
-    - dnscrypt-proxy
+  notify: Dnscrypt-proxy
   tags:
     - dnscrypt-proxy
 
-- name: configure dnscrypt-proxy
-  template:
+- name: Configure dnscrypt-proxy
+  ansible.builtin.template:
     src: dnscrypt-proxy.toml.j2
     dest: /etc/dnscrypt-proxy/dnscrypt-proxy.toml
     owner: root
     group: root
     mode: 0444
-  notify:
-    - dnscrypt-proxy
+  notify: Dnscrypt-proxy
   tags:
     - dnscrypt-proxy
 
-- name: provision allowed-names.txt
-  template:
+- name: Provision allowed-names.txt
+  ansible.builtin.template:
     src: allowed-names.txt.j2
     dest: /etc/dnscrypt-proxy/allowed-names.txt
     owner: root
     group: root
     mode: 0444
   when: dnscrypt_proxy.allowed_names is defined
-  notify:
-    - dnscrypt-proxy
+  notify: Dnscrypt-proxy
   tags:
     - dnscrypt-proxy
 
-- name: provision blocked-ips.txt
-  template:
+- name: Provision blocked-ips.txt
+  ansible.builtin.template:
     src: blocked-ips.txt.j2
     dest: /etc/dnscrypt-proxy/blocked-ips.txt
     owner: root
     group: root
     mode: 0444
-  notify:
-    - dnscrypt-proxy
+  notify: Dnscrypt-proxy
   tags:
     - dnscrypt-proxy
 
-- name: provision forwarding-rules.txt
-  template:
+- name: Provision forwarding-rules.txt
+  ansible.builtin.template:
     src: forwarding-rules.txt.j2
     dest: /etc/dnscrypt-proxy/forwarding-rules.txt
     owner: root
     group: root
     mode: 0444
   when: dnscrypt_proxy.forwarding_rules is defined
-  notify:
-    - dnscrypt-proxy
+  notify: Dnscrypt-proxy
   tags:
     - dnscrypt-proxy
 
-- name: provision cloaking-rules.txt
-  template:
+- name: Provision cloaking-rules.txt
+  ansible.builtin.template:
     src: cloaking-rules.txt.j2
     dest: /etc/dnscrypt-proxy/cloaking-rules.txt
     owner: root
     group: root
     mode: 0444
   when: dnscrypt_proxy.cloaking_rules is defined
-  notify:
-    - dnscrypt-proxy
+  notify: Dnscrypt-proxy
   tags:
     - dnscrypt-proxy
 
-- name: set permissions to /etc/dnscrypt-proxy
-  file:
+- name: Set permissions to /etc/dnscrypt-proxy
+  ansible.builtin.file:
     path: /etc/dnscrypt-proxy
     state: directory
     owner: root
@@ -89,8 +83,8 @@
   tags:
     - dnscrypt-proxy
 
-- name: prepare directory for blocklist generator and its config
-  file:
+- name: Prepare directory for blocklist generator and its config
+  ansible.builtin.file:
     path: "{{ blocked_names_generator_path }}"
     state: directory
     owner: root
@@ -99,56 +93,52 @@
   tags:
     - blocked-names
 
-- name: download blocklist generator
-  get_url:
+- name: Download blocklist generator
+  ansible.builtin.get_url:
     url: https://github.com/DNSCrypt/dnscrypt-proxy/raw/master/utils/generate-domains-blocklist/generate-domains-blocklist.py
     dest: "{{ blocked_names_generator_path }}/generate-domains-blocklist.py"
     owner: root
     group: root
     mode: 0400
-  notify:
-    - generate blocked names
+  notify: Generate blocked names
   tags:
     - blocked-names
 
-- name: provision domains-blocklist.conf
-  template:
+- name: Provision domains-blocklist.conf
+  ansible.builtin.template:
     src: domains-blocklist.conf.j2
     dest: "{{ blocked_names_generator_path }}/domains-blocklist.conf"
     owner: root
     group: root
     mode: 0400
-  notify:
-    - generate blocked names
+  notify: Generate blocked names
   tags:
     - blocked-names
 
-- name: provision domains-blocklist-local-additions.txt
-  template:
+- name: Provision domains-blocklist-local-additions.txt
+  ansible.builtin.template:
     src: domains-blocklist-local-additions.txt.j2
     dest: "{{ blocked_names_generator_path }}/domains-blocklist-local-additions.txt"
     owner: root
     group: root
     mode: 0400
-  notify:
-    - generate blocked names
+  notify: Generate blocked names
   tags:
     - blocked-names
 
-- name: provision domains-allowlist.txt from github
-  get_url:
+- name: Provision domains-allowlist.txt from github
+  ansible.builtin.get_url:
     url: https://github.com/DNSCrypt/dnscrypt-proxy/raw/master/utils/generate-domains-blocklist/domains-allowlist.txt
     dest: "{{ blocked_names_generator_path }}/domains-allowlist.txt"
     owner: root
     group: root
     mode: 0400
-  notify:
-    - generate blocked names
+  notify: Generate blocked names
   tags:
     - blocked-names
 
-- name: create empty domains-time-restricted.txt
-  file:
+- name: Create empty domains-time-restricted.txt
+  ansible.builtin.file:
     dest: "{{ blocked_names_generator_path }}/domains-time-restricted.txt"
     state: touch
     owner: root
@@ -157,20 +147,19 @@
   tags:
     - blocked-names
 
-- name: provision helper script
-  template:
+- name: Provision helper script
+  ansible.builtin.template:
     src: blocked-names-generator.sh.j2
     dest: "{{ blocked_names_generator_helper_path }}"
     owner: root
     group: root
     mode: 0500
-  notify:
-    - generate blocked names
+  notify: Generate blocked names
   tags:
     - blocked-names
 
-- name: provision cron script
-  template:
+- name: Provision cron script
+  ansible.builtin.template:
     src: cron.j2
     dest: /etc/cron.daily/blocked-names-generator
     owner: root

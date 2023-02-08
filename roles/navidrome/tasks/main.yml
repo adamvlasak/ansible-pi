@@ -1,13 +1,16 @@
 ---
-- name: download release from github
-  get_url:
+- name: Download release from github
+  ansible.builtin.get_url:
     url: "https://github.com/navidrome/navidrome/releases/download/v{{ navidrome.version }}/navidrome_{{ navidrome.version }}_Linux_arm64.tar.gz"
     dest: /tmp
+    owner: root
+    group: root
+    mode: 0644
   tags:
     - navidrome
 
-- name: prepare directories
-  file:
+- name: Prepare directories
+  ansible.builtin.file:
     path: "{{ item }}"
     state: directory
     owner: root
@@ -19,52 +22,53 @@
   tags:
     - navidrome
 
-- name: extract archive
-  unarchive:
+- name: Extract archive
+  ansible.builtin.unarchive:
     src: /tmp/navidrome_{{ navidrome.version }}_Linux_arm64.tar.gz
     dest: /opt/navidrome
-    remote_src: yes
-  notify: restart navidrome
+    remote_src: true
+  notify: Restart navidrome
+  when: not ansible_check_mode
   tags:
     - navidrome
 
-- name: setup navidrome.toml
-  template:
+- name: Setup navidrome.toml
+  ansible.builtin.template:
     src: navidrome.toml.j2
     dest: "{{ navidrome.working_directory }}/navidrome.toml"
     owner: root
     group: root
     mode: 0755
-  notify: restart navidrome
+  notify: Restart navidrome
   tags:
     - navidrome
 
-- name: setup navidrome.service
-  template:
+- name: Setup navidrome.service
+  ansible.builtin.template:
     src: navidrome.service.j2
     dest: /etc/systemd/system/navidrome.service
     owner: root
     group: root
     mode: 0755
   notify:
-    - daemon-reload
-    - restart navidrome
+    - Daemon-reload
+    - Restart navidrome
   tags:
     - navidrome
 
-- name: setup nginx virtualhost
-  template:
+- name: Setup nginx virtualhost
+  ansible.builtin.template:
     src: navidrome.nginx.j2
     dest: /etc/nginx/sites-enabled/navidrome
     owner: root
     group: root
     mode: 0644
-  notify: restart nginx
+  notify: Restart nginx
   tags:
     - navidrome
 
-- name: install ffmpeg
-  apt:
+- name: Install ffmpeg
+  ansible.builtin.apt:
     name: ffmpeg
     state: present
   tags:

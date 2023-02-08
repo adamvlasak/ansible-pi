@@ -1,18 +1,18 @@
 ---
-- name: install samba package
-  apt:
+- name: Install samba package
+  ansible.builtin.apt:
     name: samba
     state: present
   tags:
     - samba
 
-- name: setup smb.conf
-  template:
+- name: Setup smb.conf
+  ansible.builtin.template:
     src: smb.conf.j2
     dest: /etc/samba/smb.conf
     owner: root
     group: root
     mode: 0664
-  notify: restart samba
+  notify: Restart samba
   tags:
     - samba

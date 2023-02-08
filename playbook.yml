@@ -1,14 +1,14 @@
 ---
-- name: setup raspberry pi
+- name: Setup raspberry pi
   hosts: all
-  become: True
+  become: true
   vars_files:
     - vars.yml
   roles:
     - base
     - security
     - firewall
-    - dnscrypt-proxy
+    - dnscrypt_proxy
     - nginx
     - navidrome
     - minidlna

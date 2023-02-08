@@ -1,22 +1,22 @@
 ---
-- name: install necessary packages
-  apt:
+- name: Install necessary packages
+  ansible.builtin.apt:
     name: "{{ packages }}"
     state: present
-    update_cache: yes
+    update_cache: true
   tags:
     - base
 
-- name: remove unwanted packages
-  apt:
+- name: Remove unwanted packages
+  ansible.builtin.apt:
     name: "{{ item }}"
     state: absent
   loop: "{{ absent_packages }}"
   tags:
     - base
 
-- name: setup boot/config.txt
-  template:
+- name: Setup boot/config.txt
+  ansible.builtin.template:
     src: boot-config.txt.j2
     dest: /boot/config.txt
     owner: root
@@ -25,25 +25,25 @@
   tags:
     - base
 
-- name: set machine hostname
-  hostname:
+- name: Set machine hostname
+  ansible.builtin.hostname:
     name: "{{ network.hostname }}"
   tags:
     - base
 
-- name: setup sshd
-  template:
+- name: Setup sshd
+  ansible.builtin.template:
     src: sshd_config.j2
     dest: /etc/ssh/sshd_config
     owner: root
     group: root
     mode: 0644
-  notify: restart sshd
+  notify: Restart sshd
   tags:
     - base
 
-- name: set hosts file
-  template:
+- name: Set hosts file
+  ansible.builtin.template:
     src: hosts.j2
     dest: /etc/hosts
     owner: root
@@ -53,32 +53,31 @@
   tags:
     - base
 
-- name: setup correct time
-  file:
+- name: Setup correct time
+  ansible.builtin.file:
     src: /usr/share/zoneinfo/Europe/Prague
     dest: /etc/localtime
-    force: yes
+    force: true
     state: link
   tags:
     - base
 
-- name: setup locales
-  template:
+- name: Setup locales
+  ansible.builtin.template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
     owner: root
     group: root
     mode: 0644
-  notify:
-    - generate locales
+  notify: Generate locales
   loop:
-    - { src: locale.gen.j2, dest: /etc/locale.gen }
-    - { src: default.locale.j2, dest: /etc/default/locale }
+    - {src: locale.gen.j2, dest: /etc/locale.gen}
+    - {src: default.locale.j2, dest: /etc/default/locale}
   tags:
     - base
 
-- name: setup resolv.conf
-  template:
+- name: Setup resolv.conf
+  ansible.builtin.template:
     src: resolv.conf.j2
     dest: /etc/resolv.conf
     owner: root
@@ -88,8 +87,8 @@
   tags:
     - base
 
-- name: prepare mount points
-  file:
+- name: Prepare mount points
+  ansible.builtin.file:
     path: "{{ item.path }}"
     state: directory
     owner: "{{ item.owner }}"
@@ -100,11 +99,11 @@
   tags:
     - base
 
-- name: disable unwanted services
-  systemd:
+- name: Disable unwanted services
+  ansible.builtin.systemd:
     name: "{{ item }}"
     state: stopped
-    enabled: no
+    enabled: false
   loop: "{{ disabled_services }}"
   when: disabled_services is defined
   tags:

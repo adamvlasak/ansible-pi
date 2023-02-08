@@ -1,6 +1,6 @@
 ---
-- name: restart minidlna
-  systemd:
+- name: Restart minidlna
+  ansible.builtin.systemd:
     name: minidlna
     state: restarted
-    enabled: yes
+    enabled: true

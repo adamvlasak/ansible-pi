@@ -1,6 +1,6 @@
 ---
-- name: restart navidrome
-  systemd:
+- name: Restart navidrome
+  ansible.builtin.systemd:
     name: navidrome
     state: restarted
-    enabled: yes
+    enabled: true

@@ -1,29 +1,27 @@
 ---
-- name: install minidlna package
-  apt:
+- name: Install minidlna package
+  ansible.builtin.apt:
     name: minidlna
     state: present
   tags:
     - minidlna
 
-- name: setup minidlna.conf
-  template:
+- name: Setup minidlna.conf
+  ansible.builtin.template:
     src: minidlna.conf.j2
     dest: /etc/minidlna.conf
     owner: root
     group: root
     mode: 0644
-  notify:
-    - restart minidlna
+  notify: Restart minidlna
   tags:
     - minidlna
 
-- name: increase fs.inotify.max_user_watches
-  sysctl:
+- name: Increase fs.inotify.max_user_watches
+  ansible.posix.sysctl:
     key: fs.inotify.max_user_watches
     value: "100000"
     state: present
-  notify:
-    - restart minidlna
+  notify: Restart minidlna
   tags:
     - minidlna

@@ -1,0 +1,10 @@
+---
+- name: Dnscrypt-proxy
+  ansible.builtin.systemd:
+    name: dnscrypt-proxy
+    state: restarted
+
+- name: Generate blocked names
+  ansible.builtin.command: "{{ blocked_names_generator_helper_path }}"
+  notify:
+    - dnscrypt-proxy

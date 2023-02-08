@@ -1,6 +1,6 @@
 ---
-- name: restart samba
-  systemd:
+- name: Restart samba
+  ansible.builtin.systemd:
     name: smbd
     state: restarted
-    enabled: yes
+    enabled: true

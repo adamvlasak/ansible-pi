@@ -2,7 +2,7 @@ server {
   listen {{ nginx.default_port }};
   server_name {{ item.server_name }};
   root {{ nginx.root_base_path }}/sites/{{ item.server_name }};
-{% if item.autoindex is defined and item.autoindex == True %}
+{% if item.autoindex is defined and item.autoindex == true %}
   autoindex on;
 {% endif %}
 
