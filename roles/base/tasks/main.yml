@@ -10,6 +10,7 @@
 - name: Remove unwanted packages
   ansible.builtin.apt:
     name: "{{ item }}"
+    autoremove: true
     state: absent
   loop: "{{ absent_packages }}"
   tags:
