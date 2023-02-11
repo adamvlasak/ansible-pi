@@ -28,6 +28,7 @@ packages:
 
 absent_packages:
   - openresolv
+  - resolvconf
   - wpasupplicant
 
 disabled_services:

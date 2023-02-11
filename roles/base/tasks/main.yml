@@ -16,6 +16,11 @@
   tags:
     - base
 
+- name: Remove /etc/resolvconf.conf
+  ansible.builtin.file:
+    path: /etc/resolvconf.conf
+    state: absent
+
 - name: Setup boot/config.txt
   ansible.builtin.template:
     src: boot-config.txt.j2
