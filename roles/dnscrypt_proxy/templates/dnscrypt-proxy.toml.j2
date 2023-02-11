@@ -1,6 +1,6 @@
 # Empty listen_addresses to use systemd socket activation
-listen_addresses = ['127.0.0.1:53', '{{ network.ip }}:53']
-server_names = ['{{ dnscrypt_proxy.servername }}']
+listen_addresses = {{ dnscrypt_proxy.listen_addresses | list }}
+server_names = {{ dnscrypt_proxy.servernames | list }}
 
 ipv4_servers = true
 ipv6_servers = false

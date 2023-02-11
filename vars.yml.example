@@ -10,7 +10,8 @@ env:
 
 dnscrypt_proxy:
   cache_size: 4096
-  servername: cz.nic
+  listen_addresses: ["127.0.0.1:53", "192.168.1.100:53"]
+  servernames: ["cz.nic"]
   blocklists:
     - https://raw.githubusercontent.com/notracking/hosts-blocklists/master/dnscrypt-proxy/dnscrypt-proxy.blacklist.txt
     - https://hosts.oisd.nl/basic/
