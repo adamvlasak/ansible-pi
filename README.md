@@ -1,4 +1,4 @@
-# Raspberry PI media server / DNS caching blocking server
+# Raspberry PI Home Server
 
 This repository contains ansible playbook that helps with setup of raspberry pi based home server. It will have following features:
 
@@ -6,6 +6,7 @@ This repository contains ansible playbook that helps with setup of raspberry pi 
 - local DLNA server so that you can watch your movies on TV or such
 - local web based music player
 - local samba server
+- it can act as router within your network
 
 ## Prerequisities
 
@@ -21,7 +22,7 @@ Just make sure you can ssh to your raspberry and create `hosts` file (assuming y
 $ echo "192.168.1.100 ansible_user=root" > hosts
 ```
 
-Then copy `vars.yml.example` to `vars.yml` and customize to your needs. Example vars file assumes you connected raspberry to your router running on `192.168.1.1`. 
+Then copy `vars.yml.example` to `vars.yml` and customize to your needs. Example vars file assumes you connected raspberry to your router running on `192.168.1.1`.
 
 > It is required to set this raspberry pi as primary and secondary DNS server in your DHCP settings on your router so that all your devices will get `0.0.0.0` as DNS reply for blocked domains and will see domain specified in `vars.yml` file.
 

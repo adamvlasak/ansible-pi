@@ -2,6 +2,7 @@
 network:
   ip: 192.168.1.100
   hostname: pi.loc
+  router: 192.168.1.1 # or false when dhcp should be used
   subnet: 192.168.1.0/24
   nameserver: 127.0.0.1
 
