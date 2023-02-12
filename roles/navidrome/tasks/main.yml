@@ -32,7 +32,7 @@
   tags:
     - navidrome
 
-- name: Setup navidrome.toml
+- name: Configure navidrome.toml
   ansible.builtin.template:
     src: navidrome.toml.j2
     dest: "{{ navidrome.working_directory }}/navidrome.toml"
@@ -43,7 +43,7 @@
   tags:
     - navidrome
 
-- name: Setup navidrome.service
+- name: Configure navidrome.service
   ansible.builtin.template:
     src: navidrome.service.j2
     dest: /etc/systemd/system/navidrome.service
@@ -56,7 +56,7 @@
   tags:
     - navidrome
 
-- name: Setup nginx virtualhost
+- name: Configure nginx virtualhost
   ansible.builtin.template:
     src: navidrome.nginx.j2
     dest: /etc/nginx/sites-enabled/navidrome

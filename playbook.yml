@@ -1,5 +1,5 @@
 ---
-- name: Setup raspberry pi
+- name: Configure raspberry pi
   hosts: all
   become: true
   vars_files:
