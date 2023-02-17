@@ -90,6 +90,18 @@
     group: root
     mode: 0644
     attr: +i
+  notify: Restart dhcpcd
+  tags:
+    - base
+
+- name: Setup dhcpcd.conf
+  ansible.builtin.template:
+    src: dhcpcd.conf.j2
+    dest: /etc/dhcpcd.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: Restart dhcpcd
   tags:
     - base
 

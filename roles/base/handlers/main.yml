@@ -8,6 +8,11 @@
   tags:
     - base
 
+- name: Restart dhcpcd
+  ansible.builtin.systemd:
+    name: dhcpcd
+    state: restarted
+
 - name: Restart sshd
   ansible.builtin.systemd:
     name: sshd
