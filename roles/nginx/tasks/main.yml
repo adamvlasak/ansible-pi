@@ -13,7 +13,7 @@
   tags:
     - nginx
 
-- name: Setup nginx.conf
+- name: Configure nginx.conf
   ansible.builtin.template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
@@ -30,7 +30,7 @@
 - name: Setuo static sites
   when: static_sites is defined
   block:
-    - name: Setup static sites directory
+    - name: Configure static sites directory
       ansible.builtin.file:
         path: "{{ nginx.root_base_path }}/sites"
         state: directory
@@ -41,7 +41,7 @@
       tags:
         - nginx
 
-    - name: Setup static sites subdirectories
+    - name: Configure static sites subdirectories
       ansible.builtin.file:
         path: "{{ nginx.root_base_path }}/sites/{{ item.server_name }}"
         state: directory
@@ -53,7 +53,7 @@
       tags:
         - nginx
 
-    - name: Setup nginx virtual hosts
+    - name: Configure nginx virtual hosts
       ansible.builtin.template:
         src: static-vhost.conf.j2
         dest: "/etc/nginx/sites-enabled/{{ item.server_name }}-static.conf"

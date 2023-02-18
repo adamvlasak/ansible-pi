@@ -21,7 +21,7 @@
     path: /etc/resolvconf.conf
     state: absent
 
-- name: Setup boot/config.txt
+- name: Configure boot/config.txt
   ansible.builtin.template:
     src: boot-config.txt.j2
     dest: /boot/config.txt
@@ -37,7 +37,7 @@
   tags:
     - base
 
-- name: Setup sshd
+- name: Configure sshd
   ansible.builtin.template:
     src: sshd_config.j2
     dest: /etc/ssh/sshd_config
@@ -59,7 +59,7 @@
   tags:
     - base
 
-- name: Setup correct time
+- name: Configure correct time
   ansible.builtin.file:
     src: /usr/share/zoneinfo/Europe/Prague
     dest: /etc/localtime
@@ -68,7 +68,7 @@
   tags:
     - base
 
-- name: Setup locales
+- name: Configure locales
   ansible.builtin.template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
@@ -82,7 +82,7 @@
   tags:
     - base
 
-- name: Setup resolv.conf
+- name: Configure resolv.conf
   ansible.builtin.template:
     src: resolv.conf.j2
     dest: /etc/resolv.conf
@@ -94,7 +94,7 @@
   tags:
     - base
 
-- name: Setup dhcpcd.conf
+- name: Configure dhcpcd.conf
   ansible.builtin.template:
     src: dhcpcd.conf.j2
     dest: /etc/dhcpcd.conf

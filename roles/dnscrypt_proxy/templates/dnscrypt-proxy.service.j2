@@ -1,0 +1,23 @@
+[Unit]
+Description=DNSCrypt-proxy client
+Documentation=https://github.com/jedisct1/dnscrypt-proxy/wiki
+After=network.target
+Before=nss-lookup.target
+Wants=nss-lookup.target
+
+[Service]
+NonBlocking=true
+ExecStart=/usr/sbin/dnscrypt-proxy --config /etc/dnscrypt-proxy/dnscrypt-proxy.toml
+ProtectHome=yes
+ProtectControlGroups=yes
+ProtectKernelModules=yes
+
+AmbientCapabilities=cap_net_bind_service
+
+DynamicUser=yes
+CacheDirectory=dnscrypt-proxy
+LogsDirectory=dnscrypt-proxy
+RuntimeDirectory=dnscrypt-proxy
+
+[Install]
+WantedBy=multi-user.target

@@ -1,17 +1,63 @@
 ---
-- name: Install dnscryt-proxy
+- name: Remove dnscrypt-proxy package
   ansible.builtin.apt:
     name: dnscrypt-proxy
-    state: present
+    state: absent
   tags:
     - dnscrypt-proxy
 
-- name: Add AmbientCapabilities = cap_net_bind_service
-  ansible.builtin.lineinfile:
-    line: AmbientCapabilities=cap_net_bind_service
-    regex: ^AmbientCapabilities
-    path: /etc/systemd/system/multi-user.target.wants/dnscrypt-proxy.service
-  notify: Dnscrypt-proxy
+- name: Check dnscrypt-proxy version
+  ansible.builtin.command: dnscrypt-proxy --version
+  changed_when: false
+  register: installed_version
+  tags:
+    - dnscrypt-proxy
+
+- name: Install dnscrypt-proxy
+  when: installed_version.stdout != dnscrypt_proxy.version
+        and not ansible_check_mode
+  tags:
+    - dnscrypt-proxy
+  block:
+    - name: Download dnscrypt-proxy
+      ansible.builtin.get_url:
+        url: "{{ download_url }}"
+        dest: /tmp
+        owner: root
+        group: root
+        mode: 0644
+
+    - name: Extract tarball
+      ansible.builtin.unarchive:
+        src: "/tmp/{{ tarball }}"
+        dest: /tmp
+        remote_src: true
+
+    - name: Copy binary to /usr/sbin/dnscrypt_proxy
+      ansible.builtin.copy:
+        src: "/tmp/linux-{{ arch }}/dnscrypt-proxy"
+        dest: /usr/sbin/dnscrypt-proxy
+        remote_src: true
+        owner: root
+        group: root
+        mode: 0755
+
+    - name: Delete both unpacked directory and tarball
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - "/tmp/linux-{{ arch }}"
+        - "/tmp/{{ tarball }}"
+
+- name: Configure systemd service file
+  ansible.builtin.template:
+    src: dnscrypt-proxy.service.j2
+    dest: /etc/systemd/system/dnscrypt-proxy.service
+    owner: root
+    group: root
+    mode: 0755
+  notify: Restart dnscrypt-proxy
   tags:
     - dnscrypt-proxy
 
@@ -22,11 +68,11 @@
     owner: root
     group: root
     mode: 0444
-  notify: Dnscrypt-proxy
+  notify: Restart dnscrypt-proxy
   tags:
     - dnscrypt-proxy
 
-- name: Provision allowed-names.txt
+- name: Configure allowed-names.txt
   ansible.builtin.template:
     src: allowed-names.txt.j2
     dest: /etc/dnscrypt-proxy/allowed-names.txt
@@ -34,22 +80,22 @@
     group: root
     mode: 0444
   when: dnscrypt_proxy.allowed_names is defined
-  notify: Dnscrypt-proxy
+  notify: Restart dnscrypt-proxy
   tags:
     - dnscrypt-proxy
 
-- name: Provision blocked-ips.txt
+- name: Configure blocked-ips.txt
   ansible.builtin.template:
     src: blocked-ips.txt.j2
     dest: /etc/dnscrypt-proxy/blocked-ips.txt
     owner: root
     group: root
     mode: 0444
-  notify: Dnscrypt-proxy
+  notify: Restart dnscrypt-proxy
   tags:
     - dnscrypt-proxy
 
-- name: Provision forwarding-rules.txt
+- name: Configure forwarding-rules.txt
   ansible.builtin.template:
     src: forwarding-rules.txt.j2
     dest: /etc/dnscrypt-proxy/forwarding-rules.txt
@@ -57,11 +103,11 @@
     group: root
     mode: 0444
   when: dnscrypt_proxy.forwarding_rules is defined
-  notify: Dnscrypt-proxy
+  notify: Restart dnscrypt-proxy
   tags:
     - dnscrypt-proxy
 
-- name: Provision cloaking-rules.txt
+- name: Configure cloaking-rules.txt
   ansible.builtin.template:
     src: cloaking-rules.txt.j2
     dest: /etc/dnscrypt-proxy/cloaking-rules.txt
@@ -69,7 +115,7 @@
     group: root
     mode: 0444
   when: dnscrypt_proxy.cloaking_rules is defined
-  notify: Dnscrypt-proxy
+  notify: Restart dnscrypt-proxy
   tags:
     - dnscrypt-proxy
 
@@ -104,7 +150,7 @@
   tags:
     - blocked-names
 
-- name: Provision domains-blocklist.conf
+- name: Configure domains-blocklist.conf
   ansible.builtin.template:
     src: domains-blocklist.conf.j2
     dest: "{{ blocked_names_generator_path }}/domains-blocklist.conf"
@@ -115,7 +161,7 @@
   tags:
     - blocked-names
 
-- name: Provision domains-blocklist-local-additions.txt
+- name: Configure domains-blocklist-local-additions.txt
   ansible.builtin.template:
     src: domains-blocklist-local-additions.txt.j2
     dest: "{{ blocked_names_generator_path }}/domains-blocklist-local-additions.txt"
@@ -126,7 +172,7 @@
   tags:
     - blocked-names
 
-- name: Provision domains-allowlist.txt from github
+- name: Configure domains-allowlist.txt from github
   ansible.builtin.get_url:
     url: https://github.com/DNSCrypt/dnscrypt-proxy/raw/master/utils/generate-domains-blocklist/domains-allowlist.txt
     dest: "{{ blocked_names_generator_path }}/domains-allowlist.txt"
@@ -147,7 +193,7 @@
   tags:
     - blocked-names
 
-- name: Provision helper script
+- name: Configure helper script
   ansible.builtin.template:
     src: blocked-names-generator.sh.j2
     dest: "{{ blocked_names_generator_helper_path }}"
@@ -158,7 +204,7 @@
   tags:
     - blocked-names
 
-- name: Provision cron script
+- name: Configure cron script
   ansible.builtin.template:
     src: cron.j2
     dest: /etc/cron.daily/blocked-names-generator

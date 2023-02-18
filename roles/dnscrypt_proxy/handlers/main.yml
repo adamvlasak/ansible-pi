@@ -1,7 +1,8 @@
 ---
-- name: Dnscrypt-proxy
+- name: Restart dnscrypt-proxy
   ansible.builtin.systemd:
     name: dnscrypt-proxy
+    daemon-reload: true
     state: restarted
 
 - name: Generate blocked names
