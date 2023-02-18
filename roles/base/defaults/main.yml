@@ -5,12 +5,15 @@ packages:
   - curl
   - convmv
   - dnsutils
+  - flac
   - git
   - htop
   - iftop
   - iotop
   - irqbalance
+  - mc
   - mlocate
+  - mp3gain
   - ncdu
   - pass
   - sysstat
