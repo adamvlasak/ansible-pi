@@ -12,7 +12,7 @@ env:
   - "EDITOR=vim"
   - "HISTSIZE=1000"
   - "HISTFILESIZE=1000"
-  - "HISTCONTROL=ignoreboth"
+  - "HISTCONTROL=ignoredups:erasedups"
 
 dnscrypt_proxy:
   cache_size: 4096
