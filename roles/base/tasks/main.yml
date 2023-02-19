@@ -1,4 +1,14 @@
 ---
+- name: Configure boot/config.txt
+  ansible.builtin.template:
+    src: boot-config.txt.j2
+    dest: /boot/config.txt
+    owner: root
+    group: root
+    mode: 0755
+  tags:
+    - base
+
 - name: Install necessary packages
   ansible.builtin.apt:
     name: "{{ packages }}"
@@ -16,24 +26,13 @@
   tags:
     - base
 
-- name: Remove /etc/resolvconf.conf
-  ansible.builtin.file:
-    path: /etc/resolvconf.conf
-    state: absent
-
-- name: Configure boot/config.txt
-  ansible.builtin.template:
-    src: boot-config.txt.j2
-    dest: /boot/config.txt
-    owner: root
-    group: root
-    mode: 0755
-  tags:
-    - base
-
-- name: Set machine hostname
-  ansible.builtin.hostname:
-    name: "{{ network.hostname }}"
+- name: Disable unwanted services
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    state: stopped
+    enabled: false
+  loop: "{{ disabled_services }}"
+  when: disabled_services is defined
   tags:
     - base
 
@@ -45,17 +44,6 @@
     group: root
     mode: 0644
   notify: Restart sshd
-  tags:
-    - base
-
-- name: Set hosts file
-  ansible.builtin.template:
-    src: hosts.j2
-    dest: /etc/hosts
-    owner: root
-    group: root
-    mode: 0644
-    attr: +i
   tags:
     - base
 
@@ -78,9 +66,19 @@
   notify: Generate locales
   loop:
     - {src: locale.gen.j2, dest: /etc/locale.gen}
-    - {src: default.locale.j2, dest: /etc/default/locale}
   tags:
     - base
+
+- name: Set machine hostname
+  ansible.builtin.hostname:
+    name: "{{ network.hostname }}"
+  tags:
+    - base
+
+- name: Remove /etc/resolvconf.conf
+  ansible.builtin.file:
+    path: /etc/resolvconf.conf
+    state: absent
 
 - name: Configure resolv.conf
   ansible.builtin.template:
@@ -91,6 +89,17 @@
     mode: 0644
     attr: +i
   notify: Restart dhcpcd
+  tags:
+    - base
+
+- name: Set hosts file
+  ansible.builtin.template:
+    src: hosts.j2
+    dest: /etc/hosts
+    owner: root
+    group: root
+    mode: 0644
+    attr: +i
   tags:
     - base
 
@@ -105,6 +114,16 @@
   tags:
     - base
 
+- name: Configure ENV variables
+  ansible.builtin.template:
+    src: vars.sh.j2
+    dest: /etc/profile.d/vars.sh
+    owner: root
+    group: root
+    mode: 0755
+  tags:
+    - base
+
 - name: Prepare mount points
   ansible.builtin.file:
     path: "{{ item.path }}"
@@ -114,15 +133,5 @@
     mode: "{{ item.mode }}"
   loop: "{{ mount.points }}"
   when: mount.points is defined
-  tags:
-    - base
-
-- name: Disable unwanted services
-  ansible.builtin.systemd:
-    name: "{{ item }}"
-    state: stopped
-    enabled: false
-  loop: "{{ disabled_services }}"
-  when: disabled_services is defined
   tags:
     - base

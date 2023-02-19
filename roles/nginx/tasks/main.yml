@@ -1,15 +1,8 @@
 ---
-- name: Install package
+- name: Install nginx package
   ansible.builtin.apt:
     name: nginx
     state: present
-  tags:
-    - nginx
-
-- name: Remove original default vhost
-  ansible.builtin.file:
-    path: /etc/nginx/sites-available/default
-    state: absent
   tags:
     - nginx
 
@@ -27,8 +20,17 @@
   tags:
     - nginx
 
+- name: Remove original default vhost
+  ansible.builtin.file:
+    path: /etc/nginx/sites-available/default
+    state: absent
+  tags:
+    - nginx
+
 - name: Setuo static sites
   when: static_sites is defined
+  tags:
+    - nginx
   block:
     - name: Configure static sites directory
       ansible.builtin.file:
@@ -38,9 +40,6 @@
         group: root
         mode: 0755
       notify: Restart nginx
-      tags:
-        - nginx
-
     - name: Configure static sites subdirectories
       ansible.builtin.file:
         path: "{{ nginx.root_base_path }}/sites/{{ item.server_name }}"
@@ -50,8 +49,6 @@
         mode: 0755
       loop: "{{ static_sites }}"
       notify: Restart nginx
-      tags:
-        - nginx
 
     - name: Configure nginx virtual hosts
       ansible.builtin.template:
@@ -62,5 +59,3 @@
         mode: 0644
       loop: "{{ static_sites }}"
       notify: Restart nginx
-      tags:
-        - nginx
