@@ -52,6 +52,8 @@ navidrome:
   bin_directory: /opt/navidrome
   music_directory: /mnt/data/Music
 
+yt_dlp_version: 2023.02.17
+
 mount:
   points:
     - { path: /mnt/data, owner: nobody, group: nogroup, mode: "0777" }
