@@ -51,6 +51,8 @@ navidrome:
   working_directory: /var/lib/navidrome
   bin_directory: /opt/navidrome
   music_directory: /mnt/data/Music
+  external_services: false
+  theme: Nord
 
 yt_dlp_version: 2023.02.17
 

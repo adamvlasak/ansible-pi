@@ -13,12 +13,22 @@
   ansible.builtin.file:
     path: "{{ item }}"
     state: directory
-    owner: root
-    group: root
-    mode: 0755
+    owner: navidrome
+    group: users
+    mode: 0700
   loop:
     - "{{ navidrome.working_directory }}"
     - "{{ navidrome.bin_directory }}"
+  tags:
+    - navidrome
+
+- name: Configure navidrome user
+  ansible.builtin.user:
+    name: navidrome
+    groups: ["users"]
+    shell: /usr/sbin/nologin
+    home: "{{ navidrome.working_directory }}"
+    state: present
   tags:
     - navidrome
 
@@ -36,8 +46,8 @@
   ansible.builtin.template:
     src: navidrome.toml.j2
     dest: "{{ navidrome.working_directory }}/navidrome.toml"
-    owner: root
-    group: root
+    owner: navidrome
+    group: users
     mode: 0755
   notify: Restart navidrome
   tags:
