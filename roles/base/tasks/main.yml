@@ -134,6 +134,34 @@
   tags:
     - base
 
+- name: Configure pi group
+  ansible.builtin.group:
+    name: pi
+    state: present
+  tags:
+    - base
+    - user
+
+- name: Configure pi user
+  ansible.builtin.user:
+    name: pi
+    groups: ["pi", "users", "sudo"]
+    state: present
+  tags:
+    - base
+    - user
+
+- name: Configure sudoers
+  ansible.builtin.lineinfile:
+    path: /etc/sudoers
+    line: "%sudo ALL=(ALL:ALL) NOPASSWD: ALL"
+    insertafter: "%sudo.+ALL"
+    regexp: "NOPASSWD:.+ALL"
+    state: present
+  tags:
+    - base
+    - user
+
 - name: Prepare mount points
   ansible.builtin.file:
     path: "{{ item.path }}"
