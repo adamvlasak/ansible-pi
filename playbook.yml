@@ -6,7 +6,7 @@
     - vars.yml
   roles:
     - base
-    - security
+    - sysctl
     - firewall
     - dnscrypt_proxy
     - nginx
