@@ -21,3 +21,4 @@ rules:
   - {"name": "net.ipv6.conf.default.disable_ipv6", "value": "1"}
   - {"name": "net.ipv4.conf.all.log_martians", "value": "1"}
   - {"name": "net.ipv4.conf.default.log_martians", "value": "1"}
+  - {"name": "vm.swappiness", "value": "0"}
