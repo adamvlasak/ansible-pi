@@ -70,7 +70,7 @@ iptables -A INPUT -i eth0 -s {{ network.subnet }} -d {{ network.ip }}/32 -m conn
 iptables -A INPUT -i eth0 -s {{ network.subnet }} -d {{ network.ip }}/32 -m conntrack --ctstate NEW -p tcp -m tcp --dport 445 -j ACCEPT
 iptables -A INPUT -i eth0 -s {{ network.subnet }} -d {{ network.ip }}/32 -m conntrack --ctstate NEW -p tcp -m tcp --dport 8200 -j ACCEPT
 iptables -A INPUT -i eth0 -s {{ network.subnet }} -d {{ network.ip }}/32 -m conntrack --ctstate NEW -p tcp -m tcp --dport 80 -j ACCEPT
-iptables -A INPUT -i eth0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+iptables -A INPUT -i eth0 -d {{ network.ip }}/32 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 iptables -A INPUT -j LOG --log-prefix "INPUT DROP: "
 iptables -A INPUT -f -j DROP
 iptables -A INPUT -m tcp -p tcp -j REJECT --reject-with tcp-reset
@@ -85,9 +85,8 @@ iptables -A OUTPUT -o eth0 -s {{ network.ip }}/32 -m conntrack --ctstate NEW -m 
 iptables -A OUTPUT -o eth0 -s {{ network.ip }}/32 -m conntrack --ctstate NEW -m tcp -p tcp --dport 53 -j ACCEPT
 iptables -A OUTPUT -o eth0 -s {{ network.ip }}/32 -m conntrack --ctstate NEW -m udp -p udp --dport 53 -j ACCEPT
 iptables -A OUTPUT -o eth0 -s {{ network.ip }}/32 -m conntrack --ctstate NEW -m udp -p udp --dport 123 -j ACCEPT
-iptables -A OUTPUT -o eth0 -s {{ network.ip }}/32 -d {{ network.subnet }} -m conntrack --ctstate NEW -m udp -p udp --sport 1900 -j ACCEPT
+iptables -A OUTPUT -o eth0 -s {{ network.ip }}/32 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 iptables -A OUTPUT -o eth0 -m conntrack --ctstate NEW -m udp -p udp --sport 68 --dport 67 -j ACCEPT
-iptables -A OUTPUT -o eth0 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 iptables -A OUTPUT -j LOG --log-prefix "OUTPUT DROP: "
 iptables -A OUTPUT -m tcp -p tcp -j REJECT --reject-with tcp-reset
 iptables -A OUTPUT -m udp -p udp -j REJECT --reject-with icmp-port-unreachable
