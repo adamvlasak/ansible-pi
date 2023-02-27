@@ -63,7 +63,7 @@ iptables -A INPUT -s {{ network.subnet }} -d {{ network.ip }} -p icmp -m conntra
 iptables -A OUTPUT -s {{ network.ip }} -d {{ network.subnet }} -p icmp -m conntrack --ctstate NEW,RELATED,ESTABLISHED -j ACCEPT
 
 # Allowed input packets
-iptables -A INPUT -i lo -j ACCEPT
+iptables -A INPUT -i lo -d 127.0.0.1/32 -j ACCEPT
 iptables -A INPUT -i eth0 -s {{ network.subnet }} -d 239.255.255.250/32 -m conntrack --ctstate NEW -p udp -m udp --dport 1900 -j ACCEPT
 iptables -A INPUT -i eth0 -s {{ network.subnet }} -d {{ network.ip }}/32 -m conntrack --ctstate NEW -p udp -m udp --dport 53 -j ACCEPT
 iptables -A INPUT -i eth0 -s {{ network.subnet }} -d {{ network.ip }}/32 -m conntrack --ctstate NEW -p tcp -m tcp --dport 53 -j ACCEPT
