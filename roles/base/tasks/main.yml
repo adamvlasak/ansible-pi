@@ -156,7 +156,7 @@
 - name: Configure pi user
   ansible.builtin.user:
     name: pi
-    groups: ["pi", "users", "sudo"]
+    groups: [ "pi", "users", "sudo" ]
     state: present
   tags:
     - base

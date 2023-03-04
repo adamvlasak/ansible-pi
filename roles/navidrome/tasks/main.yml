@@ -25,7 +25,7 @@
 - name: Configure navidrome user
   ansible.builtin.user:
     name: navidrome
-    groups: ["users"]
+    groups: [ "users" ]
     shell: /usr/sbin/nologin
     home: "{{ navidrome.working_directory }}"
     state: present
