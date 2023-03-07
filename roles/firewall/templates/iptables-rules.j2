@@ -84,6 +84,7 @@ iptables -A OUTPUT -o eth0 -s {{ network.ip }}/32 -m conntrack --ctstate NEW -m 
 iptables -A OUTPUT -o eth0 -s {{ network.ip }}/32 -m conntrack --ctstate NEW -m udp -p udp --dport 443 -j ACCEPT
 iptables -A OUTPUT -o eth0 -s {{ network.ip }}/32 -m conntrack --ctstate NEW -m udp -p udp --dport 123 -j ACCEPT
 iptables -A OUTPUT -o eth0 -s {{ network.ip }}/32 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -o eth0 -s {{ network.ip }}/32 -d {{ network.subnet }} -m conntrack --ctstate NEW -m udp -p udp --sport 1900 -j ACCEPT
 iptables -A OUTPUT -o eth0 -m conntrack --ctstate NEW -m udp -p udp --sport 68 --dport 67 -j ACCEPT
 iptables -A OUTPUT -j LOG --log-prefix "OUTPUT DROP: "
 iptables -A OUTPUT -m tcp -p tcp -j REJECT --reject-with tcp-reset
