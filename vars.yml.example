@@ -15,13 +15,16 @@ env:
   - "HISTCONTROL=ignoredups:erasedups"
 
 dnscrypt_proxy:
-  cache_size: 4096
+  version: 2.1.4
   listen_addresses: [ "127.0.0.1:53", "192.168.1.100:53" ]
-  servernames: [ "cz.nic" ]
+  cache_size: 4096
+  servernames: [ "cloudflare-security" ]
   blocklists:
+    - https://hosts.oisd.nl/
+    - https://phishing.army/download/phishing_army_blocklist_extended.txt
     - https://raw.githubusercontent.com/notracking/hosts-blocklists/master/dnscrypt-proxy/dnscrypt-proxy.blacklist.txt
-    - https://hosts.oisd.nl/basic/
     - https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/dnscrypt/spy.txt
+    - https://osint.digitalside.it/Threat-Intel/lists/latestdomains.txt
   cloaking_rules:
     - "pi.loc {{ network.ip }}"
     - "navidrome.loc {{ network.ip }}"
@@ -58,7 +61,7 @@ yt_dlp_version: 2023.02.17
 
 mount:
   points:
-    - { path: /mnt/data, owner: nobody, group: nogroup, mode: "0777" }
+    - { path: /mnt/data, owner: nobody, group: nogroup, mode: "0755" }
 
 static_sites:
   - { "server_name": "example1.loc" }
