@@ -1,8 +1,10 @@
 # Raspberry PI Home Server
 
-This repository contains ansible playbook that helps with setup of raspberry pi based home server. It will have following features:
+This repository contains ansible playbook that helps with setup of
+Raspberry PI based home server. It will have following features:
 
-- local caching DNS server with adblocking features and DNS rebind protection
+- local caching DNS server with adblocking features and DNS rebind
+  protection
 - local DLNA server so that you can watch your movies on TV or such
 - local web based music player
 - local samba server
@@ -10,21 +12,28 @@ This repository contains ansible playbook that helps with setup of raspberry pi 
 
 ## Prerequisities
 
-- your raspberry runs on raspbian (maybe other debian based?) linux
+- your Raspberry PI runs on raspbian (maybe other debian based?) linux
 - your PC you can run ansible-playbook commands
-- you made MAC and IP reservation in your DHCP server so that IP of raspberry is not changing
+- you made MAC and IP reservation in your DHCP server so that IP of
+  Raspberry PI is not changing
 
 ## Configuration
 
-Just make sure you can ssh to your raspberry and create `hosts` file (assuming your raspberry has IP `192.168.1.100`):
+Just make sure you can ssh to your Raspberry PI and create `hosts` file
+(assuming your Raspberry PI has IP `192.168.1.100`):
 
 ```
 $ echo "192.168.1.100 ansible_user=root" > hosts
 ```
 
-Then copy `vars.yml.example` to `vars.yml` and customize to your needs. Example vars file assumes you connected raspberry to your router running on `192.168.1.1`.
+Then copy `vars.yml.example` to `vars.yml` and customize to your needs.
+Example vars file assumes you connected Raspberry PI to your router
+running on `192.168.1.1`.
 
-> It is required to set this raspberry pi as primary and secondary DNS server in your DHCP settings on your router so that all your devices will get `0.0.0.0` as DNS reply for blocked domains and will see domain specified in `vars.yml` file.
+> It is required to set this Raspberry PI pi as primary and secondary
+> DNS server in your DHCP settings on your router so that all your
+> devices will get `0.0.0.0` as DNS reply for blocked domains and will
+> see domain specified in `vars.yml` file.
 
 ## Provisioning
 
