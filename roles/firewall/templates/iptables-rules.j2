@@ -57,10 +57,10 @@ iptables -A PREROUTING -t nat -s {{ network.subnet }} ! -d {{ network.ip }}/32 -
 iptables -A INPUT -s {{ network.subnet }} -d {{ network.ip }}/32 -i eth0 -m conntrack --ctstate NEW -p tcp -m tcp --dport 22 -j ACCEPT
 
 # Incoming ICMP
-iptables -A INPUT -s {{ network.subnet }} -d {{ network.ip }} -p icmp -m conntrack --ctstate NEW,RELATED,ESTABLISHED -j ACCEPT
+iptables -A INPUT -p icmp --icmp-type 8 -s 0/0 -d {{ network.ip }} -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
 
 # Outgoing ICMP
-iptables -A OUTPUT -s {{ network.ip }} -d {{ network.subnet }} -p icmp -m conntrack --ctstate NEW,RELATED,ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -p icmp --icmp-type 0 -s {{ network.ip }} -d 0/0 -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 
 # Allowed input packets
 iptables -A INPUT -i lo -d 127.0.0.1/32 -j ACCEPT
