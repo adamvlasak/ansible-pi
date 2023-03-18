@@ -79,12 +79,12 @@ iptables -A INPUT -j REJECT --reject-with icmp-proto-unreachable
 
 # Allowed output packets
 iptables -A OUTPUT -o lo -s 127.0.0.1/32 -j ACCEPT
+iptables -A OUTPUT -o eth0 -s {{ network.ip }}/32 -d 239.255.255.250 -m conntrack --ctstate NEW -m udp -p udp --sport 1900 -j ACCEPT
 iptables -A OUTPUT -o eth0 -s {{ network.ip }}/32 -m conntrack --ctstate NEW -m tcp -p tcp --dport 80 -j ACCEPT
 iptables -A OUTPUT -o eth0 -s {{ network.ip }}/32 -m conntrack --ctstate NEW -m tcp -p tcp --dport 443 -j ACCEPT
 iptables -A OUTPUT -o eth0 -s {{ network.ip }}/32 -m conntrack --ctstate NEW -m udp -p udp --dport 443 -j ACCEPT
 iptables -A OUTPUT -o eth0 -s {{ network.ip }}/32 -m conntrack --ctstate NEW -m udp -p udp --dport 123 -j ACCEPT
 iptables -A OUTPUT -o eth0 -s {{ network.ip }}/32 -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
-iptables -A OUTPUT -o eth0 -s {{ network.ip }}/32 -d {{ network.subnet }} -m conntrack --ctstate NEW -m udp -p udp --sport 1900 -j ACCEPT
 iptables -A OUTPUT -o eth0 -m conntrack --ctstate NEW -m udp -p udp --sport 68 --dport 67 -j ACCEPT
 iptables -A OUTPUT -j LOG --log-prefix "OUTPUT DROP: "
 iptables -A OUTPUT -m tcp -p tcp -j REJECT --reject-with tcp-reset
