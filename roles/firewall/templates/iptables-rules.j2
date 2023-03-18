@@ -66,7 +66,6 @@ iptables -A OUTPUT -p icmp --icmp-type 0 -s {{ network.ip }} -d 0/0 -m conntrack
 iptables -A INPUT -i lo -d 127.0.0.1/32 -j ACCEPT
 iptables -A INPUT -i eth0 -s {{ network.subnet }} -d 239.255.255.250/32 -m conntrack --ctstate NEW -p udp -m udp --dport 1900 -j ACCEPT
 iptables -A INPUT -i eth0 -s {{ network.subnet }} -d {{ network.ip }}/32 -m conntrack --ctstate NEW -p udp -m udp --dport 53 -j ACCEPT
-iptables -A INPUT -i eth0 -s {{ network.subnet }} -d {{ network.ip }}/32 -m conntrack --ctstate NEW -p tcp -m tcp --dport 53 -j ACCEPT
 iptables -A INPUT -i eth0 -s {{ network.subnet }} -d {{ network.ip }}/32 -m conntrack --ctstate NEW -p tcp -m tcp --dport 445 -j ACCEPT
 iptables -A INPUT -i eth0 -s {{ network.subnet }} -d {{ network.ip }}/32 -m conntrack --ctstate NEW -p tcp -m tcp --dport 8200 -j ACCEPT
 iptables -A INPUT -i eth0 -s {{ network.subnet }} -d {{ network.ip }}/32 -m conntrack --ctstate NEW -p tcp -m tcp --dport 80 -j ACCEPT
