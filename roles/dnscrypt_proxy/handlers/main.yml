@@ -7,5 +7,4 @@
 
 - name: Generate blocked names
   ansible.builtin.command: "{{ blocked_names_generator_helper_path }}"
-  notify:
-    - dnscrypt-proxy
+  notify: Restart dnscrypt-proxy
