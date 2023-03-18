@@ -58,21 +58,18 @@
     - base
 
 - name: Configure correct time
-  ansible.builtin.file:
-    src: /usr/share/zoneinfo/Europe/Prague
-    dest: /etc/localtime
-    force: true
-    state: link
+  community.general.timezone:
+    name: Europe/Prague
   tags:
     - base
 
 - name: Configure locales
-  ansible.builtin.template:
-    src: locale.gen.j2
-    dest: /etc/locale.gen
-    owner: root
-    group: root
-    mode: 0644
+  community.general.locale_gen:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - en_US.UTF-8
+    - cs_CZ.UTF-8
   notify: Generate locales
   tags:
     - base
