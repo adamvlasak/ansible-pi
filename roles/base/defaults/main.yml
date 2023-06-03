@@ -2,8 +2,9 @@
 packages:
   - bash-completion
   - ca-certificates
-  - curl
+  - chrony
   - convmv
+  - curl
   - dnsutils
   - flac
   - git
