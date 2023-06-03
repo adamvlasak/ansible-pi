@@ -57,7 +57,7 @@
   tags:
     - base
 
-- name: Configure correct time
+- name: Configure correct timezone
   community.general.timezone:
     name: Europe/Prague
   tags:
@@ -118,6 +118,17 @@
     group: root
     mode: 0644
     attr: +i
+  tags:
+    - base
+
+- name: Configure chrony
+  ansible.builtin.template:
+    src: chrony.conf.j2
+    dest: /etc/chrony/chrony.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: Restart chrony
   tags:
     - base
 

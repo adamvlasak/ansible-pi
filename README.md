@@ -5,6 +5,7 @@ Raspberry PI based home server. It will have following features:
 
 - local caching DNS server with adblocking features and DNS rebind
   protection
+- local NTP server
 - local DLNA server so that you can watch your movies on TV or such
 - local web based music player
 - local samba server
