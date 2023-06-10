@@ -1,4 +1,4 @@
 ---
-nginx:
-  default_port: 80
-  root_base_path: /var/www
+nginx_conf_dir: "/etc/nginx"
+nginx_conf_inc_dir: "{{ nginx_conf_dir }}/conf.d"
+nginx_root_base_path: "/var/www"

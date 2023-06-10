@@ -68,8 +68,8 @@
 
 - name: Configure nginx virtualhost
   ansible.builtin.template:
-    src: navidrome.nginx.j2
-    dest: /etc/nginx/sites-enabled/navidrome
+    src: navidrome.nginx.conf.j2
+    dest: "{{ nginx_conf_inc_dir }}/navidrome.conf"
     owner: root
     group: root
     mode: 0644
