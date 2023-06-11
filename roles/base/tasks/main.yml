@@ -92,11 +92,15 @@
     name: "{{ network.hostname }}"
   tags:
     - base
+    - dns
 
 - name: Remove /etc/resolvconf.conf
   ansible.builtin.file:
     path: /etc/resolvconf.conf
     state: absent
+  tags:
+    - base
+    - dns
 
 - name: Configure resolv.conf
   ansible.builtin.template:
@@ -109,6 +113,18 @@
   notify: Restart dhcpcd
   tags:
     - base
+    - dns
+
+- name: Configure /etc/nsswitch.conf
+  ansible.builtin.template:
+    src: nsswitch.conf.j2
+    dest: /etc/nsswitch.conf
+    owner: root
+    group: root
+    mode: 0644
+  tags:
+    - base
+    - dns
 
 - name: Set hosts file
   ansible.builtin.template:
@@ -120,6 +136,7 @@
     attr: +i
   tags:
     - base
+    - dns
 
 - name: Configure chrony
   ansible.builtin.template:
