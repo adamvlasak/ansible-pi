@@ -77,6 +77,7 @@ iptables -A INPUT -j REJECT --reject-with icmp-proto-unreachable
 
 # Allowed output packets
 iptables -A OUTPUT -o lo -s 127.0.0.1/32 -j ACCEPT
+iptables -A OUTPUT -o eth0 -s {{ network.ip }}/32 -d {{ network.router }} -m conntrack --ctstate NEW -m udp -p udp --dport 53 -j ACCEPT
 iptables -A OUTPUT -o eth0 -s {{ network.ip }}/32 -d 192.168.10.0/24 -m conntrack --ctstate NEW -m udp -p udp --sport 1900 -j ACCEPT
 iptables -A OUTPUT -o eth0 -s {{ network.ip }}/32 -m conntrack --ctstate NEW -m tcp -p tcp --dport 80 -j ACCEPT
 iptables -A OUTPUT -o eth0 -s {{ network.ip }}/32 -m conntrack --ctstate NEW -m tcp -p tcp --dport 443 -j ACCEPT
