@@ -52,39 +52,32 @@ iptables -A PREROUTING -t nat -s {{ network.subnet }} ! -d {{ network.ip }}/32 -
 iptables -A PREROUTING -t nat -s {{ network.subnet }} ! -d {{ network.ip }}/32 -p udp --dport 123 -j DNAT --to {{ network.ip }}
 {% endif %}
 
-# Allow SSH connections on tcp port 22
-iptables -A INPUT -s {{ network.subnet }} -d {{ network.ip }}/32 -i eth0 -m conntrack --ctstate NEW -p tcp -m tcp --dport 22 -j ACCEPT
-
-# Incoming ICMP
-iptables -A INPUT -p icmp --icmp-type 8 -s 0/0 -d {{ network.ip }} -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
-
-# Outgoing ICMP
-iptables -A OUTPUT -p icmp --icmp-type 0 -s {{ network.ip }} -d 0/0 -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
-
 # Allowed input packets
-iptables -A INPUT -i lo -d 127.0.0.1/32 -j ACCEPT
-iptables -A INPUT -i eth0 -s {{ network.subnet }} -d 239.255.255.250/32 -m conntrack --ctstate NEW -p udp -m udp --dport 1900 -j ACCEPT
+iptables -A INPUT -i eth0 -d {{ network.ip }}/32 -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+iptables -A INPUT -i eth0 -s {{ network.subnet }} -d {{ network.ip }}/32 -m conntrack --ctstate NEW -p tcp -m tcp --dport 22 -j ACCEPT
 iptables -A INPUT -i eth0 -s {{ network.subnet }} -d {{ network.ip }}/32 -m conntrack --ctstate NEW -p udp -m udp --dport 53 -j ACCEPT
 iptables -A INPUT -i eth0 -s {{ network.subnet }} -d {{ network.ip }}/32 -m conntrack --ctstate NEW -p udp -m udp --dport 123 -j ACCEPT
 iptables -A INPUT -i eth0 -s {{ network.subnet }} -d {{ network.ip }}/32 -m conntrack --ctstate NEW -p tcp -m tcp --dport 445 -j ACCEPT
 iptables -A INPUT -i eth0 -s {{ network.subnet }} -d {{ network.ip }}/32 -m conntrack --ctstate NEW -p tcp -m tcp --dport 8200 -j ACCEPT
 iptables -A INPUT -i eth0 -s {{ network.subnet }} -d {{ network.ip }}/32 -m conntrack --ctstate NEW -p tcp -m tcp --dport 80 -j ACCEPT
-iptables -A INPUT -i eth0 -d {{ network.ip }}/32 -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+iptables -A INPUT -i eth0 -s {{ network.subnet }} -d 239.255.255.250/32 -m conntrack --ctstate NEW -p udp -m udp --dport 1900 -j ACCEPT
+iptables -A INPUT -i eth0 -d {{ network.ip }}/32 -p icmp --icmp-type 8 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
+iptables -A INPUT -i lo -d 127.0.0.1/32 -j ACCEPT
 iptables -A INPUT -j LOG --log-prefix "INPUT DROP: "
 iptables -A INPUT -m tcp -p tcp -j REJECT --reject-with tcp-reset
 iptables -A INPUT -m udp -p udp -j REJECT --reject-with icmp-port-unreachable
 iptables -A INPUT -j REJECT --reject-with icmp-proto-unreachable
 
 # Allowed output packets
-iptables -A OUTPUT -o lo -s 127.0.0.1/32 -j ACCEPT
-iptables -A OUTPUT -o eth0 -s {{ network.ip }}/32 -d {{ network.router }} -m conntrack --ctstate NEW -m udp -p udp --dport 53 -j ACCEPT
-iptables -A OUTPUT -o eth0 -s {{ network.ip }}/32 -d 192.168.10.0/24 -m conntrack --ctstate NEW -m udp -p udp --sport 1900 -j ACCEPT
+iptables -A OUTPUT -o eth0 -s {{ network.ip }}/32 -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 iptables -A OUTPUT -o eth0 -s {{ network.ip }}/32 -m conntrack --ctstate NEW -m tcp -p tcp --dport 80 -j ACCEPT
 iptables -A OUTPUT -o eth0 -s {{ network.ip }}/32 -m conntrack --ctstate NEW -m tcp -p tcp --dport 443 -j ACCEPT
-iptables -A OUTPUT -o eth0 -s {{ network.ip }}/32 -m conntrack --ctstate NEW -m udp -p udp --dport 443 -j ACCEPT
 iptables -A OUTPUT -o eth0 -s {{ network.ip }}/32 -m conntrack --ctstate NEW -m udp -p udp --dport 123 -j ACCEPT
-iptables -A OUTPUT -o eth0 -s {{ network.ip }}/32 -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
-iptables -A OUTPUT -o eth0 -m conntrack --ctstate NEW -m udp -p udp --sport 68 --dport 67 -j ACCEPT
+iptables -A OUTPUT -o eth0 -s {{ network.ip }}/32 -d 239.255.255.250/32 -m conntrack --ctstate NEW -m udp -p udp --dport 1900 -j ACCEPT
+iptables -A OUTPUT -o eth0 -s {{ network.ip }}/32 -d {{ network.subnet }} -m conntrack --ctstate NEW -m udp -p udp --dport 1900 -j ACCEPT
+iptables -A OUTPUT -o eth0 -s {{ network.ip }}/32 -d {{ network.router }} -m conntrack --ctstate NEW -m udp -p udp --dport 53 -j ACCEPT
+iptables -A OUTPUT -o eth0 -s {{ network.ip }}/32 -p icmp --icmp-type 0 -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+iptables -A OUTPUT -o lo -s 127.0.0.1/32 -j ACCEPT
 iptables -A OUTPUT -j LOG --log-prefix "OUTPUT DROP: "
 iptables -A OUTPUT -m tcp -p tcp -j REJECT --reject-with tcp-reset
 iptables -A OUTPUT -m udp -p udp -j REJECT --reject-with icmp-port-unreachable
@@ -95,8 +88,8 @@ iptables -A OUTPUT -j REJECT --reject-with icmp-proto-unreachable
 iptables -A POSTROUTING -t nat -o eth0 -s {{ network.subnet }} -j SNAT --to-source {{ network.ip }}
 
 # FORWARD
-iptables -A FORWARD -i eth0 -s {{ network.subnet }} -o eth0 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 iptables -A FORWARD -i eth0 -o eth0 -d {{ network.subnet }} -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+iptables -A FORWARD -i eth0 -s {{ network.subnet }} -o eth0 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 iptables -A FORWARD -j LOG --log-prefix "FORWARD DROP: "
 iptables -A FORWARD -m tcp -p tcp -j REJECT --reject-with tcp-reset
 iptables -A FORWARD -m udp -p udp -j REJECT --reject-with icmp-port-unreachable
