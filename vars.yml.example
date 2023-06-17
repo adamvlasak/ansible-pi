@@ -20,11 +20,7 @@ dnscrypt_proxy:
   cache_size: 4096
   servernames: [ "cloudflare-security" ]
   blocklists:
-    - https://hosts.oisd.nl/
-    - https://phishing.army/download/phishing_army_blocklist_extended.txt
     - https://raw.githubusercontent.com/notracking/hosts-blocklists/master/dnscrypt-proxy/dnscrypt-proxy.blacklist.txt
-    - https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/dnscrypt/spy.txt
-    - https://osint.digitalside.it/Threat-Intel/lists/latestdomains.txt
   cloaking_rules:
     - "pi.loc {{ network.ip }}"
     - "navidrome.loc {{ network.ip }}"
