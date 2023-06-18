@@ -91,9 +91,7 @@ iptables -A POSTROUTING -t nat -o eth0 -s {{ network.subnet }} -j SNAT --to-sour
 iptables -A FORWARD -i eth0 -o eth0 -d {{ network.subnet }} -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 iptables -A FORWARD -i eth0 -s {{ network.subnet }} -o eth0 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 iptables -A FORWARD -j LOG --log-prefix "FORWARD DROP: "
-iptables -A FORWARD -m tcp -p tcp -j REJECT --reject-with tcp-reset
-iptables -A FORWARD -m udp -p udp -j REJECT --reject-with icmp-port-unreachable
-iptables -A FORWARD -j REJECT --reject-with icmp-proto-unreachable
+iptables -A FORWARD -j REJECT --reject-with icmp-host-unreachable
 {% endif %}
 
 # IPv6
