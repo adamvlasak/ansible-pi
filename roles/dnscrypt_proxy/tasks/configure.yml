@@ -7,8 +7,6 @@
     group: root
     mode: 0444
   notify: Restart dnscrypt-proxy
-  tags:
-    - dnscrypt-proxy
 
 - name: Configure allowed-names.txt
   ansible.builtin.template:
@@ -19,8 +17,6 @@
     mode: 0444
   when: dnscrypt_proxy.allowed_names is defined
   notify: Restart dnscrypt-proxy
-  tags:
-    - dnscrypt-proxy
 
 - name: Configure blocked-ips.txt
   ansible.builtin.template:
@@ -30,8 +26,6 @@
     group: root
     mode: 0444
   notify: Restart dnscrypt-proxy
-  tags:
-    - dnscrypt-proxy
 
 - name: Configure forwarding-rules.txt
   ansible.builtin.template:
@@ -42,8 +36,6 @@
     mode: 0444
   when: dnscrypt_proxy.forwarding_rules is defined
   notify: Restart dnscrypt-proxy
-  tags:
-    - dnscrypt-proxy
 
 - name: Configure cloaking-rules.txt
   ansible.builtin.template:
@@ -54,8 +46,6 @@
     mode: 0444
   when: dnscrypt_proxy.cloaking_rules is defined
   notify: Restart dnscrypt-proxy
-  tags:
-    - dnscrypt-proxy
 
 - name: Set permissions to /etc/dnscrypt-proxy
   ansible.builtin.file:
@@ -64,5 +54,3 @@
     owner: root
     group: root
     mode: 0555
-  tags:
-    - dnscrypt-proxy

@@ -1,8 +1,9 @@
 ---
 network:
   ip: 192.168.1.100
-  hostname: pi.loc
+  hostname: "pi.home.arpa"
   router: 192.168.1.1 # or false when dhcp should be used
+  domain: home.arpa
   subnet: 192.168.1.0/24
   nameserver: 127.0.0.1
 
@@ -20,17 +21,20 @@ dnscrypt_proxy:
   cache_size: 4096
   servernames: [ "cloudflare-security" ]
   blocklists:
-    - https://raw.githubusercontent.com/notracking/hosts-blocklists/master/dnscrypt-proxy/dnscrypt-proxy.blacklist.txt
+    - https://big.oisd.nl/
   cloaking_rules:
-    - "pi.loc {{ network.ip }}"
-    - "navidrome.loc {{ network.ip }}"
+    - "localhost 127.0.0.1"
+    - "pi.{{ network.domain }} {{ network.ip }}"
+    - "navidrome.{{ network.domain }} {{ network.ip }}"
   block_patterns:
     - "*.lan"
+    - "*.loc"
     - "*.local"
     - "*.localdomain"
     - "*.workgroup"
   forwarding_rules:
     - 1.168.192.in-addr.arpa 192.168.1.1
+    - 224.in-addr.arpa 192.168.10.1
 
 samba:
   share_name: SOME_NAME
@@ -62,5 +66,4 @@ mount:
     - { path: /mnt/data, owner: nobody, group: nogroup, mode: "0755" }
 
 static_sites:
-  - { "server_name": "example1.loc" }
-  - { "server_name": "example2.loc", "autoindex": true }
+  - { "server_name": "notes.{{ network.domain }}" }

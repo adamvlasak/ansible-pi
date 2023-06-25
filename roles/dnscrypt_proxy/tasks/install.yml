@@ -3,21 +3,15 @@
   ansible.builtin.apt:
     name: dnscrypt-proxy
     state: absent
-  tags:
-    - dnscrypt-proxy
 
 - name: Check dnscrypt-proxy version
   ansible.builtin.command: dnscrypt-proxy --version
   changed_when: false
   register: installed_version
-  tags:
-    - dnscrypt-proxy
 
 - name: Install dnscrypt-proxy
   when: installed_version.stdout != dnscrypt_proxy.version
         and not ansible_check_mode
-  tags:
-    - dnscrypt-proxy
   block:
     - name: Download dnscrypt-proxy
       ansible.builtin.get_url:
@@ -58,5 +52,3 @@
     group: root
     mode: 0755
   notify: Restart dnscrypt-proxy
-  tags:
-    - dnscrypt-proxy

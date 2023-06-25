@@ -1,10 +1,12 @@
 # Empty listen_addresses to use systemd socket activation
 listen_addresses = {{ dnscrypt_proxy.listen_addresses | list }}
+{% if dnscrypt_proxy.servernames is defined %}
 server_names = {{ dnscrypt_proxy.servernames | list }}
+{% endif %}
 
 ipv4_servers = true
 ipv6_servers = false
-dnscrypt_servers = true
+dnscrypt_servers = false
 doh_servers = true
 
 require_dnssec = true
@@ -15,18 +17,29 @@ block_ipv6 = true
 block_unqualified = true
 block_undelegated = true
 
+force_tcp = false
+http3 = false
+
+{% if dnscrypt_proxy.cache %}
 cache = true
 cache_size = {{ dnscrypt_proxy.cache_size }}
-cache_min_ttl = 2400
+cache_min_ttl = 3600
 cache_max_ttl = 86400
 cache_neg_min_ttl = 60
 cache_neg_max_ttl = 600
+{% else %}
+cache = false
+{% endif %}
+
+keepalive = 30
 
 {% if dnscrypt_proxy.forwarding_rules is defined %}
 forwarding_rules = '/etc/dnscrypt-proxy/forwarding-rules.txt'
 {% endif %}
 
 {% if dnscrypt_proxy.cloaking_rules is defined %}
+cloak_ptr = true
+cloak_ttl = 3600
 cloaking_rules = '/etc/dnscrypt-proxy/cloaking-rules.txt'
 {% endif %}
 

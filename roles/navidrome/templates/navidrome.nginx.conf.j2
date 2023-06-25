@@ -1,6 +1,6 @@
 server {
   listen 80;
-  server_name navidrome.loc;
+  server_name navidrome.{{ network.domain }};
   location / {
     proxy_pass http://localhost:4533;
     proxy_set_header Host $host;

@@ -6,8 +6,6 @@
     owner: root
     group: root
     mode: 0500
-  tags:
-    - blocked-names
 
 - name: Download blocklist generator
   ansible.builtin.get_url:
@@ -17,8 +15,6 @@
     group: root
     mode: 0400
   notify: Generate blocked names
-  tags:
-    - blocked-names
 
 - name: Configure domains-blocklist.conf
   ansible.builtin.template:
@@ -28,8 +24,6 @@
     group: root
     mode: 0400
   notify: Generate blocked names
-  tags:
-    - blocked-names
 
 - name: Configure domains-blocklist-local-additions.txt
   ansible.builtin.template:
@@ -39,8 +33,6 @@
     group: root
     mode: 0400
   notify: Generate blocked names
-  tags:
-    - blocked-names
 
 - name: Configure domains-allowlist.txt from github
   ansible.builtin.get_url:
@@ -50,8 +42,6 @@
     group: root
     mode: 0400
   notify: Generate blocked names
-  tags:
-    - blocked-names
 
 - name: Create empty domains-time-restricted.txt
   ansible.builtin.file:
@@ -60,8 +50,6 @@
     owner: root
     group: root
     mode: 0400
-  tags:
-    - blocked-names
 
 - name: Configure helper script
   ansible.builtin.template:
@@ -71,8 +59,6 @@
     group: root
     mode: 0500
   notify: Generate blocked names
-  tags:
-    - blocked-names
 
 - name: Configure cron script
   ansible.builtin.template:
@@ -81,5 +67,3 @@
     owner: root
     group: root
     mode: 0500
-  tags:
-    - blocked-names
