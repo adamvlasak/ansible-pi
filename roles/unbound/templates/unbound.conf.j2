@@ -1,0 +1,57 @@
+server:
+    chroot: ""
+    logfile: /var/log/unbound.log
+
+    # log verbosity
+    verbosity: 2
+
+    # The following line will configure unbound to perform cryptographic
+    # DNSSEC validation using the root trust anchor.
+    auto-trust-anchor-file: "/var/lib/unbound/root.key"
+
+    # send minimal amount of information to upstream servers to enhance privacy
+    qname-minimisation: yes
+
+    # specify the interface to answer queries from by ip-address.
+{% for listen_address in unbound.listen_addresses %}
+    interface: {{ listen_address }}
+{% endfor %}
+    port: 53
+
+    # addresses from the IP range that are allowed to connect to the resolver
+    access-control: {{ unbound.allowed_subnet }} allow
+
+    do-udp: yes
+    do-ip6: no
+
+    prefetch: yes
+
+    cache-min-ttl: 3600
+    cache-max-ttl: 86400
+
+    do-not-query-localhost: no
+
+    # dns rebind protection
+{% for private_address in unbound.private_addresses %}
+    private-address: {{ private_address }}
+{% endfor %}
+
+    # local dns records
+    private-domain: "{{ network.domain }}"
+    local-zone: "{{ network.domain }}.arpa." static
+{% for record in unbound.records %}
+    local-data: "{{ record.hostname }}. {{ record.ttl | default('10800') }} IN {{ record.type }} {{ record.ip }}"
+    local-data-ptr: "{{ record.ip }} {{ record.hostname }}"
+{% endfor %}
+
+    # refused domains
+{% for refused_domain in unbound.refused_domains %}
+    local-zone: "{{ refused_domain }}" always_refuse
+{% endfor %}
+
+remote-control:
+    control-enable: no
+
+forward-zone:
+    name: "."
+    forward-addr: {{ unbound.forward_address }}@{{ unbound.forward_port }}

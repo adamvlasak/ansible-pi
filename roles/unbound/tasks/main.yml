@@ -1,0 +1,28 @@
+---
+- name: Install unbound
+  ansible.builtin.apt:
+    name: unbound
+    state: present
+  tags:
+    - dns
+    - unbound
+
+- name: Remove /etc/unbound/unbound.conf.d directory
+  ansible.builtin.file:
+    path: /etc/unbound/unbound.conf.d
+    state: absent
+  tags:
+    - dns
+    - unbound
+
+- name: Configure unbound.conf
+  ansible.builtin.template:
+    src: unbound.conf.j2
+    dest: /etc/unbound/unbound.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: Restart unbound
+  tags:
+    - dns
+    - unbound

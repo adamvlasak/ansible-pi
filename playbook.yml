@@ -11,6 +11,7 @@
     - evebox
     - firewall
     - dnscrypt_proxy
+    - unbound
     - nginx
     - navidrome
     - minidlna
