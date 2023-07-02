@@ -5,7 +5,7 @@
   vars_files:
     - vars.yml
   roles:
-    - base
+    - core
     - sysctl
     - firewall
     - dnscrypt_proxy

@@ -1,5 +1,5 @@
 ---
-packages:
+core_packages:
   - bash-completion
   - ca-certificates
   - chrony
@@ -31,11 +31,11 @@ packages:
   - w3m
   - wget
 
-absent_packages:
+core_absent_packages:
   - openresolv
   - resolvconf
   - wpasupplicant
 
-disabled_services:
+core_disabled_services:
   - avahi-daemon.service
   - avahi-daemon.socket

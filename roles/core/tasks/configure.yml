@@ -7,44 +7,7 @@
     group: root
     mode: 0755
   tags:
-    - base
-
-- name: Install necessary packages
-  ansible.builtin.apt:
-    name: "{{ packages }}"
-    state: present
-    update_cache: true
-  tags:
-    - base
-
-- name: Download yt-dlp
-  ansible.builtin.get_url:
-    url: "https://github.com/yt-dlp/yt-dlp/releases/download/{{ yt_dlp_version }}/yt-dlp_linux_aarch64"
-    dest: /usr/local/bin/yt-dlp
-    owner: root
-    group: root
-    mode: 0755
-  tags:
-    - base
-
-- name: Remove unwanted packages
-  ansible.builtin.apt:
-    name: "{{ item }}"
-    autoremove: true
-    state: absent
-  loop: "{{ absent_packages }}"
-  tags:
-    - base
-
-- name: Disable unwanted services
-  ansible.builtin.systemd:
-    name: "{{ item }}"
-    state: stopped
-    enabled: false
-  loop: "{{ disabled_services }}"
-  when: disabled_services is defined
-  tags:
-    - base
+    - core
 
 - name: Configure sshd
   ansible.builtin.template:
@@ -55,13 +18,13 @@
     mode: 0644
   notify: Restart sshd
   tags:
-    - base
+    - core
 
 - name: Configure correct timezone
   community.general.timezone:
     name: Europe/Prague
   tags:
-    - base
+    - core
 
 - name: Configure locales
   community.general.locale_gen:
@@ -72,7 +35,7 @@
     - cs_CZ.UTF-8
   notify: Generate locales
   tags:
-    - base
+    - core
 
 - name: Configure /etc/default/locale
   ansible.builtin.lineinfile:
@@ -85,13 +48,13 @@
     group: root
     mode: 0644
   tags:
-    - base
+    - core
 
 - name: Set machine hostname
   ansible.builtin.hostname:
     name: "{{ network.hostname }}"
   tags:
-    - base
+    - core
     - dns
 
 - name: Remove /etc/resolvconf.conf
@@ -99,7 +62,7 @@
     path: /etc/resolvconf.conf
     state: absent
   tags:
-    - base
+    - core
     - dns
 
 - name: Configure resolv.conf
@@ -111,7 +74,7 @@
     mode: 0644
   notify: Restart dhcpcd
   tags:
-    - base
+    - core
     - dns
 
 - name: Configure /etc/nsswitch.conf
@@ -122,7 +85,7 @@
     group: root
     mode: 0644
   tags:
-    - base
+    - core
     - dns
 
 - name: Set hosts file
@@ -133,7 +96,7 @@
     group: root
     mode: 0644
   tags:
-    - base
+    - core
     - dns
 
 - name: Configure chrony
@@ -145,7 +108,7 @@
     mode: 0644
   notify: Restart chrony
   tags:
-    - base
+    - core
 
 - name: Configure dhcpcd.conf
   ansible.builtin.template:
@@ -156,7 +119,7 @@
     mode: 0644
   notify: Restart dhcpcd
   tags:
-    - base
+    - core
 
 - name: Configure ENV variables
   ansible.builtin.template:
@@ -166,14 +129,14 @@
     group: root
     mode: 0755
   tags:
-    - base
+    - core
 
 - name: Configure pi group
   ansible.builtin.group:
     name: pi
     state: present
   tags:
-    - base
+    - core
     - user
 
 - name: Configure pi user
@@ -182,7 +145,7 @@
     groups: [ "pi", "users", "sudo" ]
     state: present
   tags:
-    - base
+    - core
     - user
 
 - name: Configure sudoers
@@ -193,7 +156,7 @@
     regexp: "NOPASSWD:.+ALL"
     state: present
   tags:
-    - base
+    - core
     - user
 
 - name: Prepare mount points
@@ -206,4 +169,4 @@
   loop: "{{ mount.points }}"
   when: mount.points is defined
   tags:
-    - base
+    - core
