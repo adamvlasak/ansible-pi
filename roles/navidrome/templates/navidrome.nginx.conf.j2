@@ -1,6 +1,10 @@
 server {
   listen 80;
   server_name navidrome.{{ network.domain }};
+
+  access_log /var/log/nginx/navidrome.{{ network.domain }}-access.log;
+  error_log /var/log/nginx/navidrome.{{ network.domain }}-error.log;
+
   location / {
     proxy_pass http://localhost:4533;
     proxy_set_header Host $host;
