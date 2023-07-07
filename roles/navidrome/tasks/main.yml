@@ -76,6 +76,7 @@
   notify: Restart nginx
   tags:
     - navidrome
+    - nginx
 
 - name: Install ffmpeg
   ansible.builtin.apt:

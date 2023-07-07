@@ -6,8 +6,10 @@ server {
   autoindex on;
 {% endif %}
 
-  access_log /var/log/nginx/{{ item.server_name }}-access.log;
-  error_log /var/log/nginx/{{ item.server_name }}-error.log;
+{% if nginx_log %}
+  access_log {{ nginx_log_dir }}/{{ item.server_name }}-access.log;
+  error_log {{ nginx_log_dir }}/{{ item.server_name }}-error.log;
+{% endif %}
 
   location / {
   }
