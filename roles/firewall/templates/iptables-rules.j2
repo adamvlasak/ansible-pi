@@ -56,12 +56,12 @@ iptables -A PREROUTING -t nat -s {{ network.subnet }} ! -d {{ network.ip }}/32 -
 iptables -A INPUT -i eth0 -d {{ network.ip }}/32 -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 iptables -A INPUT -i lo -j ACCEPT
 iptables -A INPUT -i eth0 -s {{ network.subnet }} -d {{ network.ip }}/32 -m conntrack --ctstate NEW -p tcp -m tcp --dport 22 -j ACCEPT
-iptables -A INPUT -i eth0 -s {{ network.subnet }} -d {{ network.ip }}/32 -m conntrack --ctstate NEW -p udp -m udp --dport 53 -j ACCEPT
-iptables -A INPUT -i eth0 -s {{ network.subnet }} -d {{ network.ip }}/32 -m conntrack --ctstate NEW -p udp -m udp --dport 123 -j ACCEPT
+iptables -A INPUT -i eth0 -s {{ network.subnet }} -d {{ network.ip }}/32 -p udp -m udp --dport 53 -j ACCEPT
+iptables -A INPUT -i eth0 -s {{ network.subnet }} -d {{ network.ip }}/32 -p udp -m udp --dport 123 -j ACCEPT
 iptables -A INPUT -i eth0 -s {{ network.subnet }} -d {{ network.ip }}/32 -m conntrack --ctstate NEW -p tcp -m tcp --dport 445 -j ACCEPT
 iptables -A INPUT -i eth0 -s {{ network.subnet }} -d {{ network.ip }}/32 -m conntrack --ctstate NEW -p tcp -m tcp --dport 8200 -j ACCEPT
 iptables -A INPUT -i eth0 -s {{ network.subnet }} -d {{ network.ip }}/32 -m conntrack --ctstate NEW -p tcp -m tcp --dport 80 -j ACCEPT
-iptables -A INPUT -i eth0 -s {{ network.subnet }} -d 239.255.255.250/32 -m conntrack --ctstate NEW -p udp -m udp --dport 1900 -j ACCEPT
+iptables -A INPUT -i eth0 -s {{ network.subnet }} -d 239.255.255.250/32 -p udp -m udp --dport 1900 -j ACCEPT
 iptables -A INPUT -i eth0 -d {{ network.ip }}/32 -p icmp --icmp-type 8 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
 iptables -A INPUT -j LOG --log-prefix "INPUT DROP: "
 iptables -A INPUT -m udp -p udp -j REJECT --reject-with icmp-port-unreachable
@@ -73,10 +73,10 @@ iptables -A OUTPUT -o eth0 -s {{ network.ip }}/32 -m conntrack --ctstate ESTABLI
 iptables -A OUTPUT -o lo -j ACCEPT
 iptables -A OUTPUT -o eth0 -s {{ network.ip }}/32 -m conntrack --ctstate NEW -m tcp -p tcp --dport 80 -j ACCEPT
 iptables -A OUTPUT -o eth0 -s {{ network.ip }}/32 -m conntrack --ctstate NEW -m tcp -p tcp --dport 443 -j ACCEPT
-iptables -A OUTPUT -o eth0 -s {{ network.ip }}/32 -m conntrack --ctstate NEW -m udp -p udp --dport 123 -j ACCEPT
-iptables -A OUTPUT -o eth0 -s {{ network.ip }}/32 -d 239.255.255.250/32 -m conntrack --ctstate NEW -m udp -p udp --dport 1900 -j ACCEPT
-iptables -A OUTPUT -o eth0 -s {{ network.ip }}/32 -d {{ network.subnet }} -m conntrack --ctstate NEW -m udp -p udp --dport 1900 -j ACCEPT
-iptables -A OUTPUT -o eth0 -s {{ network.ip }}/32 -d {{ network.router }} -m conntrack --ctstate NEW -m udp -p udp --dport 53 -j ACCEPT
+iptables -A OUTPUT -o eth0 -s {{ network.ip }}/32 -m udp -p udp --dport 123 -j ACCEPT
+iptables -A OUTPUT -o eth0 -s {{ network.ip }}/32 -d 239.255.255.250/32 -m udp -p udp --dport 1900 -j ACCEPT
+iptables -A OUTPUT -o eth0 -s {{ network.ip }}/32 -d {{ network.subnet }} -m udp -p udp --dport 1900 -j ACCEPT
+iptables -A OUTPUT -o eth0 -s {{ network.ip }}/32 -d {{ network.router }} -m udp -p udp --dport 53 -j ACCEPT
 iptables -A OUTPUT -o eth0 -s {{ network.ip }}/32 -p icmp --icmp-type 0 -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 iptables -A OUTPUT -j LOG --log-prefix "OUTPUT DROP: "
 iptables -A OUTPUT -m udp -p udp -j REJECT --reject-with icmp-port-unreachable
