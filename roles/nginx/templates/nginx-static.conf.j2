@@ -6,6 +6,13 @@ server {
   autoindex on;
 {% endif %}
 
+{% if item.reject_ip is defined and item.reject_ip is iterable %}
+{% for reject_ip in item.reject_ip %}
+  deny {{ reject_ip }};
+{% endfor %}
+  allow {{ network.subnet }};
+{% endif %}
+
 {% if nginx_log %}
   access_log {{ nginx_log_dir }}/{{ item.server_name }}-access.log;
   error_log {{ nginx_log_dir }}/{{ item.server_name }}-error.log;
