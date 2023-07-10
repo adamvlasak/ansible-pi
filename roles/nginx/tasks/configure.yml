@@ -1,0 +1,41 @@
+---
+- name: Install nginx package
+  ansible.builtin.apt:
+    name: nginx
+    state: present
+  tags:
+    - nginx
+
+- name: Remove sites-enabled and available dirs
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - /etc/nginx/sites-available
+    - /etc/nginx/sites-enabled
+  tags:
+    - nginx
+
+- name: Prepare conf.d directory
+  ansible.builtin.file:
+    path: "{{ nginx_conf_inc_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  tags:
+    - nginx
+
+- name: Configure nginx.conf
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: 0644
+  loop:
+    - { src: nginx.conf.j2, dest: "{{ nginx_conf_dir }}/nginx.conf" }
+    - { src: default.conf.j2, dest: "{{ nginx_conf_inc_dir }}/default.conf" }
+  notify: Restart nginx
+  tags:
+    - nginx

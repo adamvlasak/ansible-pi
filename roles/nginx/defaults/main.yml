@@ -1,6 +1,7 @@
 ---
 nginx_conf_dir: "/etc/nginx"
 nginx_conf_inc_dir: "{{ nginx_conf_dir }}/conf.d"
-nginx_root_base_path: "/var/www"
 nginx_log: false
 nginx_log_dir: "/var/log/nginx"
+nginx_listen_port: 80
+nginx_static_sites_root_dir: "/var/www"

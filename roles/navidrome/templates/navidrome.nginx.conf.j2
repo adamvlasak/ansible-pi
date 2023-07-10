@@ -1,5 +1,5 @@
 server {
-  listen 80;
+  listen {{ ansible_default_ipv4.address }}:{{ nginx_listen_port }};
   server_name navidrome.{{ network.domain }};
 
 {% if nginx_log %}

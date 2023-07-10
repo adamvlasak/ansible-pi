@@ -1,5 +1,5 @@
 server {
-  listen 80 default;
+  listen {{ ansible_default_ipv4.address }}:{{ nginx_listen_port }} default;
   location / {
     return 403;
   }
