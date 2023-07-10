@@ -65,6 +65,7 @@ mount:
   points:
     - { path: /mnt/data, owner: nobody, group: nogroup, mode: "0755" }
 
-static_sites:
+nginx_reject_ips: ["192.168.1.106"]
+nginx_static_sites:
   - { "server_name": "example.{{ network.domain }}" }
-  - { "server_name": "foobar.{{ network.domain }}", "allowed_origins": ["youtube.com", "soundcloud.com"], reject_ip: ["192.168.1.106"] }
+  - { "server_name": "foobar.{{ network.domain }}", "allowed_origins": ["youtube.com", "soundcloud.com"] }
