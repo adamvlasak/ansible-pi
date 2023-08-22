@@ -62,6 +62,7 @@ iptables -A FORWARD -i eth0 -s {{ network.subnet }} -o eth0 -m conntrack --ctsta
 iptables -A FORWARD -i eth0 -s {{ network.subnet }} -o eth0 -m conntrack --ctstate NEW,ESTABLISHED -m tcp -p tcp --dport 443 -j ACCEPT
 iptables -A FORWARD -i eth0 -s {{ network.subnet }} -o eth0 -m conntrack --ctstate NEW,ESTABLISHED -m udp -p udp --dport 443 -j ACCEPT
 iptables -A FORWARD -i eth0 -s {{ network.subnet }} -o eth0 -m conntrack --ctstate NEW,ESTABLISHED -m tcp -p tcp --dport 993 -j ACCEPT
+iptables -A FORWARD -i eth0 -s {{ network.subnet }} -o eth0 -m conntrack --ctstate NEW,ESTABLISHED -m tcp -p tcp --dport 43 -j ACCEPT
 iptables -A FORWARD -i eth0 -s {{ network.subnet }} -d 17.0.0.0/8 -o eth0 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
 iptables -A FORWARD -j LOG --log-prefix "FORWARD DROP: "
 iptables -A FORWARD -j REJECT --reject-with icmp-host-unreachable
