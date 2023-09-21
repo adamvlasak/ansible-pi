@@ -131,23 +131,6 @@
   tags:
     - core
 
-- name: Configure pi group
-  ansible.builtin.group:
-    name: pi
-    state: present
-  tags:
-    - core
-    - user
-
-- name: Configure pi user
-  ansible.builtin.user:
-    name: pi
-    groups: [ "pi", "users", "sudo" ]
-    state: present
-  tags:
-    - core
-    - user
-
 - name: Configure sudoers
   ansible.builtin.lineinfile:
     path: /etc/sudoers
