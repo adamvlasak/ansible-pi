@@ -1,4 +1,14 @@
 ---
+- name: Disable unwanted services
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    state: stopped
+    enabled: false
+  loop: "{{ core_disabled_services }}"
+  when: core_disabled_services is iterable
+  tags:
+    - core
+
 - name: Configure boot/config.txt
   ansible.builtin.template:
     src: boot-config.txt.j2

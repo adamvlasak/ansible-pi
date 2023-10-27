@@ -1,4 +1,14 @@
 ---
+- name: Remove unwanted packages
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    autoremove: true
+    state: absent
+  loop: "{{ core_absent_packages }}"
+  when: core_absent_packages is iterable
+  tags:
+    - core
+
 - name: Install necessary packages
   ansible.builtin.apt:
     name: "{{ core_packages }}"
@@ -15,25 +25,5 @@
     owner: root
     group: root
     mode: 0755
-  tags:
-    - core
-
-- name: Remove unwanted packages
-  ansible.builtin.apt:
-    name: "{{ item }}"
-    autoremove: true
-    state: absent
-  loop: "{{ core_absent_packages }}"
-  when: core_absent_packages is iterable
-  tags:
-    - core
-
-- name: Disable unwanted services
-  ansible.builtin.systemd:
-    name: "{{ item }}"
-    state: stopped
-    enabled: false
-  loop: "{{ core_disabled_services }}"
-  when: core_disabled_services is iterable
   tags:
     - core

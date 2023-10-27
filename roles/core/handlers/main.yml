@@ -5,8 +5,6 @@
 
 - name: Generate locales
   ansible.builtin.command: locale-gen
-  tags:
-    - base
 
 - name: Restart dhcpcd
   ansible.builtin.systemd:

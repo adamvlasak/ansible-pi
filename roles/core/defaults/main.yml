@@ -35,7 +35,6 @@ core_absent_packages:
   - openresolv
   - resolvconf
   - wpasupplicant
+  - triggerhappy
 
-core_disabled_services:
-  - avahi-daemon.service
-  - avahi-daemon.socket
+core_disabled_services: []
