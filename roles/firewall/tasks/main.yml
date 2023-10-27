@@ -1,13 +1,4 @@
 ---
-- name: Set facts
-  ansible.builtin.set_fact:
-    ip: "{{ ansible_default_ipv4.address }}"
-    subnet: "{{ (ansible_default_ipv4.network + '/' + ansible_default_ipv4.netmask) | ansible.utils.ipaddr('net') }}"
-    broadcast: "{{ ansible_default_ipv4.broadcast }}"
-    interface: "{{ ansible_default_ipv4.interface }}"
-  tags:
-    - firewall
-
 - name: Install iptables package
   ansible.builtin.apt:
     name: iptables
