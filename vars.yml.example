@@ -1,10 +1,13 @@
 ---
 network:
-  ip: 192.168.1.100
-  hostname: "pi.home.arpa"
-  router: 192.168.1.1 # or false when dhcp should be used
-  domain: home.arpa
-  subnet: 192.168.1.0/24
+  hostname: "pi.loc"
+  ip: "{{ ansible_default_ipv4.address }}"
+  interface: "{{ ansible_default_ipv4.interface }}"
+  subnet: "{{ (ansible_default_ipv4.network + '/' + ansible_default_ipv4.netmask) | ansible.utils.ipaddr('net') }}"
+  prefix_length: "{{ (ansible_default_ipv4.network + '/' + ansible_default_ipv4.netmask) | ansible.utils.ipaddr('prefix') }}"
+  gateway: "{{ ansible_default_ipv4.gateway }}"
+  router: true
+  domain: loc
   nameserver: 127.0.0.1
 
 env:
@@ -16,25 +19,21 @@ env:
   - "HISTCONTROL=ignoredups:erasedups"
 
 dnscrypt_proxy:
-  version: 2.1.4
-  listen_addresses: [ "127.0.0.1:53", "192.168.1.100:53" ]
+  version: 2.1.5
+  listen_addresses: ["127.0.0.1:53", "192.168.1.100:53"]
+  cache: true
   cache_size: 4096
   servernames: [ "cloudflare-security" ]
   blocklists:
     - https://big.oisd.nl/
   cloaking_rules:
-    - "localhost 127.0.0.1"
     - "pi.{{ network.domain }} {{ network.ip }}"
     - "navidrome.{{ network.domain }} {{ network.ip }}"
   block_patterns:
     - "*.lan"
-    - "*.loc"
     - "*.local"
     - "*.localdomain"
     - "*.workgroup"
-  forwarding_rules:
-    - 1.168.192.in-addr.arpa 192.168.1.1
-    - 224.in-addr.arpa 192.168.10.1
 
 samba:
   share_name: SOME_NAME
@@ -59,7 +58,7 @@ navidrome:
   external_services: false
   theme: Nord
 
-yt_dlp_version: 2023.02.17
+yt_dlp_version: 2023.03.04
 
 mount:
   points:

@@ -32,7 +32,7 @@ nohook resolv.conf
 {% if network.router != false %}
 # Static IP configuration:
 interface eth0
-static ip_address={{ network.ip }}/24
-static routers={{ network.router }}
+static ip_address={{ network.ip }}/{{ network.prefix_length }}
+static routers={{ network.gateway }}
 static domain_name_servers={{ network.nameserver }}
 {% endif %}
