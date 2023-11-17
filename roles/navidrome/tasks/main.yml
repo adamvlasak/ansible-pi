@@ -1,7 +1,13 @@
 ---
+- name: Set facts
+  ansible.builtin.set_fact:
+    navidrome_tarball: "navidrome_{{ navidrome.version }}_linux_arm64.tar.gz"
+  tags:
+    - navidrome
+
 - name: Download release from github
   ansible.builtin.get_url:
-    url: "https://github.com/navidrome/navidrome/releases/download/v{{ navidrome.version }}/navidrome_{{ navidrome.version }}_Linux_arm64.tar.gz"
+    url: "https://github.com/navidrome/navidrome/releases/download/v{{ navidrome.version }}/{{ navidrome_tarball }}"
     dest: /tmp
     owner: root
     group: root
@@ -34,7 +40,7 @@
 
 - name: Extract archive
   ansible.builtin.unarchive:
-    src: /tmp/navidrome_{{ navidrome.version }}_Linux_arm64.tar.gz
+    src: /tmp/{{ navidrome_tarball }}
     dest: /opt/navidrome
     remote_src: true
   notify: Restart navidrome
