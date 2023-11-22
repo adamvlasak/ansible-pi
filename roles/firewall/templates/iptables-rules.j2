@@ -84,6 +84,7 @@ iptables -A INPUT -j REJECT --reject-with icmp-proto-unreachable
 # Output chain
 iptables -A OUTPUT -o lo -j ACCEPT
 iptables -A OUTPUT -o {{ network.interface }} -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+iptables -A OUTPUT -o {{ network.interface }} -s {{ network.ip }}/32 -m conntrack --ctstate NEW -p icmp -j ACCEPT
 iptables -A OUTPUT -o {{ network.interface }} -s {{ network.ip }}/32 -d {{ network.subnet }} -m conntrack --ctstate NEW -j ACCEPT
 iptables -A OUTPUT -o {{ network.interface }} -s {{ network.ip }}/32 -d 239.255.255.250/32 -m conntrack --ctstate NEW -m udp -p udp --dport 1900 -j ACCEPT
 iptables -A OUTPUT -o {{ network.interface }} -s {{ network.ip }}/32 -d 224.0.0.251/32 -m conntrack --ctstate NEW -m udp -p udp --dport 5353 -j ACCEPT
