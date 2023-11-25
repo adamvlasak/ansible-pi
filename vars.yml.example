@@ -23,7 +23,7 @@ dnscrypt_proxy:
   listen_addresses: ["127.0.0.1:53", "192.168.1.100:53"]
   cache: true
   cache_size: 4096
-  servernames: [ "cloudflare-security" ]
+  servernames: ["cloudflare-security"]
   blocklists:
     - https://big.oisd.nl/
   cloaking_rules:
@@ -51,7 +51,7 @@ minidlna:
     - { type: A, path: /mnt/data/AudioBooks }
 
 navidrome:
-  version: 0.50.0
+  version: 0.50.1
   working_directory: /var/lib/navidrome
   bin_directory: /opt/navidrome
   music_directory: /mnt/data/Music
