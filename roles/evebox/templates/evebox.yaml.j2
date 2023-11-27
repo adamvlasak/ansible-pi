@@ -1,0 +1,26 @@
+# This is a minimal evebox.yaml for Elasticsearch and SQLite.
+
+database:
+  type: sqlite
+
+  retention:
+    # Only keep events for the past 7 days.
+    # - SQLite only
+    # - Default 7 days
+    # - Set to 0 to disable
+    days: 7
+
+    # Maximum database size.
+    # - SQLite only
+    # - No default
+    size: "5 GB"
+
+# The server can process events itself when using SQLite or a classic
+# Logstash style Elasticsearch template.
+input:
+  enabled: true
+
+  # Suricata EVE file patterns to look for and read.
+  paths:
+    - "/var/log/suricata/eve.json"
+    - "/var/log/suricata/eve.*.json"

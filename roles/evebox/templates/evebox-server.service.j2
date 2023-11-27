@@ -1,0 +1,13 @@
+[Unit]
+Description=Evebox Server
+After=remote-fs.target network.target
+
+[Install]
+WantedBy=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=evebox server -D {{ evebox_working_directory }} --sqlite
+WorkingDirectory={{ evebox_working_directory }}
+KillMode=process
+Restart=on-failure

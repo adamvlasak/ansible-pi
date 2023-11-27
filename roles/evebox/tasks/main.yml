@@ -1,0 +1,105 @@
+---
+- name: Add GPG key
+  ansible.builtin.apt_key:
+    url: https://evebox.org/files/GPG-KEY-evebox
+    state: present
+  tags:
+    - evebox
+
+- name: Add apt repo
+  ansible.builtin.lineinfile:
+    line: "deb http://evebox.org/files/debian stable main"
+    regexp: "^deb"
+    state: present
+    path: /etc/apt/sources.list.d/evebox.list
+    create: true
+    owner: root
+    group: root
+    mode: 0644
+  tags:
+    - evebox
+
+- name: Install evebox
+  ansible.builtin.apt:
+    name: evebox
+    state: present
+    update_cache: true
+  tags:
+    - evebox
+
+- name: Configure evebox.yaml
+  ansible.builtin.template:
+    src: evebox.yaml.j2
+    dest: /etc/evebox/evebox.yaml
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - Restart evebox server
+  tags:
+    - evebox
+
+- name: Configure agent.yaml
+  ansible.builtin.template:
+    src: agent.yaml.j2
+    dest: /etc/evebox/agent.yaml
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - Restart evebox agent
+  tags:
+    - evebox
+
+- name: Configure evebox-server.service
+  ansible.builtin.template:
+    src: evebox-server.service.j2
+    dest: /etc/systemd/system/evebox-server.service
+    owner: root
+    group: root
+    mode: 0755
+  notify:
+    - Daemon-reload
+    - Restart evebox server
+  tags:
+    - evebox
+
+- name: Configure evebox-agent.service
+  ansible.builtin.template:
+    src: evebox-agent.service.j2
+    dest: /etc/systemd/system/evebox-agent.service
+    owner: root
+    group: root
+    mode: 0755
+  notify:
+    - Daemon-reload
+    - Restart evebox agent
+  tags:
+    - evebox
+
+- name: Start and enable evebox server upon boot
+  ansible.builtin.systemd:
+    name: "evebox-server"
+    state: started
+    enabled: true
+  tags:
+    - evebox
+
+- name: Start and enable evebox agent upon boot
+  ansible.builtin.systemd:
+    name: "evebox-agent"
+    state: started
+    enabled: true
+  tags:
+    - evebox
+
+- name: Configure nginx virtual server
+  ansible.builtin.template:
+    src: evebox.nginx.conf.j2
+    dest: /etc/nginx/conf.d/evebox.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: Restart nginx
+  tags:
+    - evebox

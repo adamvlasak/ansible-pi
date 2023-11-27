@@ -1,0 +1,10 @@
+---
+- name: Restart evebox server
+  ansible.builtin.systemd:
+    name: evebox-server
+    state: restarted
+
+- name: Restart evebox agent
+  ansible.builtin.systemd:
+    name: evebox-agent
+    state: restarted

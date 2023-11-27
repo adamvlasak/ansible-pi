@@ -8,6 +8,7 @@
     - core
     - sysctl
     - suricata
+    - evebox
     - firewall
     - dnscrypt_proxy
     - nginx
