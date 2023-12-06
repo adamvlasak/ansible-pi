@@ -12,6 +12,7 @@ core_packages:
   - iftop
   - iotop
   - irqbalance
+  - isc-dhcp-server
   - mc
   - mlocate
   - mp3gain
@@ -30,7 +31,6 @@ core_packages:
   - vim
   - w3m
   - wget
-  - isc-dhcp-server
 
 core_absent_packages:
   - openresolv

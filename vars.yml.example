@@ -1,11 +1,15 @@
 ---
 network:
   hostname: "pi.loc"
-  ip: "{{ ansible_default_ipv4.address }}"
-  interface: "{{ ansible_default_ipv4.interface }}"
-  subnet: "{{ (ansible_default_ipv4.network + '/' + ansible_default_ipv4.netmask) | ansible.utils.ipaddr('net') }}"
-  prefix_length: "{{ (ansible_default_ipv4.network + '/' + ansible_default_ipv4.netmask) | ansible.utils.ipaddr('prefix') }}"
-  gateway: "{{ ansible_default_ipv4.gateway }}"
+  ip: "192.168.1.250"
+  subnet: "192.168.1.0/24"
+  gateway: "192.168.1.1"
+  mask: 255.255.255.0
+  interface: "eth0"
+  dhcp_range_from: "192.168.1.100"
+  dhcp_range_to: "192.168.1.200"
+  dhcp_nameservers: "192.168.1.250"
+  dhcp_gateway: "192.168.1.250"
   router: true
   domain: loc
   nameserver: 127.0.0.1
@@ -20,7 +24,7 @@ env:
 
 dnscrypt_proxy:
   version: 2.1.5
-  listen_addresses: ["127.0.0.1:53", "192.168.1.100:53"]
+  listen_addresses: ["127.0.0.1:53", "192.168.1.250:53"]
   cache: true
   cache_size: 4096
   servernames: ["cloudflare-security"]

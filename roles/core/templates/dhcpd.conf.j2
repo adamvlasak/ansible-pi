@@ -1,0 +1,10 @@
+default-lease-time 600;
+max-lease-time 7200;
+authoritative;
+
+subnet {{ network.subnet.split('/')[0]}} netmask {{ network.mask }} {
+  range {{ network.dhcp_range_from }} {{ network.dhcp_range_to }};
+  option domain-name-servers {{ network.dhcp_nameservers }};
+  option domain-name "loc";
+  option routers {{ network.dhcp_gateway }};
+}

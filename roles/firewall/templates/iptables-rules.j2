@@ -76,6 +76,7 @@ iptables -A INPUT -m pkttype --pkt-type multicast -j ACCEPT
 iptables -A INPUT -i {{ network.interface }} -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 iptables -A INPUT -i {{ network.interface }} -s {{ network.subnet }} -d {{ network.ip }}/32 -m conntrack --ctstate NEW -j ACCEPT
 iptables -A INPUT -i {{ network.interface }} -s {{ network.subnet }} -d 239.255.255.250/32 -m conntrack --ctstate NEW -m udp -p udp --dport 1900 -j ACCEPT
+iptables -A INPUT -i {{ network.interface }} -s 0.0.0.0/0 -d 255.255.255.255/32 -m conntrack --ctstate NEW -m udp -p udp --sport 68 --dport 67 -j ACCEPT
 iptables -A INPUT -j LOG --log-prefix "INPUT DROP: "
 iptables -A INPUT -m udp -p udp -j REJECT --reject-with icmp-port-unreachable
 iptables -A INPUT -m tcp -p tcp -j REJECT --reject-with tcp-reset

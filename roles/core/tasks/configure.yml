@@ -120,14 +120,14 @@
   tags:
     - core
 
-- name: Configure dhcpcd.conf
+- name: Configure dhcpd.conf
   ansible.builtin.template:
-    src: dhcpcd.conf.j2
-    dest: /etc/dhcpcd.conf
+    src: dhcpd.conf.j2
+    dest: /etc/dhcp/dhcpd.conf
     owner: root
     group: root
     mode: 0644
-  notify: Restart dhcpcd
+  notify: Restart dhcpd
   tags:
     - core
 
