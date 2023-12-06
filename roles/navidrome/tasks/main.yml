@@ -65,7 +65,7 @@
     dest: /etc/systemd/system/navidrome.service
     owner: root
     group: root
-    mode: 0755
+    mode: 0444
   notify:
     - Daemon-reload
     - Restart navidrome

@@ -57,7 +57,7 @@
     dest: /etc/systemd/system/evebox-server.service
     owner: root
     group: root
-    mode: 0755
+    mode: 0444
   notify:
     - Daemon-reload
     - Restart evebox server
@@ -70,7 +70,7 @@
     dest: /etc/systemd/system/evebox-agent.service
     owner: root
     group: root
-    mode: 0755
+    mode: 0444
   notify:
     - Daemon-reload
     - Restart evebox agent
