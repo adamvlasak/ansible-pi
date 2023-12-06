@@ -47,4 +47,4 @@ makestep 1 3
 leapsectz right/UTC
 
 # Allow connections from LAN
-allow {{ network.subnet }}
+allow {{ network.subnet }}/{{ network.prefix_length }}
