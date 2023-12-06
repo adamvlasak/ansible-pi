@@ -30,6 +30,7 @@ core_packages:
   - vim
   - w3m
   - wget
+  - isc-dhcp-server
 
 core_absent_packages:
   - openresolv
@@ -37,4 +38,6 @@ core_absent_packages:
   - wpasupplicant
   - triggerhappy
 
-core_disabled_services: []
+core_disabled_services:
+  - dhcpcd
+  - nmbd
