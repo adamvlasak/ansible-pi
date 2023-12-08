@@ -131,6 +131,17 @@
   tags:
     - core
 
+- name: Download http://standards-oui.ieee.org/oui.txt
+  ansible.builtin.uri:
+    url: http://standards-oui.ieee.org/oui.txt
+    dest: /usr/local/etc/oui.txt
+    owner: root
+    group: root
+    mode: 0644
+  notify: Restart dhcpd
+  tags:
+    - core
+
 - name: Configure ENV variables
   ansible.builtin.template:
     src: vars.sh.j2
