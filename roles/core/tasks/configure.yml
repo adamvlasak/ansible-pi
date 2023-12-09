@@ -19,23 +19,6 @@
   tags:
     - core
 
-- name: Configure sshd
-  ansible.builtin.template:
-    src: sshd_config.j2
-    dest: /etc/ssh/sshd_config
-    owner: root
-    group: root
-    mode: 0644
-  notify: Restart sshd
-  tags:
-    - core
-
-- name: Configure correct timezone
-  community.general.timezone:
-    name: Europe/Prague
-  tags:
-    - core
-
 - name: Configure locales
   community.general.locale_gen:
     name: "{{ item }}"
@@ -75,6 +58,23 @@
     - core
     - dns
 
+- name: Configure correct timezone
+  community.general.timezone:
+    name: Europe/Prague
+  tags:
+    - core
+
+- name: Configure chrony
+  ansible.builtin.template:
+    src: chrony.conf.j2
+    dest: /etc/chrony/chrony.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: Restart chrony
+  tags:
+    - core
+
 - name: Configure resolv.conf
   ansible.builtin.template:
     src: resolv.conf.j2
@@ -109,14 +109,14 @@
     - core
     - dns
 
-- name: Configure chrony
+- name: Configure sshd
   ansible.builtin.template:
-    src: chrony.conf.j2
-    dest: /etc/chrony/chrony.conf
+    src: sshd_config.j2
+    dest: /etc/ssh/sshd_config
     owner: root
     group: root
     mode: 0644
-  notify: Restart chrony
+  notify: Restart sshd
   tags:
     - core
 
@@ -131,6 +131,17 @@
   tags:
     - core
 
+- name: Configure sudoers
+  ansible.builtin.lineinfile:
+    path: /etc/sudoers
+    line: "%sudo ALL=(ALL:ALL) NOPASSWD: ALL"
+    insertafter: "%sudo.+ALL"
+    regexp: "NOPASSWD:.+ALL"
+    state: present
+  tags:
+    - core
+    - user
+
 - name: Download http://standards-oui.ieee.org/oui.txt
   ansible.builtin.uri:
     url: http://standards-oui.ieee.org/oui.txt
@@ -138,6 +149,7 @@
     owner: root
     group: root
     mode: 0644
+    creates: /usr/local/etc/oui.txt
   notify: Restart dhcpd
   tags:
     - core
@@ -151,17 +163,6 @@
     mode: 0755
   tags:
     - core
-
-- name: Configure sudoers
-  ansible.builtin.lineinfile:
-    path: /etc/sudoers
-    line: "%sudo ALL=(ALL:ALL) NOPASSWD: ALL"
-    insertafter: "%sudo.+ALL"
-    regexp: "NOPASSWD:.+ALL"
-    state: present
-  tags:
-    - core
-    - user
 
 - name: Prepare mount points
   ansible.builtin.file:
