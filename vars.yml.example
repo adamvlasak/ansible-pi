@@ -4,6 +4,7 @@ network:
   ip: "192.168.1.250"
   subnet: "192.168.1.0/24"
   gateway: "192.168.1.1"
+  broadcast: "192.168.10.255"
   mask: 255.255.255.0
   interface: "eth0"
   dhcp_range_from: "192.168.1.100"

@@ -3,13 +3,14 @@
 This repository contains ansible playbook that helps with setup of
 Raspberry PI based home server. It will have following features:
 
+- local DHCP server
+- strict firewall allowing explicit traffic (web, mail, whois)
 - local caching DNS server with adblocking features and DNS rebind
   protection
 - local NTP server
 - local DLNA server so that you can watch your movies on TV or such
 - local web based music player
 - local samba server
-- it can act as router within your network
 
 ## Prerequisities
 
@@ -31,10 +32,8 @@ Then copy `vars.yml.example` to `vars.yml` and customize to your needs.
 Example vars file assumes you connected Raspberry PI to your router
 running on `192.168.1.1`.
 
-> It is required to set this Raspberry PI pi as primary and secondary
-> DNS server in your DHCP settings on your router so that all your
-> devices will get `0.0.0.0` as DNS reply for blocked domains and will
-> see domain specified in `vars.yml` file.
+> Once your Raspberry PI is configured you can turn off DHCP server
+> on your router.
 
 ## Provisioning
 
