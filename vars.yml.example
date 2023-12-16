@@ -56,7 +56,7 @@ minidlna:
     - { type: A, path: /mnt/data/AudioBooks }
 
 navidrome:
-  version: 0.50.1
+  version: 0.50.2
   working_directory: /var/lib/navidrome
   bin_directory: /opt/navidrome
   music_directory: /mnt/data/Music
