@@ -3,9 +3,6 @@
   ansible.builtin.systemd:
     daemon-reload: true
 
-- name: Generate locales
-  ansible.builtin.command: locale-gen
-
 - name: Restart dhcpcd
   ansible.builtin.systemd:
     name: dhcpcd
