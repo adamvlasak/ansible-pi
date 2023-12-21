@@ -1,14 +1,4 @@
 ---
-- name: Disable unwanted services
-  ansible.builtin.systemd:
-    name: "{{ item }}"
-    state: stopped
-    enabled: false
-  loop: "{{ core_disabled_services }}"
-  when: core_disabled_services is iterable
-  tags:
-    - core
-
 - name: Configure boot/config.txt
   ansible.builtin.template:
     src: boot-config.txt.j2
@@ -18,96 +8,7 @@
     mode: 0755
   tags:
     - core
-
-- name: Configure locales
-  community.general.locale_gen:
-    name: "{{ item }}"
-    state: present
-  loop:
-    - en_US.UTF-8
-    - cs_CZ.UTF-8
-  notify: Generate locales
-  tags:
-    - core
-
-- name: Configure /etc/default/locale
-  ansible.builtin.lineinfile:
-    path: /etc/default/locale
-    line: "LANG=en_US.UTF-8"
-    regexp: LANG
-    create: true
-    state: present
-    owner: root
-    group: root
-    mode: 0644
-  tags:
-    - core
-
-- name: Set machine hostname
-  ansible.builtin.hostname:
-    name: "{{ network.hostname }}"
-  tags:
-    - core
-    - dns
-
-- name: Remove /etc/resolvconf.conf
-  ansible.builtin.file:
-    path: /etc/resolvconf.conf
-    state: absent
-  tags:
-    - core
-    - dns
-
-- name: Configure correct timezone
-  community.general.timezone:
-    name: Europe/Prague
-  tags:
-    - core
-
-- name: Configure chrony
-  ansible.builtin.template:
-    src: chrony.conf.j2
-    dest: /etc/chrony/chrony.conf
-    owner: root
-    group: root
-    mode: 0644
-  notify: Restart chrony
-  tags:
-    - core
-
-- name: Configure resolv.conf
-  ansible.builtin.template:
-    src: resolv.conf.j2
-    dest: /etc/resolv.conf
-    owner: root
-    group: root
-    mode: 0644
-  notify: Restart dhcpcd
-  tags:
-    - core
-    - dns
-
-- name: Configure /etc/nsswitch.conf
-  ansible.builtin.template:
-    src: nsswitch.conf.j2
-    dest: /etc/nsswitch.conf
-    owner: root
-    group: root
-    mode: 0644
-  tags:
-    - core
-    - dns
-
-- name: Set hosts file
-  ansible.builtin.template:
-    src: hosts.j2
-    dest: /etc/hosts
-    owner: root
-    group: root
-    mode: 0644
-  tags:
-    - core
-    - dns
+    - boot_config
 
 - name: Configure sshd
   ansible.builtin.template:
@@ -119,17 +20,7 @@
   notify: Restart sshd
   tags:
     - core
-
-- name: Configure dhcpd.conf
-  ansible.builtin.template:
-    src: dhcpd.conf.j2
-    dest: /etc/dhcp/dhcpd.conf
-    owner: root
-    group: root
-    mode: 0644
-  notify: Restart dhcpd
-  tags:
-    - core
+    - sshd
 
 - name: Configure sudoers
   ansible.builtin.lineinfile:
@@ -142,18 +33,6 @@
     - core
     - user
 
-- name: Download http://standards-oui.ieee.org/oui.txt
-  ansible.builtin.uri:
-    url: http://standards-oui.ieee.org/oui.txt
-    dest: /usr/local/etc/oui.txt
-    owner: root
-    group: root
-    mode: 0644
-    creates: /usr/local/etc/oui.txt
-  notify: Restart dhcpd
-  tags:
-    - core
-
 - name: Configure ENV variables
   ansible.builtin.template:
     src: vars.sh.j2
@@ -163,6 +42,7 @@
     mode: 0755
   tags:
     - core
+    - env
 
 - name: Prepare mount points
   ansible.builtin.file:
@@ -175,3 +55,4 @@
   when: mount.points is defined
   tags:
     - core
+    - mount

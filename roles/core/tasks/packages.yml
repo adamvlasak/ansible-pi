@@ -1,14 +1,4 @@
 ---
-- name: Remove unwanted packages
-  ansible.builtin.apt:
-    name: "{{ item }}"
-    autoremove: true
-    state: absent
-  loop: "{{ core_absent_packages }}"
-  when: core_absent_packages is iterable
-  tags:
-    - core
-
 - name: Install necessary packages
   ansible.builtin.apt:
     name: "{{ core_packages }}"
@@ -17,6 +7,7 @@
   when: core_packages is iterable
   tags:
     - core
+    - packages
 
 - name: Download yt-dlp
   ansible.builtin.get_url:
@@ -27,3 +18,4 @@
     mode: 0755
   tags:
     - core
+    - packages

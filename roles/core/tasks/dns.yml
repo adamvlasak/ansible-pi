@@ -1,0 +1,49 @@
+---
+- name: Set machine hostname
+  ansible.builtin.hostname:
+    name: "{{ network.hostname }}"
+  tags:
+    - core
+    - dns
+
+- name: Remove /etc/resolvconf.conf
+  ansible.builtin.file:
+    path: /etc/resolvconf.conf
+    state: absent
+  tags:
+    - core
+    - dns
+
+- name: Configure resolv.conf
+  ansible.builtin.template:
+    src: resolv.conf.j2
+    dest: /etc/resolv.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: Restart dhcpcd
+  tags:
+    - core
+    - dns
+
+- name: Configure /etc/nsswitch.conf
+  ansible.builtin.template:
+    src: nsswitch.conf.j2
+    dest: /etc/nsswitch.conf
+    owner: root
+    group: root
+    mode: 0644
+  tags:
+    - core
+    - dns
+
+- name: Set hosts file
+  ansible.builtin.template:
+    src: hosts.j2
+    dest: /etc/hosts
+    owner: root
+    group: root
+    mode: 0644
+  tags:
+    - core
+    - dns

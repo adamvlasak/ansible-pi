@@ -1,10 +1,21 @@
 ---
-- name: Import install tasks
-  ansible.builtin.import_tasks: install.yml
-  tags:
-    - core
+- name: Import unwanted tasks
+  ansible.builtin.import_tasks: unwanted.yml
+
+- name: Import packages tasks
+  ansible.builtin.import_tasks: packages.yml
+
+- name: Import dns tasks
+  ansible.builtin.import_tasks: dns.yml
+
+- name: Import time tasks
+  ansible.builtin.import_tasks: time.yml
+
+- name: Import locales tasks
+  ansible.builtin.import_tasks: locales.yml
+
+- name: Import dhcpd tasks
+  ansible.builtin.import_tasks: dhcpd.yml
 
 - name: Import configure tasks
   ansible.builtin.import_tasks: configure.yml
-  tags:
-    - core

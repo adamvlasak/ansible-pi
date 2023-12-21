@@ -1,0 +1,26 @@
+---
+- name: Configure locales
+  community.general.locale_gen:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - en_US.UTF-8
+    - cs_CZ.UTF-8
+  notify: Generate locales
+  tags:
+    - core
+    - locales
+
+- name: Configure /etc/default/locale
+  ansible.builtin.lineinfile:
+    path: /etc/default/locale
+    line: "LANG=en_US.UTF-8"
+    regexp: LANG
+    create: true
+    state: present
+    owner: root
+    group: root
+    mode: 0644
+  tags:
+    - core
+    - locales
