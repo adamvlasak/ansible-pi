@@ -5,6 +5,6 @@
     value: "{{ item.value }}"
     state: present
   loop:
-    "{{ rules }}"
+    "{{ sysctl_options }}"
   tags:
-    - security
+    - sysctl
