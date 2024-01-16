@@ -1,25 +1,28 @@
 ---
-- name: Install suricata packages
-  ansible.builtin.apt:
-    name: ["suricata", "suricata-update"]
-    state: present
-  tags:
-    - suricata
+- name: Install suricata
+  when: suricata_enabled
+  block:
+    - name: Install suricata packages
+      ansible.builtin.apt:
+        name: ["suricata", "suricata-update"]
+        state: present
+      tags:
+        - suricata
 
-- name: Configure suricata to use /var/lib/suricata/rules
-  ansible.builtin.lineinfile:
-    line: "default-rule-path: /var/lib/suricata/rules"
-    regex: "^default-rule-path:"
-    state: present
-    path: /etc/suricata/suricata.yaml
-  notify: Restart suricata
-  tags:
-    - suricata
+    - name: Configure suricata to use /var/lib/suricata/rules
+      ansible.builtin.lineinfile:
+        line: "default-rule-path: /var/lib/suricata/rules"
+        regex: "^default-rule-path:"
+        state: present
+        path: /etc/suricata/suricata.yaml
+      notify: Restart suricata
+      tags:
+        - suricata
 
-- name: Start and enable suricata upon boot
-  ansible.builtin.systemd:
-    name: suricata
-    state: started
-    enabled: true
-  tags:
-    - suricata
+    - name: Start and enable suricata upon boot
+      ansible.builtin.systemd:
+        name: suricata
+        state: started
+        enabled: true
+      tags:
+        - suricata

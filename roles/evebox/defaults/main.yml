@@ -1,2 +1,3 @@
 ---
+evebox_enabled: false
 evebox_working_directory: /var/lib/evebox
