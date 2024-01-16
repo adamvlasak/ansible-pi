@@ -50,3 +50,16 @@
     - core
     - dns
     - network
+
+- name: Configure avahi daemon
+  ansible.builtin.template:
+    src: avahi-daemon.conf.j2
+    dest: /etc/avahi/avahi-daemon.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: Restart avahi-daemon
+  tags:
+    - core
+    - dns
+    - network
