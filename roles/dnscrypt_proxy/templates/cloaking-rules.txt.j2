@@ -3,6 +3,6 @@
 {% endfor %}
 {% if dhcp_reservations is defined and dhcp_reservations is iterable %}
 {% for device in dhcp_reservations %}
-{{ device.hostname }} {{ device.ip }}
+{{ device.hostname }}.{{ network.domain }} {{ device.ip }}
 {% endfor %}
 {% endif %}

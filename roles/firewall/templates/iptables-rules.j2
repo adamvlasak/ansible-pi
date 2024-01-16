@@ -18,7 +18,6 @@ iptables -P INPUT DROP
 iptables -P FORWARD DROP
 iptables -P OUTPUT DROP
 
-
 {% if network.router %}
 # Force DNS
 iptables -A PREROUTING -t nat -s {{ network.subnet }} ! -d {{ network.ip }}/32 -p udp --dport 53 -j DNAT --to {{ network.ip }}

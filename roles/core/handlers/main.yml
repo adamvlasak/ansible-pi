@@ -3,11 +3,6 @@
   ansible.builtin.systemd:
     daemon-reload: true
 
-- name: Restart dhcpcd
-  ansible.builtin.systemd:
-    name: dhcpcd
-    state: restarted
-
 - name: Restart dhcpd
   ansible.builtin.systemd:
     name: isc-dhcp-server
