@@ -13,6 +13,11 @@
     name: isc-dhcp-server
     state: restarted
 
+- name: Restart networking
+  ansible.builtin.systemd:
+    name: networking
+    state: restarted
+
 - name: Restart sshd
   ansible.builtin.systemd:
     name: sshd

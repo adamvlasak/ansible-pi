@@ -5,17 +5,17 @@
 - name: Import packages tasks
   ansible.builtin.import_tasks: packages.yml
 
-- name: Import dns tasks
-  ansible.builtin.import_tasks: dns.yml
-
 - name: Import time tasks
   ansible.builtin.import_tasks: time.yml
 
 - name: Import locales tasks
   ansible.builtin.import_tasks: locales.yml
 
-- name: Import dhcpd tasks
-  ansible.builtin.import_tasks: dhcpd.yml
+- name: Import dns tasks
+  ansible.builtin.import_tasks: dns.yml
+
+- name: Import network tasks
+  ansible.builtin.import_tasks: network.yml
 
 - name: Import configure tasks
   ansible.builtin.import_tasks: configure.yml
