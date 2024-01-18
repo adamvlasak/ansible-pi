@@ -26,10 +26,13 @@ iptables -A PREROUTING -t nat -s {{ network.subnet }} ! -d {{ network.ip }}/32 -
 iptables -A PREROUTING -t nat -s {{ network.subnet }} ! -d {{ network.ip }}/32 -p udp --dport 123 -j DNAT --to {{ network.ip }}
 
 # NAT
-iptables -A POSTROUTING -t nat -o {{ network.interface }} -s {{ network.subnet }} -j SNAT --to-source {{ network.ip }}
+iptables -A POSTROUTING -t nat -o {{ network.interface }} -s {{ network.subnet }} -j MASQUERADE
+
+# This is used to overcome some ISP's and servers that block ICMP fragmentation needed packets
+iptables -A POSTROUTING -t mangle -p tcp --tcp-flags SYN,RST SYN -o {{ network.interface }} -j TCPMSS --clamp-mss-to-pmtu
 
 # Forward chain
-iptables -A FORWARD -i {{ network.interface }} -o {{ network.interface }} -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+iptables -A FORWARD -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 iptables -A FORWARD -m conntrack --ctstate INVALID -j DROP
 iptables -A FORWARD -i {{ network.interface }} -o {{ network.interface }} -s {{ network.subnet }} -m conntrack --ctstate NEW -p icmp -j ACCEPT
 iptables -A FORWARD -i {{ network.interface }} -o {{ network.interface }} -s {{ network.subnet }} -m conntrack --ctstate NEW -m tcp -p tcp --dport 22 -j ACCEPT
@@ -48,11 +51,11 @@ iptables -A FORWARD -j REJECT --reject-with icmp-proto-unreachable
 {% endif %}
 
 # Input chain
-iptables -A INPUT -i {{ network.interface }} -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
-iptables -A INPUT -m conntrack --ctstate INVALID -j DROP
-iptables -A INPUT -i {{ network.interface }} -m pkttype --pkt-type multicast -d 224.0.0.251 -j ACCEPT
+iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 iptables -A INPUT -i lo -j ACCEPT
+iptables -A INPUT -m conntrack --ctstate INVALID -j DROP
 iptables -A INPUT -i {{ network.interface }} -s {{ network.subnet }} -d {{ network.ip }}/32 -m conntrack --ctstate NEW -j ACCEPT
+iptables -A INPUT -i {{ network.interface }} -s {{ network.subnet }} -d 224.0.0.251 -m conntrack --ctstate NEW -j ACCEPT
 iptables -A INPUT -i {{ network.interface }} -s {{ network.subnet }} -d 239.255.255.250/32 -m conntrack --ctstate NEW -m udp -p udp --dport 1900 -j ACCEPT
 iptables -A INPUT -i {{ network.interface }} -s 0.0.0.0/0 -d 255.255.255.255/32 -m conntrack --ctstate NEW -m udp -p udp --sport 68 --dport 67 -j ACCEPT
 iptables -A INPUT -j LOG --log-prefix "INPUT DROP: "
@@ -61,9 +64,9 @@ iptables -A INPUT -m tcp -p tcp -j REJECT --reject-with tcp-reset
 iptables -A INPUT -j REJECT --reject-with icmp-proto-unreachable
 
 # Output chain
-iptables -A OUTPUT -o {{ network.interface }} -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
-iptables -A OUTPUT -m conntrack --ctstate INVALID -j DROP
+iptables -A OUTPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 iptables -A OUTPUT -o lo -j ACCEPT
+iptables -A OUTPUT -m conntrack --ctstate INVALID -j DROP
 iptables -A OUTPUT -o {{ network.interface }} -s {{ network.ip }}/32 -m conntrack --ctstate NEW -p icmp -j ACCEPT
 iptables -A OUTPUT -o {{ network.interface }} -s {{ network.ip }}/32 -d {{ network.subnet }} -m conntrack --ctstate NEW -j ACCEPT
 iptables -A OUTPUT -o {{ network.interface }} -s {{ network.ip }}/32 -d 239.255.255.250/32 -m conntrack --ctstate NEW -m udp -p udp --dport 1900 -j ACCEPT
