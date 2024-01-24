@@ -21,6 +21,7 @@
   ansible.posix.sysctl:
     key: fs.inotify.max_user_watches
     value: "100000"
+    sysctl_file: /etc/sysctl.d/minidlna.conf
     state: present
   notify: Restart minidlna
   tags:

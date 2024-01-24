@@ -3,6 +3,7 @@
   ansible.posix.sysctl:
     name: "{{ item.name }}"
     value: "{{ item.value }}"
+    sysctl_file: "{{ sysctl_file }}"
     state: present
   loop:
     "{{ sysctl_options }}"

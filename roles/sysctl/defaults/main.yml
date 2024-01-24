@@ -1,2 +1,3 @@
 ---
 sysctl_options: []
+sysctl_file: /etc/sysctl.d/custom.conf
