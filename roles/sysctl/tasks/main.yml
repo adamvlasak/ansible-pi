@@ -9,3 +9,12 @@
     "{{ sysctl_options }}"
   tags:
     - sysctl
+
+- name: Remove other sysctl.d
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - /etc/sysctl.d/98-rpi.conf
+  tags:
+    - sysctl
