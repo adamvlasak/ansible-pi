@@ -41,29 +41,17 @@ dnscrypt_proxy:
     - "*.workgroup"
 
 sysctl_options:
-  - { "name": "kernel.dmesg_restrict", "value": "1" }
-  - { "name": "kernel.kptr_restrict", "value": "2" }
-  - { "name": "kernel.sysrq", "value": "0" }
-  - { "name": "net.ipv4.ip_forward", "value": "1" }
-  - { "name": "net.ipv4.tcp_window_scaling", "value": "0" }
-  - { "name": "net.ipv4.conf.all.mc_forwarding", "value": "0" }
-  - { "name": "net.ipv4.conf.default.mc_forwarding", "value": "0" }
-  - { "name": "net.ipv4.conf.all.accept_redirects", "value": "0" }
-  - { "name": "net.ipv4.conf.default.accept_redirects", "value": "0" }
-  - { "name": "net.ipv4.conf.all.accept_source_route", "value": "0" }
-  - { "name": "net.ipv4.conf.default.accept_source_route", "value": "0" }
-  - { "name": "net.ipv4.conf.all.send_redirects", "value": "0" }
-  - { "name": "net.ipv4.conf.default.send_redirects", "value": "0" }
-  - { "name": "net.ipv4.conf.all.secure_redirects", "value": "1" }
-  - { "name": "net.ipv4.conf.default.secure_redirects", "value": "1" }
-  - { "name": "net.ipv4.conf.all.rp_filter", "value": "1" }
-  - { "name": "net.ipv4.conf.default.rp_filter", "value": "1" }
-  - { "name": "net.ipv4.icmp_echo_ignore_broadcasts", "value": "1" }
-  - { "name": "net.ipv6.conf.all.disable_ipv6", "value": "1" }
-  - { "name": "net.ipv6.conf.default.disable_ipv6", "value": "1" }
-  - { "name": "net.ipv4.conf.all.log_martians", "value": "1" }
-  - { "name": "net.ipv4.conf.default.log_martians", "value": "1" }
-  - { "name": "vm.swappiness", "value": "1" }
+  - { name: "kernel.dmesg_restrict", value: "1" }
+  - { name: "kernel.kptr_restrict", value: "2" }
+  - { name: "kernel.sysrq", value: "0" }
+  - { name: "net.ipv4.ip_forward", value: "1" }
+  - { name: "net.ipv6.conf.all.disable_ipv6", value: "1" }
+  - { name: "net.ipv6.conf.default.disable_ipv6", value: "1" }
+  - { name: "vm.swappiness", value: "10" }
+  - { name: "net.ipv4.tcp_mtu_probing", value: "1" }
+  - { name: "net.ipv4.tcp_base_mss", value: "1024" }
+  - { name: "net.ipv4.conf.all.rp_filter", value: "1" }
+  - { name: "net.ipv4.conf.default.rp_filter", value: "1" }
 
 samba:
   share_name: SOME_NAME
