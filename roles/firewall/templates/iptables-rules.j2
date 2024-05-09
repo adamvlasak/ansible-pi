@@ -41,6 +41,7 @@ iptables -A FORWARD -i {{ network.interface }} -o {{ network.interface }} -s {{ 
 iptables -A FORWARD -i {{ network.interface }} -o {{ network.interface }} -s {{ network.subnet }} -m conntrack --ctstate NEW -p udp --dport 443 -j ACCEPT
 iptables -A FORWARD -i {{ network.interface }} -o {{ network.interface }} -s {{ network.subnet }} -m conntrack --ctstate NEW -p tcp --dport 993 -j ACCEPT
 iptables -A FORWARD -i {{ network.interface }} -o {{ network.interface }} -s {{ network.subnet }} -m conntrack --ctstate NEW -p tcp --dport 995 -j ACCEPT
+iptables -A FORWARD -i {{ network.interface }} -o {{ network.interface }} -s {{ network.subnet }} -m conntrack --ctstate NEW -p tcp --dport 465 -j ACCEPT
 iptables -A FORWARD -i {{ network.interface }} -o {{ network.interface }} -s {{ network.subnet }} -m conntrack --ctstate NEW -p tcp --dport 587 -j ACCEPT
 iptables -A FORWARD -i {{ network.interface }} -o {{ network.interface }} -s {{ network.subnet }} -m conntrack --ctstate NEW -p tcp --dport 43 -j ACCEPT
 iptables -A FORWARD -i {{ network.interface }} -o {{ network.interface }} -s {{ network.subnet }} -d 17.0.0.0/8 -m conntrack --ctstate NEW -j ACCEPT
