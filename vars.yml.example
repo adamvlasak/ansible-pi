@@ -40,6 +40,24 @@ dnscrypt_proxy:
     - "*.localdomain"
     - "*.workgroup"
 
+unbound:
+  cache_min_ttl: 1200
+  cache_max_ttl: 14400
+  threads: 4
+  static_records:
+    - { hostname: "pi", ip: "192.168.1.250" }
+    - { hostname: "navidrome", ip: "192.168.1.250" }
+    - { hostname: "notes", ip: "192.168.1.250" }
+    - { hostname: "static", ip: "192.168.1.250" }
+  dhcp_reservations: "{{ dhcp_reservations }}"
+  refused_zones:
+    - "lan"
+    - "lcl"
+    - "local"
+    - "localdomain"
+    - "workgroup"
+    - "mshome.net"
+
 sysctl_options:
   - { name: "kernel.dmesg_restrict", value: "1" }
   - { name: "kernel.kptr_restrict", value: "2" }

@@ -1,0 +1,45 @@
+---
+- name: Install unbound
+  ansible.builtin.apt:
+    name: unbound
+    state: present
+  notify: Restart unbound
+  tags:
+    - dns
+    - unbound
+
+- name: Configure unbound
+  ansible.builtin.template:
+    src: unbound.conf.j2
+    dest: /etc/unbound/unbound.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: Restart unbound
+  tags:
+    - dns
+    - unbound
+
+- name: Configure cron to download root.hints
+  ansible.builtin.cron:
+    name: unbound root.hints
+    hour: 6
+    minute: 0
+    job: /usr/bin/curl -o /etc/unbound/root.hints https://www.internic.net/domain/named.cache
+    cron_file: root_hints
+    user: root
+  tags:
+    - dns
+    - unbound
+
+- name: Configure cron to download oisd dns blacklist
+  ansible.builtin.cron:
+    name: oisd blacklist
+    hour: 6
+    minute: 5
+    job: /usr/bin/curl -o /etc/unbound/unbound.conf.d/blacklist.conf https://big.oisd.nl/unbound
+    cron_file: oisd_blacklist
+    user: root
+  tags:
+    - dns
+    - unbound
