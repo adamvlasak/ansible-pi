@@ -1,19 +1,15 @@
 [global]
-    security = user
-    map to guest = bad user
-    guest account = nobody
-    deadtime = 30
-    use sendfile = yes
-    min receivefile size = 16384
-    disable netbios = yes
-    dns proxy = no
+security = user
+map to guest = bad user
+guest account = nobody
+vfs objects = fruit streams_xattr
 
 [{{ samba.share_name }}]
-    comment = guest
-    path = {{ samba.share_path }}
-    public = yes
-    only guest = yes
-    writable = yes
-    printable = no
-    veto files = /._*/.DS_Store/
-    delete veto files = yes
+comment = guest
+path = {{ samba.share_path }}
+public = yes
+only guest = yes
+writable = yes
+printable = no
+veto files = /._*/.DS_Store/
+delete veto files = yes
