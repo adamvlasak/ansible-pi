@@ -32,8 +32,8 @@ iptables -A POSTROUTING -t nat -o {{ network.interface }} -s {{ network.subnet }
 iptables -A POSTROUTING -t mangle -p tcp --tcp-flags SYN,RST SYN -o {{ network.interface }} -j TCPMSS --clamp-mss-to-pmtu
 
 # Forward chain
-iptables -A FORWARD -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 iptables -A FORWARD -m conntrack --ctstate INVALID -j DROP
+iptables -A FORWARD -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 iptables -A FORWARD -i {{ network.interface }} -o {{ network.interface }} -s {{ network.subnet }} -m conntrack --ctstate NEW -p icmp -j ACCEPT
 iptables -A FORWARD -i {{ network.interface }} -o {{ network.interface }} -s {{ network.subnet }} -m conntrack --ctstate NEW -p tcp --dport 22 -j ACCEPT
 iptables -A FORWARD -i {{ network.interface }} -o {{ network.interface }} -s {{ network.subnet }} -m conntrack --ctstate NEW -p tcp --dport 80 -j ACCEPT
@@ -52,9 +52,9 @@ iptables -A FORWARD -j REJECT --reject-with icmp-proto-unreachable
 {% endif %}
 
 # Input chain
+iptables -A INPUT -m conntrack --ctstate INVALID -j DROP
 iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 iptables -A INPUT -i lo -j ACCEPT
-iptables -A INPUT -m conntrack --ctstate INVALID -j DROP
 iptables -A INPUT -i {{ network.interface }} -s {{ network.subnet }} -d {{ network.ip }}/32 -m conntrack --ctstate NEW -j ACCEPT
 iptables -A INPUT -i {{ network.interface }} -s {{ network.subnet }} -d 224.0.0.251 -m conntrack --ctstate NEW -j ACCEPT
 iptables -A INPUT -i {{ network.interface }} -s {{ network.subnet }} -d 239.255.255.250/32 -m conntrack --ctstate NEW -p udp --dport 1900 -j ACCEPT
@@ -65,9 +65,9 @@ iptables -A INPUT -p tcp -j REJECT --reject-with tcp-reset
 iptables -A INPUT -j REJECT --reject-with icmp-proto-unreachable
 
 # Output chain
+iptables -A OUTPUT -m conntrack --ctstate INVALID -j DROP
 iptables -A OUTPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 iptables -A OUTPUT -o lo -j ACCEPT
-iptables -A OUTPUT -m conntrack --ctstate INVALID -j DROP
 iptables -A OUTPUT -o {{ network.interface }} -s {{ network.ip }}/32 -m conntrack --ctstate NEW -p icmp -j ACCEPT
 iptables -A OUTPUT -o {{ network.interface }} -s {{ network.ip }}/32 -d {{ network.subnet }} -m conntrack --ctstate NEW -j ACCEPT
 iptables -A OUTPUT -o {{ network.interface }} -s {{ network.ip }}/32 -d 239.255.255.250/32 -m conntrack --ctstate NEW -p udp --dport 1900 -j ACCEPT
@@ -81,7 +81,8 @@ iptables -A OUTPUT -p udp -j REJECT --reject-with icmp-port-unreachable
 iptables -A OUTPUT -p tcp -j REJECT --reject-with tcp-reset
 iptables -A OUTPUT -j REJECT --reject-with icmp-proto-unreachable
 
-# Flush all current rules from iptables
+# Flush all current rules from ip6tables
+ip6tables -Z
 ip6tables -F
 ip6tables -X
 
@@ -89,3 +90,19 @@ ip6tables -X
 ip6tables -P INPUT DROP
 ip6tables -P FORWARD DROP
 ip6tables -P OUTPUT DROP
+
+ip6tables -A INPUT -m conntrack --ctstate INVALID -j DROP
+ip6tables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+ip6tables -A INPUT -i lo -j ACCEPT
+ip6tables -A INPUT -i eth0 -d fe80::/10 -j ACCEPT
+ip6tables -A INPUT -i eth0 -d ff00::/8 -j ACCEPT
+ip6tables -A INPUT -j LOG --log-prefix "INPUT DROP: "
+ip6tables -A INPUT -j REJECT
+
+ip6tables -A OUTPUT -m conntrack --ctstate INVALID -j DROP
+ip6tables -A OUTPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+ip6tables -A OUTPUT -o lo -j ACCEPT
+ip6tables -A OUTPUT -o eth0 -s fe80::/10 -j ACCEPT
+ip6tables -A OUTPUT -o eth0 -d ff00::/8 -j ACCEPT
+ip6tables -A OUTPUT -j LOG --log-prefix "OUTPUT DROP: "
+ip6tables -A OUTPUT -j REJECT
