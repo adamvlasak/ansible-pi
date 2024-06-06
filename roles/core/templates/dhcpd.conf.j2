@@ -1,11 +1,14 @@
 authoritative;
 
+option domain-name-servers {{ network.dhcp_nameservers }};
+option domain-search "{{ network.domain }}";
+option domain-name "{{ network.domain }}";
+option subnet-mask {{ network.mask }};
+option broadcast-address {{ network.broadcast }};
+option routers {{ network.dhcp_gateway }};
+
 subnet {{ network.subnet.split('/')[0]}} netmask {{ network.mask }} {
   range {{ network.dhcp_range_from }} {{ network.dhcp_range_to }};
-  option domain-name-servers {{ network.dhcp_nameservers }};
-  option domain-search "{{ network.domain }}";
-  option domain-name "{{ network.domain }}";
-  option routers {{ network.dhcp_gateway }};
 }
 {% if dhcp_reservations is defined and dhcp_reservations is iterable %}
 {% for item in dhcp_reservations %}
