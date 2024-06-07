@@ -1,6 +1,7 @@
 authoritative;
 
 option domain-name-servers {{ network.dhcp_nameservers }};
+option ntp-servers {{ network.dhcp_nameservers }};
 option domain-search "{{ network.domain }}";
 option domain-name "{{ network.domain }}";
 option subnet-mask {{ network.mask }};
