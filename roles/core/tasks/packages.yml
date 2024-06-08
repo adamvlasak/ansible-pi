@@ -1,4 +1,18 @@
 ---
+- name: Configure repositories
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: 0644
+  loop:
+    - { src: apt.sources.list.j2, dest: /etc/apt/sources.list }
+    - { src: raspi.apt.source.j2, dest: /etc/apt/sources.list.d/raspi.list }
+  tags:
+    - core
+    - repositories
+
 - name: Install necessary packages
   ansible.builtin.apt:
     name: "{{ core_packages }}"

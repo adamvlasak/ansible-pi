@@ -31,6 +31,7 @@ core_packages:
   - vim
   - w3m
   - wget
+  - zstd
 
 core_absent_packages:
   - openresolv
