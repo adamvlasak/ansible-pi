@@ -1,8 +1,2 @@
-127.0.0.1 localhost
-::1       localhost ipv6-localhost ipv6-loopback
-fe00::0   ipv6-localnet
-ff00::0   ipv6-mcastprefix
-ff02::1   ipv6-allnodes
-ff02::2   ipv6-allrouters
-ff02::3   ipv6-allhosts
+127.0.0.1 localhost localhost.localdomain localhost4 localhost4.localdomain4
 {{ ansible_default_ipv4.address }} {{ ansible_fqdn }} {{ ansible_hostname }}
