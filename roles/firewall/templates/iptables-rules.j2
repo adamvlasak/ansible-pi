@@ -26,17 +26,14 @@ iptables -A PREROUTING -t nat -s {{ network.subnet }} ! -d {{ network.ip }}/32 -
 iptables -A PREROUTING -t nat -s {{ network.subnet }} ! -d {{ network.ip }}/32 -p udp --dport 123 -j DNAT --to {{ network.ip }}
 
 # NAT
-iptables -A POSTROUTING -t nat -o {{ network.interface }} -s {{ network.subnet }} -j MASQUERADE
+iptables -A POSTROUTING -t nat -o {{ network.interface }} -s {{ network.subnet }} -j SNAT --to-source {{ network.ip }}
 
 # This is used to overcome some ISP's and servers that block ICMP fragmentation needed packets
 iptables -A POSTROUTING -t mangle -p tcp --tcp-flags SYN,RST SYN -o {{ network.interface }} -j TCPMSS --clamp-mss-to-pmtu
 
 # Forward chain
 iptables -A FORWARD -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
-iptables -A FORWARD -s {{ network.subnet }} -p icmp -m icmp --icmp-type 8 -m conntrack --ctstate NEW -j ACCEPT
-iptables -A FORWARD -s {{ network.subnet }} -p udp -m conntrack --ctstate NEW -j ACCEPT
-iptables -A FORWARD -s {{ network.subnet }} -p tcp --tcp-flags FIN,SYN,RST,ACK SYN -m conntrack --ctstate NEW -j ACCEPT
-# iptables -A FORWARD -s {{ network.subnet }} -j ACCEPT
+iptables -A FORWARD -s {{ network.subnet }} -j ACCEPT
 iptables -A FORWARD -j LOG --log-prefix "FORWARD DROP: "
 iptables -A FORWARD -m conntrack --ctstate INVALID -j DROP
 iptables -A FORWARD -j REJECT --reject-with icmp-host-unreachable
