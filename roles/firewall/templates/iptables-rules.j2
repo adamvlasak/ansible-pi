@@ -30,11 +30,10 @@ iptables -A POSTROUTING -t nat -o {{ network.interface }} -s {{ network.subnet }
 
 # Forward chain
 iptables -A FORWARD -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
-iptables -A FORWARD -i {{ network.interface }} -o {{ network.interface }} -s {{ network.subnet }} -j ACCEPT
+iptables -A FORWARD -s {{ network.subnet }} -m conntrack --ctstate NEW -j ACCEPT
 iptables -A FORWARD -j LOG --log-prefix "FORWARD DROP: "
 iptables -A FORWARD -m conntrack --ctstate INVALID -j DROP
 iptables -A FORWARD -j REJECT --reject-with icmp-host-unreachable
-iptables -A FORWARD -j DROP
 {% endif %}
 
 # Input chain
@@ -43,7 +42,7 @@ iptables -A INPUT -i lo -j ACCEPT
 iptables -A INPUT -m conntrack --ctstate INVALID -j DROP
 iptables -A INPUT -i {{ network.interface }} -s {{ network.subnet }} -d {{ network.ip }} -p icmp -m icmp --icmp-type 8 -m conntrack --ctstate NEW -j ACCEPT
 iptables -A INPUT -i {{ network.interface }} -s {{ network.subnet }} -d {{ network.ip }} -p udp -m conntrack --ctstate NEW -j ACCEPT
-iptables -A INPUT -i {{ network.interface }} -s {{ network.subnet }} -d {{ network.ip }} -p tcp --tcp-flags FIN,SYN,RST,ACK SYN -m conntrack --ctstate NEW -j ACCEPT
+iptables -A INPUT -i {{ network.interface }} -s {{ network.subnet }} -d {{ network.ip }} -p tcp --syn -m conntrack --ctstate NEW -j ACCEPT
 iptables -A INPUT -i {{ network.interface }} -s {{ network.subnet }} -d 239.255.255.250/32 -m conntrack --ctstate NEW -p udp --dport 1900 -j ACCEPT
 iptables -A INPUT -i {{ network.interface }} -s 0.0.0.0/0 -d 255.255.255.255/32 -m conntrack --ctstate NEW -p udp --sport 68 --dport 67 -j ACCEPT
 iptables -A INPUT -i {{ network.interface }} -s {{ network.subnet }} -m conntrack --ctstate NEW -p udp --dport 15600 -j REJECT --reject-with icmp-port-unreachable
@@ -59,15 +58,15 @@ iptables -A OUTPUT -m conntrack --ctstate INVALID -j DROP
 iptables -A OUTPUT -o {{ network.interface }} -s {{ network.ip }}/32 -p icmp -m icmp --icmp-type 8 -m conntrack --ctstate NEW -j ACCEPT
 # traffic to subnet
 iptables -A OUTPUT -o {{ network.interface }} -s {{ network.ip }}/32 -d {{ network.subnet }} -m conntrack --ctstate NEW -p udp -j ACCEPT
-iptables -A OUTPUT -o {{ network.interface }} -s {{ network.ip }}/32 -d {{ network.subnet }} -m conntrack --ctstate NEW -p tcp --tcp-flags FIN,SYN,RST,ACK SYN -j ACCEPT
+iptables -A OUTPUT -o {{ network.interface }} -s {{ network.ip }}/32 -d {{ network.subnet }} -m conntrack --ctstate NEW -p tcp --syn -j ACCEPT
 # minidlna
 iptables -A OUTPUT -o {{ network.interface }} -s {{ network.ip }}/32 -d 239.255.255.250/32 -m conntrack --ctstate NEW -p udp --dport 1900 -j ACCEPT
 iptables -A OUTPUT -o {{ network.interface }} -s {{ network.ip }}/32 -d 239.0.0.0/8 -m conntrack --ctstate NEW -p igmp -j ACCEPT
 iptables -A OUTPUT -o {{ network.interface }} -s {{ network.ip }}/32 -d 224.0.0.22/32 -m conntrack --ctstate NEW -p igmp -j ACCEPT
 # other traffic
-iptables -A OUTPUT -o {{ network.interface }} -s {{ network.ip }}/32 -m conntrack --ctstate NEW -p tcp --tcp-flags FIN,SYN,RST,ACK SYN --dport 80 -j ACCEPT
-iptables -A OUTPUT -o {{ network.interface }} -s {{ network.ip }}/32 -m conntrack --ctstate NEW -p tcp --tcp-flags FIN,SYN,RST,ACK SYN --dport 443 -j ACCEPT
-iptables -A OUTPUT -o {{ network.interface }} -s {{ network.ip }}/32 -m conntrack --ctstate NEW -p tcp --tcp-flags FIN,SYN,RST,ACK SYN --dport 853 -j ACCEPT
+iptables -A OUTPUT -o {{ network.interface }} -s {{ network.ip }}/32 -m conntrack --ctstate NEW -p tcp --syn --dport 80 -j ACCEPT
+iptables -A OUTPUT -o {{ network.interface }} -s {{ network.ip }}/32 -m conntrack --ctstate NEW -p tcp --syn --dport 443 -j ACCEPT
+iptables -A OUTPUT -o {{ network.interface }} -s {{ network.ip }}/32 -m conntrack --ctstate NEW -p tcp --syn --dport 853 -j ACCEPT
 iptables -A OUTPUT -o {{ network.interface }} -s {{ network.ip }}/32 -m conntrack --ctstate NEW -p udp --dport 443 -j ACCEPT
 iptables -A OUTPUT -o {{ network.interface }} -s {{ network.ip }}/32 -m conntrack --ctstate NEW -p udp --dport 123 -j ACCEPT
 iptables -A OUTPUT -j LOG --log-prefix "OUTPUT DROP: "
