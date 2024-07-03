@@ -72,9 +72,21 @@ server:
 	insecure-lan-zones: no
 	private-domain: {{ network.domain }}
 
+	local-zone: "{{ network.reverse }}." static
+	local-data: "{{ network.reverse }}. 10800 IN NS {{ network.hostname }}."
+	local-data: "{{ network.reverse }}. 10800 IN SOA {{ network.domain}}. admin.{{ network.domain }}. 1 3600 1200 604800 10800"
+	local-data: "b._dns-sd._udp.0.{{ network.reverse }}. IN PTR {{ network.reverse }}."
+	local-data: "db._dns-sd._udp.0.{{ network.reverse }}. IN PTR {{ network.reverse }}."
+	local-data: "lb._dns-sd._udp.0.{{ network.reverse }}. IN PTR {{ network.reverse }}."
+
 	local-zone: "{{ network.domain }}." static
 	local-data: "{{ network.domain }}. 10800 IN NS {{ network.hostname }}."
 	local-data: "{{ network.domain }}. 10800 IN SOA {{ network.domain}}. admin.{{ network.domain }}. 1 3600 1200 604800 10800"
+	local-data: "_dns.resolver.arpa. 3600 IN SRV 0 100 53 {{ network.hostname }}"
+	# http://www.dns-sd.org/ServerSetup.html
+	local-data: "b._dns-sd._udp.{{ network.domain }}. IN PTR {{ network.domain }}"
+	local-data: "db._dns-sd._udp.{{ network.domain }}. IN PTR {{ network.domain }}."
+	local-data: "lb._dns-sd._udp.{{ network.domain }}. IN PTR {{ network.domain }}."
 	local-data: "{{ network.hostname }}. IN A {{ network.ip }}"
 	local-data-ptr: "{{ network.ip }} {{ network.hostname }}."
 {% for host in unbound.dhcp_reservations %}
