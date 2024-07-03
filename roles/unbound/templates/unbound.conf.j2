@@ -1,0 +1,109 @@
+# Unbound configuration file for Debian.
+#
+# See the unbound.conf(5) man page.
+#
+# See /usr/share/doc/unbound/examples/unbound.conf for a commented
+# reference config file.
+#
+# The following line includes additional configuration files from the
+# /etc/unbound/unbound.conf.d directory.
+include-toplevel: "/etc/unbound/unbound.conf.d/*.conf"
+
+server:
+	# general settings
+	interface: 127.0.0.1
+	interface: {{ network.ip }}
+	access-control: 0.0.0.0 refuse
+	access-control: 127.0.0.0/8 allow
+	access-control: {{ network.subnet }} allow
+	do-ip4: yes
+	do-ip6: no
+	do-udp: yes
+	do-tcp: yes
+	prefetch: yes
+	do-not-query-localhost: no
+	tls-cert-bundle: /etc/ssl/certs/ca-certificates.crt
+
+	verbosity: 1
+	log-queries: yes
+	log-replies: yes
+	log-servfail: yes
+	log-tag-queryreply: yes
+	log-local-actions: yes
+	log-time-ascii: yes
+
+	# cache
+	cache-max-ttl: {{ unbound.cache_max_ttl }}
+	cache-min-ttl: {{ unbound.cache_min_ttl }}
+	num-threads: 4
+	msg-cache-slabs: 4
+	rrset-cache-slabs: 4
+	infra-cache-slabs: 4
+	key-cache-slabs: 4
+	rrset-cache-size: 100m
+	msg-cache-size: 50m
+	so-rcvbuf: 4m
+	so-sndbuf: 4m
+	so-reuseport: yes
+
+	# security
+	qname-minimisation: yes
+	qname-minimisation-strict: no
+	aggressive-nsec: yes
+	hide-identity: yes
+	hide-version: yes
+
+	# refused zones
+{% for zone in unbound.refused_zones %}
+	local-zone: "{{ zone }}." refuse
+{% endfor %}
+
+	# rebind protection
+	private-address: 127.0.0.0/8
+	private-address: 10.0.0.0/8
+	private-address: 172.16.0.0/12
+	private-address: 192.168.0.0/16
+	private-address: 169.254.0.0/16
+	private-address: fd00::/8
+	private-address: fe80::/10
+
+	# local DNS
+	unblock-lan-zones: no
+	insecure-lan-zones: no
+	private-domain: {{ network.domain }}
+
+	local-zone: "{{ network.reverse }}." static
+	local-data: "{{ network.reverse }}. 10800 IN NS {{ network.hostname }}."
+	local-data: "{{ network.reverse }}. 10800 IN SOA {{ network.domain}}. admin.{{ network.domain }}. 1 3600 1200 604800 10800"
+	local-data: "b._dns-sd._udp.0.{{ network.reverse }}. IN PTR {{ network.reverse }}."
+	local-data: "db._dns-sd._udp.0.{{ network.reverse }}. IN PTR {{ network.reverse }}."
+	local-data: "lb._dns-sd._udp.0.{{ network.reverse }}. IN PTR {{ network.reverse }}."
+
+	local-zone: "{{ network.domain }}." static
+	local-data: "{{ network.domain }}. 10800 IN NS {{ network.hostname }}."
+	local-data: "{{ network.domain }}. 10800 IN SOA {{ network.domain}}. admin.{{ network.domain }}. 1 3600 1200 604800 10800"
+	local-data: "_dns.resolver.arpa. 3600 IN SRV 0 100 53 {{ network.hostname }}"
+	# http://www.dns-sd.org/ServerSetup.html
+	local-data: "b._dns-sd._udp.{{ network.domain }}. IN PTR {{ network.domain }}"
+	local-data: "db._dns-sd._udp.{{ network.domain }}. IN PTR {{ network.domain }}."
+	local-data: "lb._dns-sd._udp.{{ network.domain }}. IN PTR {{ network.domain }}."
+	local-data: "{{ network.hostname }}. IN A {{ network.ip }}"
+	local-data-ptr: "{{ network.ip }} {{ network.hostname }}."
+{% for host in unbound.dhcp_reservations %}
+	local-data: "{{ host.hostname }}.{{ network.domain }}. IN A {{ host.ip }}"
+	local-data-ptr: "{{ host.ip }} {{ host.hostname }}.{{ network.domain }}"
+{% endfor %}
+{% for host in unbound.static_records %}
+	local-data: "{{ host.hostname }}.{{ network.domain }}. IN A {{ host.ip }}"
+{% endfor %}
+
+root-hints: root.hints
+
+remote-control:
+	control-interface: 127.0.0.1
+
+forward-zone:
+	name: "."
+	forward-tls-upstream: yes
+	forward-addr: 193.17.47.1@853#odvr.nic.cz
+	forward-addr: 185.43.135.1@853#odvr.nic.cz

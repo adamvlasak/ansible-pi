@@ -1,20 +1,26 @@
 ---
 network:
-  hostname: "pi.loc"
+  hostname: "pi.home.lan"
   ip: "192.168.1.250"
   subnet: "192.168.1.0/24"
   gateway: "192.168.1.1"
-  broadcast: "192.168.10.255"
+  broadcast: "192.168.1.255"
   mask: 255.255.255.0
+  reverse: "1.168.192.in-addr.arpa"
   interface: "eth0"
   dhcp_range_from: "192.168.1.100"
   dhcp_range_to: "192.168.1.200"
   dhcp_nameservers: "192.168.1.250"
   dhcp_gateway: "192.168.1.250"
   router: true
-  domain: loc
+  domain: home.lan
   nameserver: 127.0.0.1
 
+core_disabled_services:
+  - dhcpcd
+
+dhcp_reservations:
+  - { hostname: "<name>", mac: "<mac>", ip: "<ip>" }
 env:
   - "LANG=en_US.UTF-8"
   - "LC_ALL=en_US.UTF-8"
@@ -23,22 +29,22 @@ env:
   - "HISTFILESIZE=1000"
   - "HISTCONTROL=ignoredups:erasedups"
 
-dnscrypt_proxy:
-  version: 2.1.5
-  listen_addresses: ["127.0.0.1:53", "192.168.1.250:53"]
-  cache: true
-  cache_size: 4096
-  servernames: ["cloudflare-security"]
-  blocklists:
-    - https://big.oisd.nl/
-  cloaking_rules:
-    - "pi.{{ network.domain }} {{ network.ip }}"
-    - "navidrome.{{ network.domain }} {{ network.ip }}"
-  block_patterns:
-    - "*.lan"
-    - "*.local"
-    - "*.localdomain"
-    - "*.workgroup"
+
+unbound:
+  cache_min_ttl: 1200
+  cache_max_ttl: 14400
+  threads: 4
+  static_records:
+    - { hostname: "pi", ip: "192.168.1.250" }
+    - { hostname: "navidrome", ip: "192.168.1.250" }
+    - { hostname: "notes", ip: "192.168.1.250" }
+    - { hostname: "static", ip: "192.168.1.250" }
+  dhcp_reservations: "{{ dhcp_reservations }}"
+  refused_zones:
+    - "local"
+    - "localdomain"
+    - "workgroup"
+    - "mshome.net"
 
 sysctl_options:
   - { name: "kernel.dmesg_restrict", value: "1" }
@@ -48,8 +54,6 @@ sysctl_options:
   - { name: "net.ipv6.conf.all.disable_ipv6", value: "1" }
   - { name: "net.ipv6.conf.default.disable_ipv6", value: "1" }
   - { name: "vm.swappiness", value: "10" }
-  - { name: "net.ipv4.tcp_mtu_probing", value: "1" }
-  - { name: "net.ipv4.tcp_base_mss", value: "1024" }
   - { name: "net.ipv4.conf.all.rp_filter", value: "1" }
   - { name: "net.ipv4.conf.default.rp_filter", value: "1" }
 
