@@ -18,6 +18,9 @@
     owner: root
     group: root
     mode: 0644
+  when:
+    - network.router is defined
+    - network.router is true
   notify: Restart dhcpd
   tags:
     - core
