@@ -1,15 +1,15 @@
 ---
-- name: Configure pi group
+- name: Configure group
   ansible.builtin.group:
-    name: pi
+    name: "{{ user_group }}"
     state: present
   tags:
     - user
 
-- name: Configure pi user
+- name: Configure user
   ansible.builtin.user:
-    name: pi
-    groups: ["users", "pi", "sudo"]
+    name: "{{ user_name }}"
+    groups: ["users", "{{ user_group }}", "sudo"]
     state: present
   tags:
     - user
@@ -17,9 +17,9 @@
 - name: Configure .bashrc
   ansible.builtin.template:
     src: bashrc.j2
-    dest: /home/pi/.bashrc
-    owner: pi
-    group: pi
+    dest: "{{ user_home }}/.bashrc"
+    owner: "{{ user_name }}"
+    group: "{{ user_group }}"
     mode: 0600
   tags:
     - user

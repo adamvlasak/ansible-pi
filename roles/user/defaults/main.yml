@@ -1,0 +1,4 @@
+---
+user_name: pi
+user_group: pi
+user_home: "/home/{{ user_name }}"
