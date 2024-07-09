@@ -35,6 +35,9 @@
     group: root
     mode: 0644
     creates: /usr/local/etc/oui.txt
+  when:
+    - network.router is defined
+    - network.router is true
   notify: Restart dhcpd
   tags:
     - core
