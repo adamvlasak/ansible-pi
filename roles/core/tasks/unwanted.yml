@@ -5,7 +5,9 @@
     autoremove: true
     state: absent
   loop: "{{ core_absent_packages }}"
-  when: core_absent_packages is iterable
+  when:
+    - core_absent_packages is defined
+    - core_absent_packages is iterable
   tags:
     - core
     - unwanted
@@ -16,7 +18,9 @@
     state: stopped
     enabled: false
   loop: "{{ core_disabled_services }}"
-  when: core_disabled_services is iterable
+  when:
+    - core_disabled_services is defined
+    - core_disabled_services is iterable
   tags:
     - core
     - unwanted

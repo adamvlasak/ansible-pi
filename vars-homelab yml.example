@@ -1,0 +1,79 @@
+---
+network:
+  hostname: "homelab.home.lan"
+  ip: "192.168.1.193"
+  subnet: "192.168.1.0/24"
+  gateway: "192.168.1.250"
+  broadcast: "192.168.1.255"
+  mask: "255.255.255.0"
+  reverse: "10.168.192.in-addr.arpa"
+  interface: "eth0"
+  dhcp_range_from: "192.168.1.110"
+  dhcp_range_to: "192.168.1.200"
+  dhcp_nameservers: "192.168.1.250"
+  dhcp_gateway: "192.168.1.250"
+  router: false
+  domain: "home.lan"
+  nameserver: "192.168.1.250"
+
+user_name: homelab
+user_groups: ["homelab", "sudo", "docker", "users"]
+
+chrony_sources:
+  - 192.168.1.250
+
+env:
+  - "LANG=en_US.UTF-8"
+  - "LC_ALL=en_US.UTF-8"
+  - "EDITOR=vim"
+  - "HISTSIZE=1000"
+  - "HISTFILESIZE=1000"
+  - "HISTCONTROL=ignoredups:erasedups"
+
+sysctl_options:
+  - { name: "kernel.dmesg_restrict", value: "1" }
+  - { name: "kernel.kptr_restrict", value: "2" }
+  - { name: "kernel.sysrq", value: "0" }
+  - { name: "net.ipv4.ip_forward", value: "1" }
+  - { name: "net.ipv6.conf.all.disable_ipv6", value: "1" }
+  - { name: "net.ipv6.conf.default.disable_ipv6", value: "1" }
+  - { name: "vm.swappiness", value: "10" }
+  - { name: "net.ipv4.conf.all.rp_filter", value: "1" }
+  - { name: "net.ipv4.conf.default.rp_filter", value: "1" }
+
+core_packages:
+  - bash-completion
+  - ca-certificates
+  - chrony
+  - curl
+  - dnsutils
+  - git
+  - htop
+  - iftop
+  - iotop
+  - irqbalance
+  - mc
+  - mlocate
+  - ncdu
+  - pass
+  - sudo
+  - sysstat
+  - tar
+  - tcpdump
+  - telnet
+  - tig
+  - tmux
+  - traceroute
+  - tree
+  - unzip
+  - vim
+  - w3m
+  - wget
+
+core_absent_packages:
+  - openresolv
+  - resolvconf
+  - wpasupplicant
+  - triggerhappy
+
+core_disabled_services: []
