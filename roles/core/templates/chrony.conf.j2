@@ -46,5 +46,13 @@ makestep 1 3
 # leap-smeared time.
 leapsectz right/UTC
 
+{% if network.router is defined and network.router is true %}
 # Allow connections from LAN
 allow {{ network.subnet }}
+{% endif %}
+
+{% if chrony_sources is defined and chrony_sources is iterable %}
+{% for source in chrony_sources %}
+server {{ source }} iburst minpoll 2 maxpoll 2 xleave
+{% endfor %}
+{% endif %}
