@@ -1,7 +1,7 @@
 ---
 - name: Configure group
   ansible.builtin.group:
-    name: "{{ user_group }}"
+    name: "{{ user_groups | first }}"
     state: present
   tags:
     - user
@@ -9,7 +9,7 @@
 - name: Configure user
   ansible.builtin.user:
     name: "{{ user_name }}"
-    groups: ["users", "{{ user_group }}", "sudo"]
+    groups: "{{ user_groups }}"
     state: present
   tags:
     - user
@@ -19,7 +19,7 @@
     src: bashrc.j2
     dest: "{{ user_home }}/.bashrc"
     owner: "{{ user_name }}"
-    group: "{{ user_group }}"
+    group: "{{ user_groups | first }}"
     mode: 0600
   tags:
     - user

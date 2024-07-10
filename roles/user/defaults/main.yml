@@ -1,4 +1,4 @@
 ---
 user_name: pi
-user_group: pi
+user_groups: ["pi", "sudo", "users"]
 user_home: "/home/{{ user_name }}"
