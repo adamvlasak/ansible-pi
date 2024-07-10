@@ -1,9 +1,9 @@
 ---
 - name: Configure raspberry pi
-  hosts: all
+  hosts: router
   become: true
   vars_files:
-    - vars.yml
+    - vars-router.yml
   roles:
     - core
     - sysctl
