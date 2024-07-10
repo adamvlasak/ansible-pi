@@ -7,13 +7,27 @@
 #
 # See the man page for details on how to write a sudoers file.
 #
+
 Defaults	env_reset
+Defaults	mail_badpass
+Defaults	secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
-# Host alias specification
+# This fixes CVE-2005-4890 and possibly breaks some versions of kdesu
+# (#1011624, https://bugs.kde.org/show_bug.cgi?id=452532)
+Defaults	use_pty
 
-# User alias specification
+# This preserves proxy settings from user environments of root
+# equivalent users (group sudo)
+Defaults:%sudo env_keep += "http_proxy https_proxy ftp_proxy all_proxy no_proxy"
 
-# Cmnd alias specification
+# Completely harmless preservation of a user preference.
+Defaults:%sudo env_keep += "GREP_COLOR"
+
+# "sudo scp" or "sudo rsync" should be able to use your SSH agent.
+Defaults:%sudo env_keep += "SSH_AGENT_PID SSH_AUTH_SOCK"
+
+# Ditto for GPG agent
+Defaults:%sudo env_keep += "GPG_AGENT_INFO"
 
 # User privilege specification
 root	ALL=(ALL:ALL) ALL
