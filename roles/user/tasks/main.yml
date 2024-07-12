@@ -8,7 +8,7 @@
 
 - name: Configure user
   ansible.builtin.user:
-    name: "{{ user_name }}"
+    name: "{{ user_login }}"
     groups: "{{ user_groups }}"
     state: present
   tags:
@@ -18,7 +18,7 @@
   ansible.builtin.template:
     src: bashrc.j2
     dest: "{{ user_home }}/.bashrc"
-    owner: "{{ user_name }}"
+    owner: "{{ user_login }}"
     group: "{{ user_groups | first }}"
     mode: 0600
   tags:
