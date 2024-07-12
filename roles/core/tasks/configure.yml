@@ -1,11 +1,28 @@
 ---
 - name: Configure boot/config.txt
   ansible.builtin.template:
-    src: boot-config.txt.j2
+    src: boot-config4.txt.j2
     dest: /boot/config.txt
     owner: root
     group: root
     mode: 0755
+  when:
+    - raspberry_version is defined
+    - raspberry_version == 4
+  tags:
+    - core
+    - boot_config
+
+- name: Configure boot/config.txt
+  ansible.builtin.template:
+    src: boot-config5.txt.j2
+    dest: /boot/firmware/config.txt
+    owner: root
+    group: root
+    mode: 0755
+  when:
+    - raspberry_version is defined
+    - raspberry_version == 5
   tags:
     - core
     - boot_config
