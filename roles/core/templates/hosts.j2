@@ -1,5 +1,5 @@
 127.0.0.1 localhost localhost.localdomain localhost4 localhost4.localdomain4
-{% if network.mode == "dhcp" %}
+{% if network_mode == "dhcp" %}
 127.0.0.1 {{ ansible_fqdn }} {{ ansible_hostname }}
 {% else %}
 {{ ansible_default_ipv4.address }} {{ ansible_fqdn }} {{ ansible_hostname }}

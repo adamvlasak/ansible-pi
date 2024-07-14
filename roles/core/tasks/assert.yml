@@ -1,0 +1,14 @@
+---
+- name: Assert that we have basic network info
+  ansible.builtin.assert:
+    that:
+      - network_router is defined
+      - network_hostname is defined
+      - network_ip is defined
+      - network_subnet is defined
+      - network_gateway is defined
+      - network_broadcast is defined
+      - network_reverse is defined
+      - network_interface is defined
+      - network_domain is defined
+      - network_nameserver is defined

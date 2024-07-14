@@ -1,7 +1,7 @@
 ---
 - name: DNS | Set machine hostname
   ansible.builtin.hostname:
-    name: "{{ network.hostname }}"
+    name: "{{ network_hostname }}"
   tags:
     - core
     - dns

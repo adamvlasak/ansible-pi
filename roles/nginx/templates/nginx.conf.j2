@@ -46,7 +46,7 @@ http {
 {% for reject_ip in nginx_reject_ips %}
   deny {{ reject_ip }};
 {% endfor %}
-  allow {{ network.subnet }};
+  allow {{ network_subnet }};
 {% endif %}
 
   include {{ nginx_conf_inc_dir }}/*.conf;
