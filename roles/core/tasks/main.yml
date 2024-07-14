@@ -1,4 +1,7 @@
 ---
+- name: Import assert tasks
+  ansible.builtin.import_tasks: assert.yml
+
 - name: Import unwanted tasks
   ansible.builtin.import_tasks: unwanted.yml
 

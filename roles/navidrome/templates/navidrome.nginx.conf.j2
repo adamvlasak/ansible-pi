@@ -1,10 +1,10 @@
 server {
   listen {{ ansible_default_ipv4.address }}:{{ nginx_listen_port }};
-  server_name navidrome.{{ network.domain }};
+  server_name navidrome.{{ network_domain }};
 
 {% if nginx_log %}
-  access_log {{ nginx_log_dir }}/navidrome.{{ network.domain }}-access.log;
-  error_log {{ nginx_log_dir }}/navidrome.{{ network.domain }}-error.log;
+  access_log {{ nginx_log_dir }}/navidrome.{{ network_domain }}-access.log;
+  error_log {{ nginx_log_dir }}/navidrome.{{ network_domain }}-error.log;
 {% endif %}
 
   location / {
