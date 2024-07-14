@@ -31,8 +31,8 @@ env:
 
 
 unbound:
-  cache_min_ttl: 1200
-  cache_max_ttl: 14400
+  cache_min_ttl: 3600
+  cache_max_ttl: 86400
   threads: 4
   static_records:
     - { hostname: "pi", ip: "192.168.1.250" }
