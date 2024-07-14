@@ -1,5 +1,5 @@
 ---
-- name: Configure repositories
+- name: Packages | Configure repositories
   ansible.builtin.template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
@@ -13,7 +13,7 @@
     - core
     - repositories
 
-- name: Install necessary packages
+- name: Packages | Install necessary packages
   ansible.builtin.apt:
     name: "{{ core_packages }}"
     state: present
@@ -23,7 +23,7 @@
     - core
     - packages
 
-- name: Download yt-dlp
+- name: Packages | Download yt-dlp
   ansible.builtin.get_url:
     url: "https://github.com/yt-dlp/yt-dlp/releases/download/{{ yt_dlp_version }}/yt-dlp_linux_aarch64"
     dest: /usr/local/bin/yt-dlp
