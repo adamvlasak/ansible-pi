@@ -13,6 +13,7 @@ network:
   dhcp_nameservers: "192.168.1.250"
   dhcp_gateway: "192.168.1.250"
   router: true
+  mode: static
   domain: home.lan
   nameserver: 127.0.0.1
 
