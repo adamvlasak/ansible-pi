@@ -1,5 +1,5 @@
 ---
-- name: Remove unwanted packages
+- name: Unwanted | Remove unwanted packages
   ansible.builtin.apt:
     name: "{{ item }}"
     autoremove: true
@@ -12,7 +12,7 @@
     - core
     - unwanted
 
-- name: Disable unwanted services
+- name: Unwanted | Disable unwanted services
   ansible.builtin.systemd:
     name: "{{ item }}"
     state: stopped
