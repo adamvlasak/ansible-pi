@@ -29,6 +29,12 @@ env:
   - "HISTFILESIZE=1000"
   - "HISTCONTROL=ignoredups:erasedups"
 
+chrony_sources:
+  - { type: pool, address: 0.at.pool.ntp.org, options: iburst }
+  - { type: pool, address: 1.at.pool.ntp.org, options: iburst }
+  - { type: pool, address: 2.at.pool.ntp.org, options: iburst }
+  - { type: pool, address: 3.at.pool.ntp.org, options: iburst }
+
 dnscrypt_proxy:
   version: 2.1.5
   listen_addresses: ["127.0.0.1:53", "{{ network_ip}}:53"]
@@ -52,7 +58,6 @@ unbound:
   cache_max_ttl: 86400
   threads: 4
   static_records:
-    - { hostname: "pi", ip: "192.168.1.250" }
     - { hostname: "navidrome", ip: "192.168.1.250" }
     - { hostname: "notes", ip: "192.168.1.250" }
     - { hostname: "static", ip: "192.168.1.250" }
@@ -98,10 +103,6 @@ navidrome:
   theme: Nord
 
 yt_dlp_version: 2023.03.04
-
-mount:
-  points:
-    - { path: /mnt/data, owner: nobody, group: nogroup, mode: "0755" }
 
 nginx_reject_ips: ["192.168.1.106"]
 nginx_static_sites:

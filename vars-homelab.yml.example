@@ -16,11 +16,18 @@ network_mode: dhcp
 network_domain: "home.lan"
 network_nameserver: "192.168.1.250"
 
+raspberry_version: 5
+
 user_name: homelab
 user_groups: ["homelab", "sudo", "docker", "users"]
+user_name: John Doe
+user_email: john.doe@example.org
 
 chrony_sources:
-  - 192.168.1.250
+  - { type: pool, address: 0.at.pool.ntp.org, options: iburst }
+  - { type: pool, address: 1.at.pool.ntp.org, options: iburst }
+  - { type: pool, address: 2.at.pool.ntp.org, options: iburst }
+  - { type: pool, address: 3.at.pool.ntp.org, options: iburst }
 
 env:
   - "LANG=en_US.UTF-8"
@@ -40,6 +47,8 @@ sysctl_options:
   - { name: "vm.swappiness", value: "10" }
   - { name: "net.ipv4.conf.all.rp_filter", value: "1" }
   - { name: "net.ipv4.conf.default.rp_filter", value: "1" }
+
+yt_dlp_version: 2023.03.04
 
 core_packages:
   - bash-completion

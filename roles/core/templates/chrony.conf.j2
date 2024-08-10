@@ -4,9 +4,6 @@
 # Include configuration files found in /etc/chrony/conf.d.
 confdir /etc/chrony/conf.d
 
-# Use Debian vendor zone.
-pool 2.debian.pool.ntp.org iburst
-
 # Use time sources from DHCP.
 sourcedir /run/chrony-dhcp
 
@@ -53,6 +50,6 @@ allow {{ network_subnet }}
 
 {% if chrony_sources is defined and chrony_sources is iterable %}
 {% for source in chrony_sources %}
-server {{ source }} iburst minpoll 2 maxpoll 2 xleave
+{{ source.type }} {{ source.address }} {{ source.options }}
 {% endfor %}
 {% endif %}
