@@ -67,6 +67,13 @@ unbound:
     - "localdomain"
     - "workgroup"
     - "mshome.net"
+  forward_addrs:
+    - "193.17.47.1@853#odvr.nic.cz"
+    - "185.43.135.1@853#odvr.nic.cz"
+    - "1.1.1.1@853#cloudflare-dns.com"
+    - "1.0.0.1@853#cloudflare-dns.com"
+    - "9.9.9.9@853#dns.quad9.net"
+    - "149.112.112.112@853#dns.quad9.net"
 
 sysctl_options:
   - { name: "kernel.dmesg_restrict", value: "1" }
