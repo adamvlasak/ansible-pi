@@ -25,6 +25,7 @@ server:
 	do-not-query-localhost: no
 	tls-cert-bundle: /etc/ssl/certs/ca-certificates.crt
 
+	# log
 	verbosity: 1
 	log-queries: yes
 	log-replies: yes
@@ -40,9 +41,10 @@ server:
 	msg-cache-slabs: 4
 	rrset-cache-slabs: 4
 	infra-cache-slabs: 4
-	key-cache-slabs: 4
-	rrset-cache-size: 100m
-	msg-cache-size: 50m
+	key-cache-size: 8m
+	key-cache-slabs: 8
+	rrset-cache-size: 256m
+	msg-cache-size: 128m
 	so-rcvbuf: 4m
 	so-sndbuf: 4m
 	so-reuseport: yes
@@ -50,7 +52,7 @@ server:
 	# security
 	qname-minimisation: yes
 	qname-minimisation-strict: no
-	aggressive-nsec: yes
+	minimal-responses: yes
 	hide-identity: yes
 	hide-version: yes
 
@@ -106,5 +108,6 @@ remote-control:
 forward-zone:
 	name: "."
 	forward-tls-upstream: yes
-	forward-addr: 193.17.47.1@853#odvr.nic.cz
-	forward-addr: 185.43.135.1@853#odvr.nic.cz
+{% for forward_addr in unbound.forward_addrs %}
+	forward-addr: {{ forward_addr }}
+{% endfor %}
