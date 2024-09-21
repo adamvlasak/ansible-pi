@@ -29,6 +29,23 @@ env:
   - "HISTFILESIZE=1000"
   - "HISTCONTROL=ignoredups:erasedups"
 
+dnscrypt_proxy:
+  version: 2.1.5
+  listen_addresses: ["127.0.0.1:53", "{{ network_ip}}:53"]
+  cache: true
+  cache_size: 4096
+  servernames: ["cloudflare", "nic.cz"]
+  blocklists:
+    - https://big.oisd.nl/
+  cloaking_rules:
+    - "pi {{ network_ip }}"
+  forwarding_rules:
+    - "168.192.in-addr.arpa 192.168.0.1"
+  block_patterns:
+    - "*.lan"
+    - "*.local"
+    - "*.localdomain"
+    - "*.workgroup"
 
 unbound:
   cache_min_ttl: 1200

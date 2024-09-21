@@ -1,0 +1,7 @@
+file:domains-blocklist-local-additions.txt
+
+{% if dnscrypt_proxy.blocklists is defined and dnscrypt_proxy.blocklists is iterable %}
+{% for blocklist in dnscrypt_proxy.blocklists %}
+{{ blocklist }}
+{% endfor %}
+{% endif %}

@@ -1,0 +1,10 @@
+#!/bin/sh
+
+set -e
+
+cd {{ dnscrypt_proxy_blocked_names_generator_path }} && \
+    /usr/bin/python3 {{ dnscrypt_proxy_blocked_names_generator_path }}/generate-domains-blocklist.py \
+    -o {{ dnscrypt_proxy_blocked_names_path }}
+
+chmod 0444 {{ dnscrypt_proxy_blocked_names_path }}
+chown root:root {{ dnscrypt_proxy_blocked_names_path }}

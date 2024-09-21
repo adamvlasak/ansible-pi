@@ -1,0 +1,18 @@
+---
+- name: Import dnscrypt-proxy install tasks
+  ansible.builtin.import_tasks: install.yml
+  tags:
+    - dns
+    - dnscrypt_proxy
+
+- name: Import dnscrypt-proxy configure tasks
+  ansible.builtin.import_tasks: configure.yml
+  tags:
+    - dns
+    - dnscrypt_proxy
+
+- name: Import dnscrypt-proxy blocked names tasks
+  ansible.builtin.import_tasks: blocked_names.yml
+  tags:
+    - dns
+    - dnscrypt_proxy

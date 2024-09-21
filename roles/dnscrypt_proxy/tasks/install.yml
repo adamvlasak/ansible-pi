@@ -1,0 +1,56 @@
+---
+- name: Remove dnscrypt-proxy package
+  ansible.builtin.apt:
+    name: dnscrypt-proxy
+    state: absent
+
+- name: Check dnscrypt-proxy version
+  ansible.builtin.command: dnscrypt-proxy --version
+  changed_when: installed_version.rc == 0
+  failed_when: installed_version.rc > 0
+  register: installed_version
+
+- name: Install dnscrypt-proxy
+  when:
+    - not ansible_check_mode
+    - installed_version.stdout != dnscrypt_proxy.version
+  block:
+    - name: Download dnscrypt-proxy
+      ansible.builtin.get_url:
+        url: "{{ dnscrypt_proxy_download_url }}"
+        dest: /tmp
+        owner: root
+        group: root
+        mode: 0644
+
+    - name: Extract tarball
+      ansible.builtin.unarchive:
+        src: "/tmp/{{ dnscrypt_proxy_tarball }}"
+        dest: /tmp
+        remote_src: true
+
+    - name: Copy binary to /usr/sbin/dnscrypt_proxy
+      ansible.builtin.copy:
+        src: "/tmp/linux-{{ dnscrypt_proxy_arch }}/dnscrypt-proxy"
+        dest: /usr/sbin/dnscrypt-proxy
+        remote_src: true
+        owner: root
+        group: root
+        mode: 0755
+
+    - name: Delete both unpacked directory and tarball
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - "/tmp/linux-{{ dnscrypt_proxy_arch }}"
+        - "/tmp/{{ dnscrypt_proxy_tarball }}"
+
+- name: Configure systemd service file
+  ansible.builtin.template:
+    src: dnscrypt-proxy.service.j2
+    dest: /etc/systemd/system/dnscrypt-proxy.service
+    owner: root
+    group: root
+    mode: 0444
+  notify: Restart dnscrypt-proxy

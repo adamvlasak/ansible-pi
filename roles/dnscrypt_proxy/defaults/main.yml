@@ -1,0 +1,10 @@
+---
+dnscrypt_proxy_conf_dir: /etc/dnscrypt-proxy
+
+dnscrypt_proxy_arch: arm64
+dnscrypt_proxy_tarball: "dnscrypt-proxy-linux_{{ dnscrypt_proxy_arch }}-{{ dnscrypt_proxy.version }}.tar.gz"
+dnscrypt_proxy_download_url: "https://github.com/DNSCrypt/dnscrypt-proxy/releases/download/{{ dnscrypt_proxy.version }}/{{ dnscrypt_proxy_tarball }}"
+
+dnscrypt_proxy_blocked_names_generator_helper_path: /usr/local/sbin/blocked-names-generator
+dnscrypt_proxy_blocked_names_generator_path: "{{ dnscrypt_proxy_conf_dir }}/blocked-names-generator"
+dnscrypt_proxy_blocked_names_path: "{{ dnscrypt_proxy_conf_dir }}/blocked-names.txt"
