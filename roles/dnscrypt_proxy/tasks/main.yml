@@ -16,3 +16,12 @@
   tags:
     - dns
     - dnscrypt_proxy
+
+- name: Start and enable dnscrypt-proxy upon boot
+  ansible.builtin.systemd:
+    name: dnscrypt-proxy
+    state: started
+    enabled: true
+  tags:
+    - dns
+    - dnscrypt_proxy
