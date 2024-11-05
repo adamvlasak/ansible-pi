@@ -24,8 +24,8 @@ cache = true
 cache_size = {{ dnscrypt_proxy.cache_size }}
 cache_min_ttl = 3600
 cache_max_ttl = 86400
-cache_neg_min_ttl = 60
-cache_neg_max_ttl = 600
+cache_neg_min_ttl = 0
+cache_neg_max_ttl = 0
 {% else %}
 cache = false
 {% endif %}
@@ -43,26 +43,26 @@ cloaking_rules = '{{ dnscrypt_proxy_conf_dir }}/cloaking-rules.txt'
 {% endif %}
 
 [blocked_names]
-  blocked_names_file = '{{ dnscrypt_proxy_conf_dir }}/blocked-names.txt'
+blocked_names_file = '{{ dnscrypt_proxy_conf_dir }}/blocked-names.txt'
 
 [blocked_ips]
-  blocked_ips_file = '{{ dnscrypt_proxy_conf_dir }}/blocked-ips.txt'
+blocked_ips_file = '{{ dnscrypt_proxy_conf_dir }}/blocked-ips.txt'
 
 {% if dnscrypt_proxy.allowed_names is defined %}
 [allowed_names]
-  allowed_names_file = '{{ dnscrypt_proxy_conf_dir }}/allowed-names.txt'
+allowed_names_file = '{{ dnscrypt_proxy_conf_dir }}/allowed-names.txt'
 {% endif %}
 
 [query_log]
-  file = '/var/log/dnscrypt-proxy/query.log'
+file = '/var/log/dnscrypt-proxy/query.log'
 
 [nx_log]
-  file = '/var/log/dnscrypt-proxy/nx.log'
+file = '/var/log/dnscrypt-proxy/nx.log'
 
 [sources]
-  [sources.'public-resolvers']
-  url = 'https://download.dnscrypt.info/resolvers-list/v3/public-resolvers.md'
-  cache_file = '/var/cache/dnscrypt-proxy/public-resolvers.md'
-  minisign_key = 'RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3'
-  refresh_delay = 24
-  prefix = ''
+[sources.'public-resolvers']
+url = 'https://download.dnscrypt.info/resolvers-list/v3/public-resolvers.md'
+cache_file = '/var/cache/dnscrypt-proxy/public-resolvers.md'
+minisign_key = 'RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3'
+refresh_delay = 24
+prefix = ''

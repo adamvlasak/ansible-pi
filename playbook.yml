@@ -10,7 +10,7 @@
     - suricata
     - evebox
     - firewall
-    - unbound
+    - dnscrypt_proxy
     - nginx
     - navidrome
     - minidlna
