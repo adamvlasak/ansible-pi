@@ -1,9 +1,15 @@
 ---
+- name: Import assert tasks
+  ansible.builtin.import_tasks: assert.yml
+
 - name: Import unwanted tasks
   ansible.builtin.import_tasks: unwanted.yml
 
 - name: Import packages tasks
   ansible.builtin.import_tasks: packages.yml
+
+- name: Import sudo tasks
+  ansible.builtin.import_tasks: sudo.yml
 
 - name: Import time tasks
   ansible.builtin.import_tasks: time.yml
@@ -16,6 +22,9 @@
 
 - name: Import network tasks
   ansible.builtin.import_tasks: network.yml
+
+- name: Import dhcpd tasks
+  ansible.builtin.import_tasks: dhcpd.yml
 
 - name: Import configure tasks
   ansible.builtin.import_tasks: configure.yml

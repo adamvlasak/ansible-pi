@@ -1,0 +1,33 @@
+---
+- name: DHCP | Configure dhcpd.conf
+  ansible.builtin.template:
+    src: dhcpd.conf.j2
+    dest: /etc/dhcp/dhcpd.conf
+    owner: root
+    group: root
+    mode: "0644"
+  when:
+    - network_router is defined
+    - network_router is true
+  notify: Restart dhcpd
+  tags:
+    - core
+    - dhcpd
+    - network
+
+- name: DHCP | Download http://standards-oui.ieee.org/oui.txt
+  ansible.builtin.uri:
+    url: http://standards-oui.ieee.org/oui.txt
+    dest: /usr/local/etc/oui.txt
+    owner: root
+    group: root
+    mode: "0644"
+    creates: /usr/local/etc/oui.txt
+  when:
+    - network_router is defined
+    - network_router is true
+  notify: Restart dhcpd
+  tags:
+    - core
+    - dhcpd
+    - network

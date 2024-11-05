@@ -1,22 +1,26 @@
 ---
-- name: Remove unwanted packages
+- name: Unwanted | Remove unwanted packages
   ansible.builtin.apt:
     name: "{{ item }}"
     autoremove: true
     state: absent
   loop: "{{ core_absent_packages }}"
-  when: core_absent_packages is iterable
+  when:
+    - core_absent_packages is defined
+    - core_absent_packages is iterable
   tags:
     - core
     - unwanted
 
-- name: Disable unwanted services
+- name: Unwanted | Disable unwanted services
   ansible.builtin.systemd:
     name: "{{ item }}"
     state: stopped
     enabled: false
   loop: "{{ core_disabled_services }}"
-  when: core_disabled_services is iterable
+  when:
+    - core_disabled_services is defined
+    - core_disabled_services is iterable
   tags:
     - core
     - unwanted

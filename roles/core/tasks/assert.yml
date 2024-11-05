@@ -1,0 +1,45 @@
+---
+- name: assert | Assert that we have basic network info for router
+  ansible.builtin.assert:
+    that:
+      - network_router is defined
+      - network_router is true
+      - network_mode is defined
+      - network_mode in ("static", "dhcp")
+      - network_hostname is defined
+      - network_ip is defined
+      - network_subnet is defined
+      - network_mask is defined
+      - network_gateway is defined
+      - network_broadcast is defined
+      - network_reverse is defined
+      - network_interface is defined
+      - network_domain is defined
+      - network_nameserver is defined
+      - network_dhcp_nameservers is defined
+      - network_dhcp_gateway is defined
+      - network_dhcp_range_from is defined
+      - network_dhcp_range_to is defined
+      - dhcp_reservations is defined
+      - dhcp_reservations is iterable
+  when:
+    - network_router is true
+
+- name: assert | Assert that we have basic network info for homelab
+  ansible.builtin.assert:
+    that:
+      - network_router is defined
+      - network_router is false
+      - network_mode is defined
+      - network_mode in ("static", "dhcp")
+      - network_hostname is defined
+      - network_subnet is defined
+      - network_mask is defined
+      - network_gateway is defined
+      - network_broadcast is defined
+      - network_reverse is defined
+      - network_interface is defined
+      - network_domain is defined
+      - network_nameserver is defined
+  when:
+    - network_router is false

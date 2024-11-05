@@ -1,11 +1,11 @@
 ---
-- name: Configure repositories
+- name: Packages | Configure repositories
   ansible.builtin.template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
     owner: root
     group: root
-    mode: 0644
+    mode: "0644"
   loop:
     - { src: apt.sources.list.j2, dest: /etc/apt/sources.list }
     - { src: raspi.apt.source.j2, dest: /etc/apt/sources.list.d/raspi.list }
@@ -13,7 +13,7 @@
     - core
     - repositories
 
-- name: Install necessary packages
+- name: Packages | Install necessary packages
   ansible.builtin.apt:
     name: "{{ core_packages }}"
     state: present
@@ -23,13 +23,13 @@
     - core
     - packages
 
-- name: Download yt-dlp
+- name: Packages | Download yt-dlp
   ansible.builtin.get_url:
     url: "https://github.com/yt-dlp/yt-dlp/releases/download/{{ yt_dlp_version }}/yt-dlp_linux_aarch64"
     dest: /usr/local/bin/yt-dlp
     owner: root
     group: root
-    mode: 0755
+    mode: "0755"
   tags:
     - core
     - packages

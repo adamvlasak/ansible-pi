@@ -1,45 +1,12 @@
 ---
-- name: Configure network interfaces
+- name: Network | Configure interfaces
   ansible.builtin.template:
     src: interfaces.j2
     dest: /etc/network/interfaces
     owner: root
     group: root
-    mode: 0644
+    mode: "0644"
   notify: Restart networking
   tags:
     - core
-    - network
-
-- name: Configure dhcpd.conf
-  ansible.builtin.template:
-    src: dhcpd.conf.j2
-    dest: /etc/dhcp/dhcpd.conf
-    owner: root
-    group: root
-    mode: 0644
-  when:
-    - network.router is defined
-    - network.router is true
-  notify: Restart dhcpd
-  tags:
-    - core
-    - dhcpd
-    - network
-
-- name: Download http://standards-oui.ieee.org/oui.txt
-  ansible.builtin.uri:
-    url: http://standards-oui.ieee.org/oui.txt
-    dest: /usr/local/etc/oui.txt
-    owner: root
-    group: root
-    mode: 0644
-    creates: /usr/local/etc/oui.txt
-  when:
-    - network.router is defined
-    - network.router is true
-  notify: Restart dhcpd
-  tags:
-    - core
-    - dhcpd
     - network
