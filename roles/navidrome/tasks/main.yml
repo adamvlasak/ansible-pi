@@ -11,7 +11,7 @@
     dest: /tmp
     owner: root
     group: root
-    mode: 0644
+    mode: "0644"
   tags:
     - navidrome
 
@@ -21,7 +21,7 @@
     state: directory
     owner: navidrome
     group: users
-    mode: 0700
+    mode: "0700"
   loop:
     - "{{ navidrome.working_directory }}"
     - "{{ navidrome.bin_directory }}"
@@ -54,7 +54,7 @@
     dest: "{{ navidrome.working_directory }}/navidrome.toml"
     owner: navidrome
     group: users
-    mode: 0755
+    mode: "0755"
   notify: Restart navidrome
   tags:
     - navidrome
@@ -65,7 +65,7 @@
     dest: /etc/systemd/system/navidrome.service
     owner: root
     group: root
-    mode: 0444
+    mode: "0444"
   notify:
     - Daemon-reload
     - Restart navidrome
@@ -78,7 +78,7 @@
     dest: "{{ nginx_conf_inc_dir }}/navidrome.conf"
     owner: root
     group: root
-    mode: 0644
+    mode: "0644"
   notify: Restart nginx
   tags:
     - navidrome

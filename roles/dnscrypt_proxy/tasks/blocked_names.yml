@@ -5,7 +5,7 @@
     state: directory
     owner: root
     group: root
-    mode: 0500
+    mode: "0500"
 
 - name: Download blocklist generator
   ansible.builtin.get_url:
@@ -13,7 +13,7 @@
     dest: "{{ dnscrypt_proxy_blocked_names_generator_path }}/generate-domains-blocklist.py"
     owner: root
     group: root
-    mode: 0400
+    mode: "0400"
   notify: Generate blocked names
 
 - name: Configure domains-blocklist.conf
@@ -22,7 +22,7 @@
     dest: "{{ dnscrypt_proxy_blocked_names_generator_path }}/domains-blocklist.conf"
     owner: root
     group: root
-    mode: 0400
+    mode: "0400"
   notify: Generate blocked names
 
 - name: Configure domains-blocklist-local-additions.txt
@@ -31,7 +31,7 @@
     dest: "{{ dnscrypt_proxy_blocked_names_generator_path }}/domains-blocklist-local-additions.txt"
     owner: root
     group: root
-    mode: 0400
+    mode: "0400"
   notify: Generate blocked names
 
 - name: Configure domains-allowlist.txt from github
@@ -40,7 +40,7 @@
     dest: "{{ dnscrypt_proxy_blocked_names_generator_path }}/domains-allowlist.txt"
     owner: root
     group: root
-    mode: 0400
+    mode: "0400"
   notify: Generate blocked names
 
 - name: Create empty domains-time-restricted.txt
@@ -49,7 +49,7 @@
     state: touch
     owner: root
     group: root
-    mode: 0400
+    mode: "0400"
 
 - name: Configure helper script
   ansible.builtin.template:
@@ -57,7 +57,7 @@
     dest: "{{ dnscrypt_proxy_blocked_names_generator_helper_path }}"
     owner: root
     group: root
-    mode: 0500
+    mode: "0500"
   notify: Generate blocked names
 
 - name: Configure cron script
@@ -66,4 +66,4 @@
     dest: /etc/cron.daily/blocked-names-generator
     owner: root
     group: root
-    mode: 0500
+    mode: "0500"

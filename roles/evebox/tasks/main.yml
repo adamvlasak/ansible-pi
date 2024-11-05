@@ -18,7 +18,7 @@
         create: true
         owner: root
         group: root
-        mode: 0644
+        mode: "0644"
       tags:
         - evebox
 
@@ -36,7 +36,7 @@
         dest: /etc/evebox/evebox.yaml
         owner: root
         group: root
-        mode: 0644
+        mode: "0644"
       notify:
         - Restart evebox server
       tags:
@@ -48,7 +48,7 @@
         dest: /etc/evebox/agent.yaml
         owner: root
         group: root
-        mode: 0644
+        mode: "0644"
       notify:
         - Restart evebox agent
       tags:
@@ -60,7 +60,7 @@
         dest: /etc/systemd/system/evebox-server.service
         owner: root
         group: root
-        mode: 0444
+        mode: "0444"
       notify:
         - Daemon-reload
         - Restart evebox server
@@ -73,7 +73,7 @@
         dest: /etc/systemd/system/evebox-agent.service
         owner: root
         group: root
-        mode: 0444
+        mode: "0444"
       notify:
         - Daemon-reload
         - Restart evebox agent
@@ -102,7 +102,7 @@
         dest: /etc/nginx/conf.d/evebox.conf
         owner: root
         group: root
-        mode: 0644
+        mode: "0644"
       notify: Restart nginx
       tags:
         - evebox

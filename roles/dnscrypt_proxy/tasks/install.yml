@@ -21,7 +21,7 @@
         dest: /tmp
         owner: root
         group: root
-        mode: 0644
+        mode: "0644"
 
     - name: Extract tarball
       ansible.builtin.unarchive:
@@ -36,7 +36,7 @@
         remote_src: true
         owner: root
         group: root
-        mode: 0755
+        mode: "0755"
 
     - name: Delete both unpacked directory and tarball
       ansible.builtin.file:
@@ -52,5 +52,5 @@
     dest: /etc/systemd/system/dnscrypt-proxy.service
     owner: root
     group: root
-    mode: 0444
+    mode: "0444"
   notify: Restart dnscrypt-proxy

@@ -20,6 +20,6 @@
     dest: "{{ user_home }}/.bashrc"
     owner: "{{ user_name }}"
     group: "{{ user_groups | first }}"
-    mode: 0600
+    mode: "0600"
   tags:
     - user

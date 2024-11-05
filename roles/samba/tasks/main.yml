@@ -12,7 +12,7 @@
     dest: /etc/samba/smb.conf
     owner: root
     group: root
-    mode: 0664
+    mode: "0664"
   notify: Restart samba
   tags:
     - samba

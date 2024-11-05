@@ -12,7 +12,7 @@
     dest: /usr/local/sbin/iptables-rules
     owner: root
     group: root
-    mode: 0700
+    mode: "0700"
   notify: Restart iptables
   tags:
     - firewall
@@ -23,7 +23,7 @@
     dest: /etc/systemd/system/iptables.service
     owner: root
     group: root
-    mode: 0444
+    mode: "0444"
   notify: Daemon-reload
   tags:
     - firewall

@@ -9,7 +9,7 @@
         state: directory
         owner: root
         group: root
-        mode: 0755
+        mode: "0755"
       notify: Restart nginx
 
     - name: Configure static sites subdirectories
@@ -18,7 +18,7 @@
         state: directory
         owner: root
         group: root
-        mode: 0755
+        mode: "0755"
       loop: "{{ nginx_static_sites }}"
       notify: Restart nginx
 
@@ -28,6 +28,6 @@
         dest: "{{ nginx_conf_inc_dir }}/{{ item.server_name }}-static.conf"
         owner: root
         group: root
-        mode: 0644
+        mode: "0644"
       loop: "{{ nginx_static_sites }}"
       notify: Restart nginx

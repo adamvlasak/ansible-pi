@@ -5,7 +5,7 @@
     state: directory
     owner: root
     group: root
-    mode: 0555
+    mode: "0555"
 
 - name: Configure dnscrypt-proxy
   ansible.builtin.template:
@@ -13,7 +13,7 @@
     dest: "{{ dnscrypt_proxy_conf_dir }}/dnscrypt-proxy.toml"
     owner: root
     group: root
-    mode: 0444
+    mode: "0444"
   notify: Restart dnscrypt-proxy
 
 - name: Configure allowed-names.txt
@@ -22,7 +22,7 @@
     dest: "{{ dnscrypt_proxy_conf_dir }}/allowed-names.txt"
     owner: root
     group: root
-    mode: 0444
+    mode: "0444"
   when: dnscrypt_proxy.allowed_names is defined
   notify: Restart dnscrypt-proxy
 
@@ -32,7 +32,7 @@
     dest: "{{ dnscrypt_proxy_conf_dir }}/blocked-ips.txt"
     owner: root
     group: root
-    mode: 0444
+    mode: "0444"
   notify: Restart dnscrypt-proxy
 
 - name: Configure forwarding-rules.txt
@@ -41,7 +41,7 @@
     dest: "{{ dnscrypt_proxy_conf_dir }}/forwarding-rules.txt"
     owner: root
     group: root
-    mode: 0444
+    mode: "0444"
   when: dnscrypt_proxy.forwarding_rules is defined
   notify: Restart dnscrypt-proxy
 
@@ -51,6 +51,6 @@
     dest: "{{ dnscrypt_proxy_conf_dir }}/cloaking-rules.txt"
     owner: root
     group: root
-    mode: 0444
+    mode: "0444"
   when: dnscrypt_proxy.cloaking_rules is defined
   notify: Restart dnscrypt-proxy
