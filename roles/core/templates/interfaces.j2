@@ -1,8 +1,13 @@
 auto lo
 iface lo inet loopback
 
-auto {{ network.interface }}
-iface {{ network.interface }} inet static
-    address {{ network.ip }}
-    netmask {{ network.mask }}
-    gateway {{ network.gateway }}
+auto {{ network_interface }}
+allow-hotplug eth0
+{% if network_mode == "dhcp" %}
+iface eth0 inet dhcp
+{% else %}
+iface {{ network_interface }} inet static
+    address {{ network_ip }}
+    netmask {{ network_mask }}
+    gateway {{ network_gateway }}
+{% endif %}

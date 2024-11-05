@@ -1,0 +1,26 @@
+---
+- name: Sudo | Configure /etc/sudoers.d/sudo-no-passwd
+  ansible.builtin.lineinfile:
+    path: /etc/sudoers.d/sudo-no-passwd
+    line: "%sudo ALL=(ALL:ALL) NOPASSWD: ALL"
+    insertafter: "%sudo.+ALL"
+    regexp: "NOPASSWD:.+ALL"
+    state: present
+    create: true
+    owner: root
+    group: root
+    mode: "0644"
+  tags:
+    - core
+    - user
+
+- name: Sudo | Configure /etc/sudoers
+  ansible.builtin.template:
+    src: sudoers.j2
+    dest: /etc/sudoers
+    owner: root
+    group: root
+    mode: "0644"
+  tags:
+    - core
+    - user

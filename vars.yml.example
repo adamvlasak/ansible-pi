@@ -1,23 +1,22 @@
 ---
-network:
-  hostname: "pi.home.lan"
-  ip: "192.168.1.250"
-  subnet: "192.168.1.0/24"
-  gateway: "192.168.1.1"
-  broadcast: "192.168.1.255"
-  mask: 255.255.255.0
-  reverse: "1.168.192.in-addr.arpa"
-  interface: "eth0"
-  dhcp_range_from: "192.168.1.100"
-  dhcp_range_to: "192.168.1.200"
-  dhcp_nameservers: "192.168.1.250"
-  dhcp_gateway: "192.168.1.250"
-  router: true
-  domain: home.lan
-  nameserver: 127.0.0.1
+network_hostname: "pi.home.lan"
+network_ip: "192.168.1.250"
+network_subnet: "192.168.1.0/24"
+network_gateway: "192.168.1.1"
+network_broadcast: "192.168.1.255"
+network_mask: 255.255.255.0
+network_interface: "eth0"
+network_dhcp_range_from: "192.168.1.110"
+network_dhcp_range_to: "192.168.1.200"
+network_dhcp_nameservers: "192.168.1.250"
+network_dhcp_gateway: "192.168.1.250"
+network_reverse: "1.168.192.in-addr.arpa"
+network_router: true
+network_mode: static
+network_domain: home.lan
+network_nameserver: 127.0.0.1
 
-core_disabled_services:
-  - dhcpcd
+raspberry_version: 4
 
 dhcp_reservations:
   - { hostname: "<name>", mac: "<mac>", ip: "<ip>" }

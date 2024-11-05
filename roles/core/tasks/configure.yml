@@ -1,73 +1,55 @@
 ---
-- name: Configure boot/config.txt
+# FIXME: quick and dirty support for both 4 and 5
+
+- name: Configure | boot/config.txt
   ansible.builtin.template:
-    src: boot-config.txt.j2
+    src: boot-config4.txt.j2
     dest: /boot/config.txt
     owner: root
     group: root
-    mode: 0755
+    mode: "0755"
+  when:
+    - raspberry_version is defined
+    - raspberry_version == 4
   tags:
     - core
     - boot_config
 
-- name: Configure sshd
+- name: Configure | boot/firmware/config.txt
+  ansible.builtin.template:
+    src: boot-config5.txt.j2
+    dest: /boot/firmware/config.txt
+    owner: root
+    group: root
+    mode: "0755"
+  when:
+    - raspberry_version is defined
+    - raspberry_version == 5
+  tags:
+    - core
+    - boot_config
+
+# ---
+
+- name: Configure | sshd
   ansible.builtin.template:
     src: sshd_config.j2
     dest: /etc/ssh/sshd_config
     owner: root
     group: root
-    mode: 0644
+    mode: "0644"
   notify: Restart sshd
   tags:
     - core
     - sshd
 
-- name: Configure sudo in sudoers
-  ansible.builtin.lineinfile:
-    path: /etc/sudoers.d/sudo-no-passwd
-    line: "%sudo ALL=(ALL:ALL) NOPASSWD: ALL"
-    insertafter: "%sudo.+ALL"
-    regexp: "NOPASSWD:.+ALL"
-    state: present
-    create: true
-    owner: root
-    group: root
-    mode: 0644
-  tags:
-    - core
-    - user
-
-- name: Configure sudoers
-  ansible.builtin.template:
-    src: sudoers.j2
-    dest: /etc/sudoers
-    owner: root
-    group: root
-    mode: 0644
-  tags:
-    - core
-    - user
-
-- name: Configure ENV variables
+- name: Configure | ENV variables
   ansible.builtin.template:
     src: vars.sh.j2
     dest: /etc/profile.d/vars.sh
     owner: root
     group: root
-    mode: 0755
+    mode: "0755"
   tags:
     - core
     - env
-
-- name: Prepare mount points
-  ansible.builtin.file:
-    path: "{{ item.path }}"
-    state: directory
-    owner: "{{ item.owner }}"
-    group: "{{ item.group }}"
-    mode: "{{ item.mode }}"
-  loop: "{{ mount.points }}"
-  when: mount.points is defined
-  tags:
-    - core
-    - mount

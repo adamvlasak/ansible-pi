@@ -14,9 +14,9 @@ core_packages:
   - irqbalance
   - isc-dhcp-server
   - mc
-  - mlocate
   - mp3gain
   - ncdu
+  - nscd
   - pass
   - sudo
   - sysstat
@@ -41,4 +41,3 @@ core_absent_packages:
 
 core_disabled_services:
   - dhcpcd
-  - nmbd

@@ -1,5 +1,5 @@
 ---
-- name: Configure locales
+- name: Locales | /etc/locale.gen
   community.general.locale_gen:
     name: "{{ item }}"
     state: present
@@ -10,7 +10,7 @@
     - core
     - locales
 
-- name: Configure /etc/default/locale
+- name: Locales | /etc/default/locale
   ansible.builtin.lineinfile:
     path: /etc/default/locale
     line: "LANG=en_US.UTF-8"
@@ -19,7 +19,7 @@
     state: present
     owner: root
     group: root
-    mode: 0644
+    mode: "0644"
   tags:
     - core
     - locales

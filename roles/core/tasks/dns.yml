@@ -1,13 +1,13 @@
 ---
-- name: Set machine hostname
+- name: DNS | Set machine hostname
   ansible.builtin.hostname:
-    name: "{{ network.hostname }}"
+    name: "{{ network_hostname }}"
   tags:
     - core
     - dns
     - network
 
-- name: Remove /etc/resolvconf.conf
+- name: DNS | Remove /etc/resolvconf.conf
   ansible.builtin.file:
     path: /etc/resolvconf.conf
     state: absent
@@ -16,36 +16,36 @@
     - dns
     - network
 
-- name: Configure resolv.conf
+- name: DNS | Configure resolv.conf
   ansible.builtin.template:
     src: resolv.conf.j2
     dest: /etc/resolv.conf
     owner: root
     group: root
-    mode: 0644
+    mode: "0644"
   tags:
     - core
     - dns
     - network
 
-- name: Configure /etc/nsswitch.conf
+- name: DNS | Configure /etc/nsswitch.conf
   ansible.builtin.template:
     src: nsswitch.conf.j2
     dest: /etc/nsswitch.conf
     owner: root
     group: root
-    mode: 0644
+    mode: "0644"
   tags:
     - core
     - dns
 
-- name: Set hosts file
+- name: DNS | Set hosts file
   ansible.builtin.template:
     src: hosts.j2
     dest: /etc/hosts
     owner: root
     group: root
-    mode: 0644
+    mode: "0644"
   tags:
     - core
     - dns
