@@ -57,6 +57,9 @@ unbound:
     - { hostname: "notes", ip: "192.168.1.250" }
     - { hostname: "static", ip: "192.168.1.250" }
   dhcp_reservations: "{{ dhcp_reservations }}"
+  forward_addrs:
+    - 193.17.47.1@853#odvr.nic.cz
+    - 185.43.135.1@853#odvr.nic.cz
   refused_zones:
     - "local"
     - "localdomain"
