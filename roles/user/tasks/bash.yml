@@ -1,0 +1,10 @@
+---
+- name: Configure .bashrc
+  ansible.builtin.template:
+    src: bashrc.j2
+    dest: "{{ user_home }}/.bashrc"
+    owner: "{{ user_login }}"
+    group: "{{ user_groups | first }}"
+    mode: "0600"
+  tags:
+    - user

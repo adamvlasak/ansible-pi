@@ -1,25 +1,20 @@
 ---
-- name: Configure group
-  ansible.builtin.group:
-    name: "{{ user_groups | first }}"
-    state: present
+- name: Configure system
+  ansible.builtin.import_tasks: system.yml
   tags:
     - user
 
-- name: Configure user
-  ansible.builtin.user:
-    name: "{{ user_name }}"
-    groups: "{{ user_groups }}"
-    state: present
+- name: Configure fish
+  ansible.builtin.import_tasks: fish.yml
   tags:
     - user
 
-- name: Configure .bashrc
-  ansible.builtin.template:
-    src: bashrc.j2
-    dest: "{{ user_home }}/.bashrc"
-    owner: "{{ user_name }}"
-    group: "{{ user_groups | first }}"
-    mode: "0600"
+- name: Configure bash
+  ansible.builtin.import_tasks: bash.yml
+  tags:
+    - user
+
+- name: Configure git
+  ansible.builtin.import_tasks: git.yml
   tags:
     - user
