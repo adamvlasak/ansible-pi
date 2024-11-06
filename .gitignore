@@ -1,4 +1,5 @@
 .env/
 .vscode
 hosts
-vars.yml
+vars-router.yml
+vars-homelab.yml

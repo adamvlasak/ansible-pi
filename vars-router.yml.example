@@ -28,6 +28,12 @@ env:
   - "HISTFILESIZE=1000"
   - "HISTCONTROL=ignoredups:erasedups"
 
+chrony_sources:
+  - { type: pool, address: 0.at.pool.ntp.org, options: iburst }
+  - { type: pool, address: 1.at.pool.ntp.org, options: iburst }
+  - { type: pool, address: 2.at.pool.ntp.org, options: iburst }
+  - { type: pool, address: 3.at.pool.ntp.org, options: iburst }
+
 dnscrypt_proxy:
   version: 2.1.5
   listen_addresses: ["127.0.0.1:53", "{{ network_ip}}:53"]
@@ -47,11 +53,10 @@ dnscrypt_proxy:
     - "*.workgroup"
 
 unbound:
-  cache_min_ttl: 1200
-  cache_max_ttl: 14400
+  cache_min_ttl: 3600
+  cache_max_ttl: 86400
   threads: 4
   static_records:
-    - { hostname: "pi", ip: "192.168.1.250" }
     - { hostname: "navidrome", ip: "192.168.1.250" }
     - { hostname: "notes", ip: "192.168.1.250" }
     - { hostname: "static", ip: "192.168.1.250" }
@@ -64,6 +69,13 @@ unbound:
     - "localdomain"
     - "workgroup"
     - "mshome.net"
+  forward_addrs:
+    - "193.17.47.1@853#odvr.nic.cz"
+    - "185.43.135.1@853#odvr.nic.cz"
+    - "1.1.1.1@853#cloudflare-dns.com"
+    - "1.0.0.1@853#cloudflare-dns.com"
+    - "9.9.9.9@853#dns.quad9.net"
+    - "149.112.112.112@853#dns.quad9.net"
 
 sysctl_options:
   - { name: "kernel.dmesg_restrict", value: "1" }
@@ -100,10 +112,6 @@ navidrome:
   theme: Nord
 
 yt_dlp_version: 2023.03.04
-
-mount:
-  points:
-    - { path: /mnt/data, owner: nobody, group: nogroup, mode: "0755" }
 
 nginx_reject_ips: ["192.168.1.106"]
 nginx_static_sites:

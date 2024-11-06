@@ -1,0 +1,10 @@
+---
+- name: Configure raspberry pi
+  hosts: homelab
+  become: true
+  vars_files:
+    - vars-homelab.yml
+  roles:
+    - core
+    - sysctl
+    - user

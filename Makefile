@@ -1,11 +1,15 @@
-ansible_cmd := ansible-playbook playbook.yml --diff
-
 lint:
 	yamllint .
 	ansible-lint
 
-test:
-	$(ansible_cmd) --check
+test-router:
+	ansible-playbook router.yml --diff --check
 
-provision:
-	$(ansible_cmd)
+provision-router:
+	ansible-playbook router.yml --diff
+
+test-homelab:
+	ansible-playbook homelab.yml --diff --check
+
+provision-homelab:
+	ansible-playbook homelab.yml --diff

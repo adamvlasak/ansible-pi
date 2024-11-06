@@ -1,0 +1,88 @@
+---
+network_hostname: "homelab.home.lan"
+network_ip: "192.168.1.193"
+network_subnet: "192.168.1.0/24"
+network_gateway: "192.168.1.250"
+network_broadcast: "192.168.1.255"
+network_mask: "255.255.255.0"
+network_reverse: "10.168.192.in-addr.arpa"
+network_interface: "eth0"
+network_dhcp_range_from: "192.168.1.110"
+network_dhcp_range_to: "192.168.1.200"
+network_dhcp_nameservers: "192.168.1.250"
+network_dhcp_gateway: "192.168.1.250"
+network_router: false
+network_mode: dhcp
+network_domain: "home.lan"
+network_nameserver: "192.168.1.250"
+
+raspberry_version: 5
+
+user_name: homelab
+user_groups: ["homelab", "sudo", "docker", "users"]
+user_name: John Doe
+user_email: john.doe@example.org
+
+chrony_sources:
+  - { type: pool, address: 0.at.pool.ntp.org, options: iburst }
+  - { type: pool, address: 1.at.pool.ntp.org, options: iburst }
+  - { type: pool, address: 2.at.pool.ntp.org, options: iburst }
+  - { type: pool, address: 3.at.pool.ntp.org, options: iburst }
+
+env:
+  - "LANG=en_US.UTF-8"
+  - "LC_ALL=en_US.UTF-8"
+  - "EDITOR=vim"
+  - "HISTSIZE=1000"
+  - "HISTFILESIZE=1000"
+  - "HISTCONTROL=ignoredups:erasedups"
+
+sysctl_options:
+  - { name: "kernel.dmesg_restrict", value: "1" }
+  - { name: "kernel.kptr_restrict", value: "2" }
+  - { name: "kernel.sysrq", value: "0" }
+  - { name: "net.ipv4.ip_forward", value: "1" }
+  - { name: "net.ipv6.conf.all.disable_ipv6", value: "1" }
+  - { name: "net.ipv6.conf.default.disable_ipv6", value: "1" }
+  - { name: "vm.swappiness", value: "10" }
+  - { name: "net.ipv4.conf.all.rp_filter", value: "1" }
+  - { name: "net.ipv4.conf.default.rp_filter", value: "1" }
+
+yt_dlp_version: 2023.03.04
+
+core_packages:
+  - bash-completion
+  - ca-certificates
+  - chrony
+  - curl
+  - dnsutils
+  - git
+  - htop
+  - iftop
+  - iotop
+  - irqbalance
+  - mc
+  - mlocate
+  - ncdu
+  - pass
+  - sudo
+  - sysstat
+  - tar
+  - tcpdump
+  - telnet
+  - tig
+  - tmux
+  - traceroute
+  - tree
+  - unzip
+  - vim
+  - w3m
+  - wget
+
+core_absent_packages:
+  - openresolv
+  - resolvconf
+  - wpasupplicant
+  - triggerhappy
+
+core_disabled_services: []
