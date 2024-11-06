@@ -4,7 +4,7 @@
     src: gitconfig.j2
     dest: "{{ user_home }}/.gitconfig"
     owner: "{{ user_login }}"
-    group: "{{ user_groups | first }}"
+    group: "{{ user_group }}"
     mode: "0644"
   tags:
     - user

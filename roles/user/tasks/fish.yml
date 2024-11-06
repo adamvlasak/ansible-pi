@@ -4,7 +4,7 @@
     path: "{{ item }}"
     state: "directory"
     owner: "{{ user_login }}"
-    group: "{{ user_groups | first }}"
+    group: "{{ user_group }}"
     mode: "0700"
   loop:
     - "{{ user_home }}/.config"
@@ -17,7 +17,7 @@
     src: config.fish.j2
     dest: "{{ user_home }}/.config/fish/config.fish"
     owner: "{{ user_login }}"
-    group: "{{ user_groups | first }}"
+    group: "{{ user_group }}"
     mode: "0600"
   tags:
     - user

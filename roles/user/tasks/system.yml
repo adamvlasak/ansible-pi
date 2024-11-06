@@ -1,7 +1,7 @@
 ---
 - name: Configure group
   ansible.builtin.group:
-    name: "{{ user_groups | first }}"
+    name: "{{ user_group }}"
     state: present
   tags:
     - user
