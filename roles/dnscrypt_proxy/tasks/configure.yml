@@ -23,7 +23,9 @@
     owner: root
     group: root
     mode: "0444"
-  when: dnscrypt_proxy.allowed_names is defined
+  when:
+    - dnscrypt_proxy.allowed_names is defined
+    - dnscrypt_proxy.allowed_names is iterable
   notify: Restart dnscrypt-proxy
 
 - name: Configure blocked-ips.txt
@@ -42,7 +44,9 @@
     owner: root
     group: root
     mode: "0444"
-  when: dnscrypt_proxy.forwarding_rules is defined
+  when:
+    - dnscrypt_proxy.forwarding_rules is defined
+    - dnscrypt_proxy.forwarding_rules is iterable
   notify: Restart dnscrypt-proxy
 
 - name: Configure cloaking-rules.txt
@@ -52,5 +56,7 @@
     owner: root
     group: root
     mode: "0444"
-  when: dnscrypt_proxy.cloaking_rules is defined
+  when:
+    - dnscrypt_proxy.cloaking_rules is defined
+    - dnscrypt_proxy.cloaking_rules is iterable
   notify: Restart dnscrypt-proxy

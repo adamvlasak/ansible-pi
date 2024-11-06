@@ -44,9 +44,9 @@
   notify: Generate blocked names
 
 - name: Create empty domains-time-restricted.txt
-  ansible.builtin.file:
+  ansible.builtin.copy:
+    content: ""
     dest: "{{ dnscrypt_proxy_blocked_names_generator_path }}/domains-time-restricted.txt"
-    state: touch
     owner: root
     group: root
     mode: "0400"
