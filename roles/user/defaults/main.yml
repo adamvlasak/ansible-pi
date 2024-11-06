@@ -1,4 +1,6 @@
 ---
-user_name: pi
+user_login: pi
 user_groups: ["pi", "sudo", "users"]
-user_home: "/home/{{ user_name }}"
+user_home: "/home/{{ user_login }}"
+user_name: John Doe
+user_email: john@doe.com

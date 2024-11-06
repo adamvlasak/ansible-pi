@@ -1,0 +1,23 @@
+---
+- name: Prepare directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: "directory"
+    owner: "{{ user_login }}"
+    group: "{{ user_groups | first }}"
+    mode: "0700"
+  loop:
+    - "{{ user_home }}/.config"
+    - "{{ user_home }}/.config/fish"
+  tags:
+    - user
+
+- name: Configure fish
+  ansible.builtin.template:
+    src: config.fish.j2
+    dest: "{{ user_home }}/.config/fish/config.fish"
+    owner: "{{ user_login }}"
+    group: "{{ user_groups | first }}"
+    mode: "0600"
+  tags:
+    - user

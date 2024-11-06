@@ -1,0 +1,15 @@
+---
+- name: Configure group
+  ansible.builtin.group:
+    name: "{{ user_groups | first }}"
+    state: present
+  tags:
+    - user
+
+- name: Configure user
+  ansible.builtin.user:
+    name: "{{ user_login }}"
+    groups: "{{ user_groups }}"
+    state: present
+  tags:
+    - user
