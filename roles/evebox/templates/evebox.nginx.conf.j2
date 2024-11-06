@@ -1,10 +1,10 @@
 server {
   listen {{ ansible_default_ipv4.address }}:{{ nginx_listen_port }};
-  server_name evebox.{{ network.domain }};
+  server_name evebox.{{ network_domain }};
 
 {% if nginx_log %}
-  access_log {{ nginx_log_dir }}/evebox.{{ network.domain }}-access.log;
-  error_log {{ nginx_log_dir }}/evebox.{{ network.domain }}-error.log;
+  access_log {{ nginx_log_dir }}/evebox.{{ network_domain }}-access.log;
+  error_log {{ nginx_log_dir }}/evebox.{{ network_domain }}-error.log;
 {% endif %}
 
   location / {
